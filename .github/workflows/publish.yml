@@ -8,7 +8,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           registry-url: 'https://registry.npmjs.org'      
-      - run: npm ci
+      - run: npm install
       - run: npm run build
       - run: npm publish --access public
         if: github.ref_name == 'main'
