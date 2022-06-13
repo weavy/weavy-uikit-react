@@ -64,7 +64,7 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
                     })
                 }
             })
-            console.log("rs scroller", reverseScroller.root);
+            
         } else {
             reverseScroller?.disconnect();
             reverseScroller = null;

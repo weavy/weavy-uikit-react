@@ -49,6 +49,8 @@ export default function App() {
 
 In your app.tsx or wherever you would like to add the Weavy Messenger:
 
+> If you registered for a free account on <a href="https://get.weavy.io">get.weavy.io</a>, you can use the demo/test JWT token generated for you and use it in the `getToken` below and just return it as a string. But in a real application, this is typically fetched from a backend enpoint or similar that returns a valid JWT for your currently signed in user.
+
  ```js
 import React from 'react';
 import { WeavyClient, WeavyProvider, Messenger } from '@weavy/uikit-react';
@@ -107,4 +109,4 @@ Start your React app. You should see the Weavy Messenger component rendering a C
 
 ## Documentation
 
-To learn more about all the different components that you can use and how to setup the authentication flow, head over to our [Documentation site](https://https://www.weavy.com/docs/frontend)
+To learn more about all the different components that you can use and how to setup the authentication flow, head over to our [Documentation site](https://weavy.com/docs/frontend/uikit-react)
