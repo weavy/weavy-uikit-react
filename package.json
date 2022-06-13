@@ -1,0 +1,47 @@
+{
+  "name": "@weavy/uikit-react",
+  "version": "11.0.0",
+  "author": "Weavy",
+  "description": "React UI-kit for Weavy",
+  "homepage": "https://github.com/weavy/weavy-uikit-react",
+  "license": "MIT",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "./dist/cjs/types/index.d.ts",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.0",
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "@rollup/plugin-typescript": "^8.3.1",
+    "@types/lodash.debounce": "^4.0.7",
+    "@types/lodash.throttle": "^4.1.7",
+    "@types/react": "^18.0.8",
+    "@types/react-dom": "^18.0.3",
+    "@types/react-modal": "^3.13.1",
+    "rollup": "^2.72.0",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-dts": "^4.2.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-terser": "^7.0.2",
+    "tslib": "^2.4.0",
+    "typescript": "^4.6.4"
+  },
+  "peerDependencies": {
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c --watch"
+  },
+  "dependencies": {
+    "@mdi/react": "^1.6.0",
+    "@microsoft/signalr": "^6.0.3",
+    "classnames": "^2.3.1",
+    "dayjs": "^1.11.1",
+    "emoji-toolkit": "^6.6.0",
+    "lodash.debounce": "^4.0.8",
+    "lodash.throttle": "^4.1.1",
+    "react-modal": "^3.14.4",
+    "react-query": "^3.34.16"
+  }
+}
