@@ -12,7 +12,7 @@ export default function useChat(id: string, options: any) {
 
     const getConversation = async () => {
 
-        const response = await fetch(client.uri + "/api/apps/idf/" + id, {
+        const response = await fetch(client.url + "/api/apps/idf/" + id, {
             headers: {
                 "content-type": "application/json",
                 "Authorization": "Bearer " + await client.tokenFactory()

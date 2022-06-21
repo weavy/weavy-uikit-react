@@ -20,7 +20,7 @@ export default function useMutateConversationName() {
 
     const mutateConversationName = async ({ id, name }: MutateProps) => {
 
-        const response = await fetch(client.uri + "/api/apps/" + id, {
+        const response = await fetch(client.url + "/api/apps/" + id, {
             method: "PATCH",
             body: JSON.stringify({ name: name }),
             headers: {

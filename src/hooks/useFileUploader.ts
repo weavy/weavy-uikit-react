@@ -7,13 +7,17 @@ export default function useFileUploader(callback: Function) {
 
     const { client } = useContext(WeavyContext);
 
+    if (!client) {
+        throw new Error('useFileUploader must be used within an WeavyProvider');
+    }
+
     return useMutation(
         async ({ request }: any) => {
 
             const formData = new FormData();
             formData.append('blob', request.file);
 
-            var response = await fetch(client.uri + "/api/blobs", {
+            var response = await fetch(client.url + "/api/blobs", {
                 method: 'POST',
                 body: formData,
                 headers: {

@@ -1,9 +1,10 @@
 //import { useContext } from "react";
 import { useQuery } from "react-query";
+import WeavyClient from "../client/WeavyClient";
 //import { WeavyContext } from "../contexts/WeavyContext";
 
 /// GET current user
-export default function useUser(client: any) {
+export default function useUser(client: WeavyClient) {
     //const { client } = useContext(WeavyContext);
 
     if (!client) {
@@ -13,7 +14,7 @@ export default function useUser(client: any) {
     const getUser = async () => {
 
         try {
-            const response = await fetch(client.uri + "/api/user", {
+            const response = await fetch(client.url + "/api/user", {
                 headers: {
                     "content-type": "application/json",
                     "Authorization": "Bearer " + await client.tokenFactory()
@@ -27,7 +28,7 @@ export default function useUser(client: any) {
             console.error("Could not load Weavy user data...")
             return null;
         } catch(err: any){
-            console.error(`Could not connect to the Weavy backend. Please make sure ${client.uri} is up and running!`)
+            console.error(`Could not connect to the Weavy backend. Please make sure ${client.url} is up and running!`)
         }
         
         

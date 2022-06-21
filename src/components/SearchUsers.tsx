@@ -60,8 +60,8 @@ const SearchUsers = ({handleSubmit, buttonTitle}: SearchUsersProps) => {
                                     <td className={wy('search-result-table-icon')}>
                                         <Avatar src={user.avatar_url} size={24} id={user.id} presence={user.presence} name={user.display_name} />
                                     </td>
-                                    <td>{user.display_name}</td>
-                                    <td className={wy('search-result-table-icon')}><input type="checkbox" checked={isChecked(user.id)} onChange={(e) => handleSelected(e, user)} /></td>
+                                    <td><label htmlFor={'chk' + user.id}>{user.display_name}</label></td>
+                                    <td className={wy('search-result-table-icon')}><input type="checkbox" id={'chk' + user.id} checked={isChecked(user.id)} onChange={(e) => handleSelected(e, user)} /></td>
                                 </tr>
                             )
                         })}

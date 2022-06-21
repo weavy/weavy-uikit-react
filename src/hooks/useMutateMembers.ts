@@ -21,7 +21,7 @@ export default function useMutateMembers() {
     // add members to conversation
     const mutateMembers = async ({ id, members }: MutateProps) => {
 
-        const response = await fetch(client.uri + "/api/apps/" + id + "/members/", {
+        const response = await fetch(client.url + "/api/apps/" + id + "/members/", {
             method: "POST",
             body: JSON.stringify(members),
             headers: {

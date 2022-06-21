@@ -19,7 +19,7 @@ export default function useMutateMeeting() {
 
     const mutateMeeting = async ({ provider }: MutateProps) => {
 
-        const response = await fetch(client.uri + "/api/meetings", {
+        const response = await fetch(client.url + "/api/meetings", {
             method: "POST",
             body: JSON.stringify({provider: provider}),
             headers: {

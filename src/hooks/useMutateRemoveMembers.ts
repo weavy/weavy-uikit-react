@@ -22,7 +22,7 @@ export default function useMutateRemoveMembers() {
 
     const mutateRemove = async ({ id, members }: MutateProps) => {
 
-        const response = await fetch(client.uri + "/api/apps/" + id + "/members/" + members.join(","), {
+        const response = await fetch(client.url + "/api/apps/" + id + "/members/" + members.join(","), {
             method: "DELETE",        
             body: JSON.stringify(members),    
             headers: {

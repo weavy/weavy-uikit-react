@@ -94,30 +94,31 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
             // mark conversation as read
             readMessageMutation.mutate({ id: id, read: true })
 
-            client.subscribe(`a${id}`, "message-inserted", handleRealtimeMessage);
-            client.subscribe(`a${id}`, "conversation-read", handleRealtimeSeenBy);            
-            client.subscribe(`a${id}`, "reaction-inserted", handleRealtimeReactionInserted);
-            client.subscribe(`a${id}`, "reaction-deleted", handleRealtimeReactionDeleted);
+            client?.subscribe(`a${id}`, "message-inserted", handleRealtimeMessage);
+            client?.subscribe(`a${id}`, "conversation-read", handleRealtimeSeenBy);            
+            client?.subscribe(`a${id}`, "reaction-inserted", handleRealtimeReactionInserted);
+            client?.subscribe(`a${id}`, "reaction-deleted", handleRealtimeReactionDeleted);
         }
 
         return () => {
             window.removeEventListener('focus', handleFocus, false)
 
             if (id) {
-
                 // remove additional pages in cache. Only get first page
                 let qd = queryClient.getQueryData(["messages", id]);
+                
                 if (qd) {
+                    
                     queryClient.setQueryData(["messages", id], (data: any) => ({
-                        pages: data?.pages.splice(0, 1),
-                        pageParams: data?.pageParams.splice(0, 1),
-                    }));
+                        pages: data?.pages.slice(0,1),
+                        pageParams: [undefined]                        
+                    }));                    
                 }
 
-                client.unsubscribe(`a${id}`, "message-inserted", handleRealtimeMessage);
-                client.unsubscribe(`a${id}`, "conversation-read", handleRealtimeSeenBy);                
-                client.unsubscribe(`a${id}`, "reaction-inserted", handleRealtimeReactionInserted);
-                client.unsubscribe(`a${id}`, "reaction-deleted", handleRealtimeReactionDeleted);
+                client?.unsubscribe(`a${id}`, "message-inserted", handleRealtimeMessage);
+                client?.unsubscribe(`a${id}`, "conversation-read", handleRealtimeSeenBy);                
+                client?.unsubscribe(`a${id}`, "reaction-inserted", handleRealtimeReactionInserted);
+                client?.unsubscribe(`a${id}`, "reaction-deleted", handleRealtimeReactionDeleted);
             }
         }
     }, [id]);

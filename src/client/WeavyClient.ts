@@ -1,7 +1,7 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 export default class WeavyClient {
-    uri;
+    url;
     tokenFactory;
     connection;
     groups: string[];
@@ -14,14 +14,14 @@ export default class WeavyClient {
     EVENT_RECONNECTED = "reconnected";
 
     constructor(options: WeavyClientOptions) {
-        this.uri = options.uri;
+        this.url = options.url;
         this.tokenFactory = options.tokenFactory
         this.groups = [];
         this.connectionEvents = [];
          
         this.connection = new HubConnectionBuilder()
             .configureLogging(LogLevel.None)
-            .withUrl(this.uri + "/hubs/rtm", {
+            .withUrl(this.url + "/hubs/rtm", {
                 accessTokenFactory: this.tokenFactory
             })
             .withAutomaticReconnect()

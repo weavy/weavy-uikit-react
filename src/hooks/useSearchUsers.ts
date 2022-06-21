@@ -12,7 +12,7 @@ export default function useSearchUsers(text: string, options: any) {
     }
 
     const getUsers = async () => {
-        const response = await fetch(client.uri + "/api/users?q=" + text + "&skip=0&top=" + PAGE_SIZE, {
+        const response = await fetch(client.url + "/api/users?q=" + text + "&skip=0&top=" + PAGE_SIZE, {
             headers: {
                 "content-type": "application/json",
                 "Authorization": "Bearer " + await client.tokenFactory()

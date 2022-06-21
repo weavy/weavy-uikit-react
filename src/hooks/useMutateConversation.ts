@@ -20,7 +20,7 @@ export default function useMutateConversation() {
     // create new conversation
     const mutateConversation = async ({ members }: MutateProps) => {
 
-        const response = await fetch(client.uri + "/api/conversations/", {
+        const response = await fetch(client.url + "/api/conversations/", {
             method: "POST",
             body: JSON.stringify({ members: members }),
             headers: {

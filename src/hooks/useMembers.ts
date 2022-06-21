@@ -12,7 +12,7 @@ export default function useMembers(id: number | null, options: any) {
 
     const getConversationMembers = async () => {
 
-        const response = await fetch(client.uri + "/api/apps/" + id + "/members", {
+        const response = await fetch(client.url + "/api/apps/" + id + "/members", {
             headers: {
                 "content-type": "application/json",
                 "Authorization": "Bearer " + await client.tokenFactory()

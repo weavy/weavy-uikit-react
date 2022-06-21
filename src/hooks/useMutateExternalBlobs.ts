@@ -19,7 +19,7 @@ export default function useMutateExternalBlobs() {
 
     const mutateExternalBlobs = async ({ blobs }: MutateProps) => {
 
-        const response = await fetch(client.uri + "/api/blobs/external", {
+        const response = await fetch(client.url + "/api/blobs/external", {
             method: "POST",
             body: JSON.stringify(blobs),
             headers: {

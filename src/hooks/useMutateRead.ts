@@ -20,7 +20,7 @@ export default function useMutateRead() {
 
     const mutateRead = async ({ id, read }: MutateProps) => {
 
-        const response = await fetch(client.uri + "/api/conversations/" + id + "/read", {
+        const response = await fetch(client.url + "/api/conversations/" + id + "/read", {
             method:  !read ? "DELETE": "PUT",
             body: "",
             headers: {

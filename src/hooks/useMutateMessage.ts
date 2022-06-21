@@ -22,7 +22,7 @@ export default function useMutateMessage() {
     }
 
     const mutateMessage = async ({ id, text, userId, attachments, meetings }: MutateProps) => {
-        const response = await fetch(client.uri + "/api/apps/" + id + "/messages", {
+        const response = await fetch(client.url + "/api/apps/" + id + "/messages", {
             method: "POST",
             body: JSON.stringify({
                 text: text,
@@ -86,6 +86,7 @@ export default function useMutateMessage() {
                 let pageMessages = [...data, {
                     id: tempId,
                     text: variables.text,
+                    html: variables.text,
                     display_name: "",
                     temp: true,
                     parent_id: null,

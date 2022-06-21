@@ -1,10 +1,17 @@
+interface WeavyClient {
+    url: string,
+    tokenFactory: (() => string | Promise<string>),
+    subscribe: Function,
+    unsubscribe: Function,
+}
+
 type WeavyClientOptions = {
-    uri: string,
+    url: string,
     tokenFactory: (() => string | Promise<string>)
 }
 
 type WeavyContextProps = {
-    client: any,
+    client: WeavyClient | null,
     options?: WeavyContextOptions  
 };
 

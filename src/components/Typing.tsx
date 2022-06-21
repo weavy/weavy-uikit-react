@@ -26,12 +26,12 @@ const Typing = ({ children, id, context }: Props) => {
     useEffect(() => {
         setActiveTypers([]);
         
-        client.subscribe(`a${id}`, "typing", handleTyping);        
-        client.subscribe(`a${id}`, "message-inserted", handleStopTyping);
+        client?.subscribe(`a${id}`, "typing", handleTyping);        
+        client?.subscribe(`a${id}`, "message-inserted", handleStopTyping);
 
         return () => {
-            client.unsubscribe(`a${id}`, "typing", handleTyping);            
-            client.unsubscribe(`a${id}`, "message-inserted", handleStopTyping);
+            client?.unsubscribe(`a${id}`, "typing", handleTyping);            
+            client?.unsubscribe(`a${id}`, "message-inserted", handleStopTyping);
         }
     }, [id])
 

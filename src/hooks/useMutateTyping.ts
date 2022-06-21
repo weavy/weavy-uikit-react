@@ -18,7 +18,7 @@ export default function useMutateTyping() {
 
     const mutateTyping = async ({ id }: MutateProps) => {
 
-        const response = await fetch(client.uri + "/api/conversations/" + id + "/typing", {
+        const response = await fetch(client.url + "/api/conversations/" + id + "/typing", {
             method: "PUT",
             body: JSON.stringify({}),
             headers: {

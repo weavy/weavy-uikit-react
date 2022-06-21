@@ -20,7 +20,7 @@ export default function useMutatePinned() {
 
     const mutatePinned = async ({ id, pin }: MutateProps) => {
 
-        const response = await fetch(client.uri + "/api/conversations/" + id + "/pin", {
+        const response = await fetch(client.url + "/api/conversations/" + id + "/pin", {
             method:  + !pin ? "DELETE": "PUT",
             body: "",
             headers: {

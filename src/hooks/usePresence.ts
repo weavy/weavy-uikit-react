@@ -6,6 +6,10 @@ export default function usePresence() {
 
     const {client} = useContext(WeavyContext);
     
+    if (!client) {
+        throw new Error('usePresence must be used within an WeavyProvider');
+    }
+
     useEffect(() => {
         client.subscribe("online", "online", handlePresenceChange)
     }, []);

@@ -157,7 +157,7 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
                 <div className={wy('avatar-header')}>
                     <Avatar src={user.avatar_url} name={user.title} presence={user.presence} id={user.id} size={256} />
                     <h2>Welcome {user.name}!</h2>
-                    Select a conversation to get started
+                    Create or select a conversation to get started
                 </div>
             }
             {selectedConversationId && dataMembers &&

@@ -13,7 +13,7 @@ export default function useConversation(id: number | null, options: any) {
 
     const getConversation = async () => {
 
-        const response = await fetch(client.uri + "/api/conversations/" + id, {
+        const response = await fetch(client.url + "/api/conversations/" + id, {
             headers: {
                 "content-type": "application/json",
                 "Authorization": "Bearer " + await client.tokenFactory()

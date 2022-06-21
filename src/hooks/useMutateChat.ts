@@ -21,7 +21,7 @@ export default function useMutateChat() {
     // create new conversation
     const mutateChat = async ({ identifier, members }: MutateProps) => {
 
-        const response = await fetch(client.uri + "/api/apps/", {
+        const response = await fetch(client.url + "/api/apps/", {
             method: "POST",
             body: JSON.stringify({ 
                 identifier: identifier,

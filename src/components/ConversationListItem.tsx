@@ -40,10 +40,10 @@ const ConversationListItem = ({ item, refetchConversations }: ConversationListIt
     }, [item.id])
 
     useEffect(() => {
-        client.subscribe(`a${item.id}`, "app-updated", handleAppUpdated);
+        client?.subscribe(`a${item.id}`, "app-updated", handleAppUpdated);
 
         return () => {
-            client.unsubscribe(`a${item.id}`, "app-updated", handleAppUpdated);
+            client?.unsubscribe(`a${item.id}`, "app-updated", handleAppUpdated);
         }
     }, [item.id])
 

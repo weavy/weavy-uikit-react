@@ -12,7 +12,7 @@ export default function useBadge() {
 
     const getBadge = async () => {
 
-        const response = await fetch(client.uri + "/api/conversations/badge", {
+        const response = await fetch(client.url + "/api/conversations/badge", {
             headers: {
                 "content-type": "application/json",
                 "Authorization": "Bearer " + await client.tokenFactory()

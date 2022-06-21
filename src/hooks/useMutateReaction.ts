@@ -22,7 +22,7 @@ export default function useMutateReaction() {
     const mutateReaction = async ({id, reaction }: MutateProps) => {
 
       
-        const response = await fetch(client.uri + "/api/messages/" + id + "/reactions/", {
+        const response = await fetch(client.url + "/api/messages/" + id + "/reactions/", {
             method: "POST",
             body: JSON.stringify({ content: reaction}),
             headers: {
