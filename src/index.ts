@@ -1,8 +1,8 @@
 import WeavyClient from './client/WeavyClient';
 import WeavyProvider from './contexts/WeavyContext';
-import  { WeavyContext } from './contexts/WeavyContext';
+import { WeavyContext } from './contexts/WeavyContext';
 import MessengerProvider from './contexts/MessengerContext';
-import  { MessengerContext } from './contexts/MessengerContext';
+import { MessengerContext } from './contexts/MessengerContext';
 import Messenger from './components/Messenger';
 import ConversationBadge from './components/ConversationBadge';
 import ConversationList from './components/ConversationList';

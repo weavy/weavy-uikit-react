@@ -131,7 +131,7 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
                     {selectedConversationId && dataConversation &&
 
                         <>
-                            <div>
+                            <div className='wy-appbar-text'>
                                 <Typing id={selectedConversationId} context="conversation">
                                     {dataConversation.display_name}
                                 </Typing>

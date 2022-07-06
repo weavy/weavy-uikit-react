@@ -37,19 +37,16 @@ const Chat = ({ id }: ChatProps) => {
     }, [dataChat]);
 
     return (
-        <>
+        <div className={wy('messenger-conversation scroll-y')}>
             <header className={wy('appbars')}>
                 <nav className={wy('appbar')}>
-
+                    <div></div>
                     {selectedId && dataConversation &&
-
-                        <>
-                            <div>
-                                <Typing id={selectedId} context="conversation">
-                                    {dataConversation.display_name}
-                                </Typing>
-                            </div>
-                        </>
+                        <div className="wy-appbar-text">
+                            <Typing id={selectedId} context="conversation">
+                                {dataConversation.display_name}
+                            </Typing>
+                        </div>
                     }
                 </nav>
             </header>
@@ -61,7 +58,7 @@ const Chat = ({ id }: ChatProps) => {
             {selectedId && dataMembers &&
                 <Messages id={selectedId} members={dataMembers} />
             }
-        </>
+        </div>
     )
 }
 

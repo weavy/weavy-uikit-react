@@ -6,7 +6,7 @@ import { Messenger } from '../types/Messenger';
 import { WeavyContext } from '../contexts/WeavyContext';
 import { prefix as wy } from "../utils/styles";
 
-const Messenger: FC<Messenger> = ({ options }) => {
+const Messenger: FC<Messenger> = () => {
 
     const { client } = useContext(WeavyContext);
 
@@ -15,14 +15,14 @@ const Messenger: FC<Messenger> = ({ options }) => {
     }
     
     return (
-        <MessengerProvider options={options}>
+        <MessengerProvider>
             <div className={wy('messenger-provider')}>
 
-                <div className={wy('messenger-sidebar')}>
+                <div className={wy('messenger-sidebar scroll-y')}>
                     <ConversationList />
                 </div>
 
-                <div  className={wy('messenger-conversation')}>
+                <div className={wy('messenger-conversation scroll-y')}>
                     <Conversation id={null} />
                 </div>
             </div>

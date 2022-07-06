@@ -3,22 +3,14 @@ import usePresence from "../hooks/usePresence";
 
 export const MessengerContext = createContext<MessengerContextProps>({
     selectedConversationId: null,
-    setSelectedConversationId: (id: any) => { },
-    options: {}
+    setSelectedConversationId: (id: any) => { }    
 });
 
 type Props = {
-    children: React.ReactNode,
-    options?: MessengerContextOptions
+    children: React.ReactNode    
 }
 
-const MessengerProvider = ({ children, options }: Props) => {
-
-    let defaultOptions: MessengerContextOptions = {
-        reactions: ['😍', '😎', '😉', '😜', '👍']
-    };
-
-    let opts = { ...defaultOptions, ...options };
+const MessengerProvider = ({ children }: Props) => {
 
     const [selectedConversationId, setSelectedConversation] = useState(null);
 
@@ -31,7 +23,7 @@ const MessengerProvider = ({ children, options }: Props) => {
 
     return (
         <>
-            <MessengerContext.Provider value={{ options: opts, selectedConversationId, setSelectedConversationId }}>
+            <MessengerContext.Provider value={{ selectedConversationId, setSelectedConversationId }}>
                 {children}
             </MessengerContext.Provider>
         </>

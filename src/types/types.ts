@@ -19,11 +19,12 @@ type WeavyContextOptions = {
     zoomAuthenticationUrl?: string,
     teamsAuthenticationUrl?: string,
     enableCloudFiles?: boolean,
-    filebrowserUrl?: string
+    enableScrollbarDetection?: boolean,
+    filebrowserUrl?: string,
+    reactions?: string[]
 }
 
 type MessengerContextProps = {    
-    options?: MessengerContextOptions,    
     selectedConversationId: null | number,
     setSelectedConversationId: Function    
 };
@@ -31,11 +32,6 @@ type MessengerContextProps = {
 type UserContextProps = {        
     user: UserType    
 };
-
-
-type MessengerContextOptions = {
-    reactions?: string[]
-}
 
 type PreviewContextProps = {
     openPreview: Function,

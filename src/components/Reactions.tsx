@@ -8,6 +8,7 @@ import classNames from "classnames";
 import { prefix as wy } from "../utils/styles";
 import useReactions from "../hooks/useReactions";
 import useMutateDeleteReaction from "../hooks/useMutateDeleteReaction";
+import { WeavyContext } from "../contexts/WeavyContext";
 
 type ReactionMenuProps = {
     id: number,
@@ -25,7 +26,7 @@ export const ReactionsMenu = ({ id, reactions }: ReactionMenuProps) => {
     const reactionMutation = useMutateReaction();
     const reactionDeleteMutation = useMutateDeleteReaction();
     const [visible, setVisible] = useState<boolean>(false);
-    const { options } = useContext(MessengerContext);
+    const { options } = useContext(WeavyContext);
     const [reactedEmoji, setReactedEmoji] = useState<string>('');
 
     const emojis = options?.reactions;

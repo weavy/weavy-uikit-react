@@ -83,17 +83,16 @@ export default App;
 ```
 
 
-## Add the stylesheets
+## Add the stylesheet
 
 In your index.tsx (or index.js if you are not using TypeScript) file, add the following
 
 
 ```js
 // ---------------------------------------------------------
-// add the following two lines of code
+// add the following line of code
 // ---------------------------------------------------------
-import "@weavy/themes/dist/weavy-reboot.css";             
-import "@weavy/themes/dist/weavy-default-messenger.css";  
+import "@weavy/themes/dist/weavy-default.css";  
 // ---------------------------------------------------------
 
 const container = document.getElementById('root');

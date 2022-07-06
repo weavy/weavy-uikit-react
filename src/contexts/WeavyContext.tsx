@@ -8,6 +8,7 @@ import timezone from 'dayjs/plugin/timezone';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import PreviewProvider from "./PreviewContext";
 import WeavyClient from "../client/WeavyClient";
+import detectScrollbars from '../utils/scrollbarDetection';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -40,10 +41,16 @@ const WeavyProvider = ({ children, client, options }: Props) => {
     zoomAuthenticationUrl: undefined,
     teamsAuthenticationUrl: undefined,
     enableCloudFiles: true,
-    filebrowserUrl: "https://filebrowser.weavycloud.com/index10.html"
+    enableScrollbarDetection: true,
+    filebrowserUrl: "https://filebrowser.weavycloud.com/index10.html",
+    reactions: ['😍', '😎', '😉', '😜', '👍']
   };
 
   let opts = { ...defaultOptions, ...options }
+
+  if (opts.enableScrollbarDetection) {
+    detectScrollbars();
+  }
 
   return (
     <>

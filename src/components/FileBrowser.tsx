@@ -61,7 +61,7 @@ const FileBrowser = ({ onFileAdded }: Props) => {
             $filebrowserFrame.name = "weavy-filebrowser";
             $filebrowserFrame.src = filebrowserSrc;
             $filebrowserFrame.className = wy('filebrowser-frame');
-            $filebrowserFrame.style.cssText = "position: absolute; top: 0; left: 0; height: 100%; width: 100%; background: rgba(1,1,1,.4); z-index: 10000; display:none"
+            $filebrowserFrame.style.cssText = "position: fixed; top: 0; left: 0; height: 100%; width: 100%; background: rgba(1,1,1,.4); z-index: 10000; display:none"
 
             window.top?.document.body.appendChild($filebrowserFrame);
 

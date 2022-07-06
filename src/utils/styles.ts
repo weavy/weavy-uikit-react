@@ -13,7 +13,7 @@ var themePrefix = "wy";
   
   
   /**
-   * Prefixes one or more classnames (with or without dot) using the themePrefix
+   * Prefixes one or more classnames (with or without dot or double dash) using the themePrefix
    * @param {...string} strs 
    * @returns string[]
    */
@@ -22,18 +22,33 @@ var themePrefix = "wy";
     if (_prefix) {
       strs = strs.map((str) => {
         str ??= '';
-        if (str[0] === '.') {
-          return `.${_prefix}-${str.substring(1)}`;
-        } else {
-          return `${_prefix}-${str}`;
+        if (str[0] === '.') { // .example-class
+          // Skip if already set
+          if (str.substring(1).indexOf(_prefix + "-") !== 0) {
+            return `.${_prefix}-${str.substring(1)}`;
+          }
+        } else if (str.indexOf("--") === 0) { // --example-var
+          // Skip if already set
+          if (str.substring(2).indexOf(_prefix + "-") !== 0) {
+            return `--${_prefix}-${str.substring(2)}`;
+          }
+        } else { // example-class
+          // Skip if already set
+          if (str.indexOf(_prefix + "-") !== 0) {
+            return `${_prefix}-${str}`;
+          }
         }
+
+        // return untouched str
+        return str;
+        
       })
     }
     return strs;
   }
 
   /**
-   * Prefixes one classname (with or without dot) using the themePrefix
+   * Prefixes a classname string (containing one or multiple space-separated classnames, with or without dot or double dash) using the themePrefix
    * @param {string} str 
    * @returns string
    */
