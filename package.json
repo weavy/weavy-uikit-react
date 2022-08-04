@@ -1,6 +1,6 @@
 {
   "name": "@weavy/uikit-react",
-  "version": "11.2.0",
+  "version": "12.0.0",
   "author": "Weavy",
   "description": "React UI-kit for Weavy",
   "homepage": "https://github.com/weavy/weavy-uikit-react",
@@ -8,6 +8,7 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "./dist/cjs/types/index.d.ts",
+  "style": "dist/css/weavy-react.css",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.0",
     "@rollup/plugin-node-resolve": "^13.1.3",
@@ -17,11 +18,13 @@
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.3",
     "@types/react-modal": "^3.13.1",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
     "rollup": "^2.72.0",
-    "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-dts": "^4.2.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-terser": "^7.0.2",
+    "sass": "^1.53.0",
     "tslib": "^2.4.0",
     "typescript": "^4.6.4"
   },
@@ -30,17 +33,25 @@
     "react-dom": "^18.1.0"
   },
   "scripts": {
-    "build": "rollup -c",
-    "watch": "rollup -c --watch"
+    "clean": "rimraf dist/*",
+    "build": "npm-run-all clean --parallel css js",
+    "css": "sass scss:dist/css --no-source-map",
+    "js": "rollup -c",
+    "watch": "npm-run-all clean --parallel watch-css watch-js",
+    "watch-css": "sass scss:dist/css --watch",
+    "watch-js": "rollup -c --watch"
   },
   "dependencies": {
+    "@mdi/js": "^6.9.96",
     "@mdi/react": "^1.6.0",
     "@microsoft/signalr": "^6.0.3",
+    "@weavy/themes": "^12.0.0",
     "classnames": "^2.3.1",
     "dayjs": "^1.11.1",
     "emoji-toolkit": "^6.6.0",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
+    "pdfjs-dist": "^2.14.305",
     "react-modal": "^3.14.4",
     "react-query": "^3.34.16"
   }

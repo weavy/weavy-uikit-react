@@ -4,7 +4,6 @@ import Button from '../ui/Button';
 import Icon from '../ui/Icon';
 import useMutateExternalBlobs from '../hooks/useMutateExternalBlobs';
 import { UserContext } from "../contexts/UserContext";
-import { prefix as wy } from "../utils/styles";
 
 type Props = {
     onFileAdded: Function
@@ -60,7 +59,7 @@ const FileBrowser = ({ onFileAdded }: Props) => {
             $filebrowserFrame.id = "weavy-filebrowser";
             $filebrowserFrame.name = "weavy-filebrowser";
             $filebrowserFrame.src = filebrowserSrc;
-            $filebrowserFrame.className = wy('filebrowser-frame');
+            $filebrowserFrame.className = "wy-filebrowser-frame";
             $filebrowserFrame.style.cssText = "position: fixed; top: 0; left: 0; height: 100%; width: 100%; background: rgba(1,1,1,.4); z-index: 10000; display:none"
 
             window.top?.document.body.appendChild($filebrowserFrame);

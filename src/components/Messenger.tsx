@@ -4,7 +4,6 @@ import Conversation from './Conversation';
 import ConversationList from './ConversationList';
 import { Messenger } from '../types/Messenger';
 import { WeavyContext } from '../contexts/WeavyContext';
-import { prefix as wy } from "../utils/styles";
 
 const Messenger: FC<Messenger> = () => {
 
@@ -16,13 +15,13 @@ const Messenger: FC<Messenger> = () => {
     
     return (
         <MessengerProvider>
-            <div className={wy('messenger-provider')}>
+            <div className="wy-messenger-provider">
 
-                <div className={wy('messenger-sidebar scroll-y')}>
+                <div className="wy-messenger-sidebar wy-scroll-y">
                     <ConversationList />
                 </div>
 
-                <div className={wy('messenger-conversation scroll-y')}>
+                <div className="wy-messenger-conversation wy-scroll-y">
                     <Conversation id={null} />
                 </div>
             </div>

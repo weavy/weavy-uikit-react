@@ -4,7 +4,6 @@ import useSearchUsers from "../hooks/useSearchUsers";
 import Avatar from './Avatar';
 import Button from '../ui/Button';
 import Icon from '../ui/Icon';
-import { prefix as wy } from "../utils/styles";
 
 type SearchUsersProps = {
     handleSubmit: any,
@@ -42,33 +41,33 @@ const SearchUsers = ({handleSubmit, buttonTitle}: SearchUsersProps) => {
     }
 
     return (
-        <div className={wy('search scroll-y')}>
-            <div className={wy('search-form pane-group')}>
+        <div className="wy-search wy-scroll-y">
+            <div className="wy-search-form wy-pane-group">
                 <Button.UI><Icon.UI name="magnify" /></Button.UI>
-                <input className={wy('search-input')} value={text} onChange={(e) => setText(e.target.value)} name="text" placeholder='Search...' />
+                <input className="wy-search-input" value={text} onChange={(e) => setText(e.target.value)} name="text" placeholder='Search...' />
             </div>
 
-            <div className={wy('pane-group')}>
+            <div className="wy-pane-group">
                 {data && data.data.length === 0 &&
-                    <div className={wy('search-no-result')}>Your search did not match any people.</div>
+                    <div className="wy-search-no-result">Your search did not match any people.</div>
                 }
-                <table className={wy('search-result-table')}>
+                <table className="wy-search-result-table">
                     <tbody>
                         {data && data.data.length > 0 && data.data.map((user: MemberType) => {
                             return (
-                                <tr key={user.id} className={wy('search-result-table-checkbox')}>
-                                    <td className={wy('search-result-table-icon')}>
+                                <tr key={user.id} className="wy-search-result-table-checkbox">
+                                    <td className="wy-search-result-table-icon">
                                         <Avatar src={user.avatar_url} size={24} id={user.id} presence={user.presence} name={user.display_name} />
                                     </td>
                                     <td><label htmlFor={'chk' + user.id}>{user.display_name}</label></td>
-                                    <td className={wy('search-result-table-icon')}><input type="checkbox" id={'chk' + user.id} checked={isChecked(user.id)} onChange={(e) => handleSelected(e, user)} /></td>
+                                    <td className="wy-search-result-table-icon"><input type="checkbox" id={'chk' + user.id} checked={isChecked(user.id)} onChange={(e) => handleSelected(e, user)} /></td>
                                 </tr>
                             )
                         })}
                     </tbody>
                 </table>
             </div>
-            {/*<div className={wy('search-group')}>
+            {/*<div className="wy-search-group">
                 <h2>Selected people</h2>
                 <ul>
                     {selected && selected.length > 0 && selected.map((user: UserType) => {
@@ -76,10 +75,10 @@ const SearchUsers = ({handleSubmit, buttonTitle}: SearchUsersProps) => {
                     })}
                 </ul>
                 </div>*/}
-            <div className={wy('footerbars')}>
-                <div className={wy('footerbar')}>
-                    <div className={wy('pane-group')}>
-                        <button className={wy('button-primary')} type="button" onClick={() => {handleSubmit(selected); clear();}} disabled={selected.length === 0}>{buttonTitle}</button>
+            <div className="wy-footerbars">
+                <div className="wy-footerbar">
+                    <div className="wy-pane-group">
+                        <button className="wy-button-primary" type="button" onClick={() => {handleSubmit(selected); clear();}} disabled={selected.length === 0}>{buttonTitle}</button>
                     </div>
                 </div>
             </div>

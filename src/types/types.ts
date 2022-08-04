@@ -137,6 +137,8 @@ type AttachmentType = {
     external_url: string
 }
 
+type PreviewFormatType = "text"|"code"|"markup"|"image"|"video"|"audio"|"document"|"embed"|"link"|"download"|"none";
+
 type ReactionType = {    
     id: number,
     parent: MessageType, 

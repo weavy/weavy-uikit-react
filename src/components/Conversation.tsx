@@ -13,14 +13,12 @@ import SearchUsers from './SearchUsers';
 import useMutateMembers from '../hooks/useMutateMembers';
 import useConversation from '../hooks/useConversation';
 import useMutateConversationName from '../hooks/useMutateConversationName';
-import { prefix as wy } from "../utils/styles";
 import useMutateRemoveMembers from '../hooks/useMutateRemoveMembers';
 import Avatar from './Avatar';
 import { UserContext } from '../contexts/UserContext';
 import Messages from './Messages';
 
 const Conversation = ({ id, showBackButton }: ConversationProps) => {
-
 
     const queryClient = useQueryClient();
     const { client } = useContext(WeavyContext);
@@ -85,10 +83,6 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
         setSelectedConversationId(null);
     }
 
-    
-
-
-
     // set selected conversation id if id is supplied to component
     useEffect(() => {
         if (id) {
@@ -117,13 +111,10 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
         }
     }, [dataConversation]);
 
-
-
-
     return (
         <>
-            <header className={wy('appbars')}>
-                <nav className={wy('appbar')}>
+            <header className="wy-appbars">
+                <nav className="wy-appbar">
                     <div>
                         {showBackButton &&
                             <Button.UI onClick={handleBack}><Icon.UI name="back" /></Button.UI>
@@ -131,7 +122,7 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
                     {selectedConversationId && dataConversation &&
 
                         <>
-                            <div className='wy-appbar-text'>
+                            <div className="wy-appbar-text">
                                 <Typing id={selectedConversationId} context="conversation">
                                     {dataConversation.display_name}
                                 </Typing>
@@ -154,7 +145,7 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
             </header>
 
             {!selectedConversationId &&
-                <div className={wy('avatar-header')}>
+                <div className="wy-avatar-header">
                     <Avatar src={user.avatar_url} name={user.title} presence={user.presence} id={user.id} size={256} />
                     <h2>Welcome {user.name}!</h2>
                     Create or select a conversation to get started
@@ -164,41 +155,41 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
                 <Messages id={selectedConversationId} members={dataMembers} displayName={dataConversation?.display_name} avatarUrl={dataConversation?.avatar_url} />
             }
 
-            <Overlay.UI isOpen={modalAddOpen} className={wy('modal')}>
-                <header className={wy('appbars')}>
-                    <nav className={wy('appbar')}>
+            <Overlay.UI isOpen={modalAddOpen} className="wy-modal">
+                <header className="wy-appbars">
+                    <nav className="wy-appbar">
                         <Button.UI onClick={() => toggleAddModal(false)}><Icon.UI name='close' /></Button.UI>
-                        <div className={wy('appbar-text')}>Add people</div>
+                        <div className="wy-appbar-text">Add people</div>
                     </nav>
                 </header>
                 <SearchUsers handleSubmit={handleAdd} buttonTitle="Add selected" />
             </Overlay.UI>
 
-            <Overlay.UI isOpen={modalDetailsOpen} className={wy('modal')}>
-                <header className={wy('appbars')}>
-                    <nav className={wy('appbar')}>
+            <Overlay.UI isOpen={modalDetailsOpen} className="wy-modal">
+                <header className="wy-appbars">
+                    <nav className="wy-appbar">
                         <Button.UI onClick={() => toggleDetailsModal(false)}><Icon.UI name='close' /></Button.UI>
-                        <div className={wy('appbar-text')}>Conversation details</div>
+                        <div className="wy-appbar-text">Conversation details</div>
                     </nav>
                 </header>
                 <div>
-                    {dataConversation && <div className={wy('avatar-header')}><Avatar src={dataConversation?.avatar_url} name={title} size={128} /></div>}
+                    {dataConversation && <div className="wy-avatar-header"><Avatar src={dataConversation?.avatar_url} name={title} size={128} /></div>}
                     {dataConversation?.type !== ChatRoom &&
-                        <h4 className={wy('avatar-display-name')}>{dataConversation?.display_name}</h4>
+                        <h4 className="wy-avatar-display-name">{dataConversation?.display_name}</h4>
                     }
 
                     {dataConversation?.type === ChatRoom && (
                         <>
-                            <div className={wy('pane-group')}>
-                                <input className={wy('input')} value={title} onChange={(e) => handleUpdateTitle(e)} />
+                            <div className="wy-pane-group">
+                                <input className="wy-input" value={title} onChange={(e) => handleUpdateTitle(e)} />
                             </div>
-                            <div className={wy('pane-group')}>
-                                <table className={wy('search-result-table')}>
+                            <div className="wy-pane-group">
+                                <table className="wy-search-result-table">
                                     <tbody>
                                         {dataMembers?.data.map((m: MemberType) => {
                                             return (
-                                                <tr key={m.id} className={wy('search-result-table-checkbox')}>
-                                                    <td className={wy('search-result-table-icon')}><Avatar src={m.avatar_url} name={m.display_name} id={m.id} size={24} presence={m.presence} /></td>
+                                                <tr key={m.id} className="wy-search-result-table-checkbox">
+                                                    <td className="wy-search-result-table-icon"><Avatar src={m.avatar_url} name={m.display_name} id={m.id} size={24} presence={m.presence} /></td>
                                                     <td>{m.display_name}</td>
                                                     <td></td>
                                                 </tr>

@@ -1,5 +1,5 @@
 import React from "react";
-import { prefix as wy } from "../utils/styles";
+import classNames from "classnames";
 
 type Props = {
     id: number,
@@ -8,7 +8,7 @@ type Props = {
 
 const Presence = ({ id, status }: Props) => {
     return (
-        <span className={wy(`presence ${status === "active" ? "presence-active" : ""}`)} data-presence-id={id}></span>
+        <span className={classNames("wy-presence", { "wy-presence-active": status === "active" })} data-presence-id={id}></span>
     )
 } 
 

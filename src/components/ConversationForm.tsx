@@ -11,8 +11,6 @@ import Meetings from './Meetings';
 import Meeting from './Meeting';
 import FileBrowser from './FileBrowser';
 import { getIcon } from '../utils/fileUtilities';
-import { prefix as wy } from "../utils/styles";
-
 
 type Props = {
     conversationId: number,
@@ -46,12 +44,9 @@ const ConversationForm = ({ conversationId, handleInsert }: Props) => {
                 setAttachments([...attachments, attachment[0]]);
             }
         })
-
-
     }
 
     const { mutateAsync: uploadFile, isSuccess: uploadSuccess } = useFileUploader(handleUploaded);
-
 
     useEffect(() => {
         // set stored text and attachments if available
@@ -70,8 +65,6 @@ const ConversationForm = ({ conversationId, handleInsert }: Props) => {
     useEffect(() => {
         handleAutoGrow();
     }, [text])
-
-
 
     const handleInsertMessage = (e: React.KeyboardEvent<EventTarget>) => {
 
@@ -159,7 +152,7 @@ const ConversationForm = ({ conversationId, handleInsert }: Props) => {
 
 
     return (
-        <form className={wy('message-form')}>
+        <form className="wy-message-form">
             {uploadError &&
                 <div>{uploadError}</div>
             }
@@ -169,12 +162,12 @@ const ConversationForm = ({ conversationId, handleInsert }: Props) => {
                     {working &&
                         <div>Now uploading ({currentUploadCount} of {fileCount}) selected files</div>
                     }
-                    <div className={wy('picker-list')}>
+                    <div className="wy-picker-list">
                         {attachments.map((a: FileType) => {
                             let { icon } = getIcon(a.name);
                             return (
-                                <div key={a.id} className={wy('picker-list-item')}>
-                                    <File id={a.id} name={a.name} className={wy('picker-list-item-title')} icon={ icon } />
+                                <div key={a.id} className="wy-picker-list-item">
+                                    <File id={a.id} name={a.name} className="wy-picker-list-item-title" icon={ icon } />
                                     <Button.UI onClick={handleRemoveFile.bind(ConversationForm, a.id)}><Icon.UI name='close-circle' /></Button.UI>
                                 </div>
 
@@ -183,8 +176,8 @@ const ConversationForm = ({ conversationId, handleInsert }: Props) => {
 
                         {meetings.map((m: MeetingType) => {
                             return (
-                                <div key={m.id} className={wy('picker-list-item')}>
-                                    <Meeting id={m.id} title={m.provider} className={wy('picker-list-item-title')} />
+                                <div key={m.id} className="wy-picker-list-item">
+                                    <Meeting id={m.id} title={m.provider} className="wy-picker-list-item-title" />
                                     <Button.UI onClick={handleRemoveMeeting.bind(ConversationForm, m.id)}><Icon.UI name='close-circle' /></Button.UI>
                                 </div>
 
@@ -193,19 +186,19 @@ const ConversationForm = ({ conversationId, handleInsert }: Props) => {
                     </div>
                 </div>
             }
-            <div className={wy('message-editor-inputs')}>
+            <div className="wy-message-editor-inputs">
 
-                <div className={wy('message-editor-buttons')}>
+                <div className="wy-message-editor-buttons">
                     <input type="file" ref={input => fileInput = input} value={files} onChange={handleFileUpload} multiple hidden tabIndex={-1} />
                     <Button.UI title="Upload attachment" onClick={openFileInput}><Icon.UI name="attachment" /></Button.UI>
                     <Meetings onMeetingAdded={handleAddMeeting} />
                     <FileBrowser onFileAdded={handleExternalFileAdded} />
                 </div>
 
-                <div className={wy('message-editor-text message-editor-grow')}>
-                    <textarea rows={1} ref={textInput} className={wy('message-editor-textfield message-editor-textcontent')}  value={text} onChange={handleChange} onKeyDown={handleInsertMessage} onKeyPress={useThrottle(handleKeyPress, 4000)}></textarea>
+                <div className="wy-message-editor-text wy-message-editor-grow">
+                    <textarea rows={1} ref={textInput} className="wy-message-editor-textfield wy-message-editor-textcontent"  value={text} onChange={handleChange} onKeyDown={handleInsertMessage} onKeyPress={useThrottle(handleKeyPress, 4000)}></textarea>
                 </div>
-                <div className={wy('message-editor-buttons')}>
+                <div className="wy-message-editor-buttons">
                     <Button.UI type="button" onClick={handleInsertMessage} ><Icon.UI name="send"/></Button.UI>
                 </div>
             </div>

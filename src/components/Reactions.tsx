@@ -5,7 +5,6 @@ import Button from "../ui/Button";
 import { MessengerContext } from "../contexts/MessengerContext";
 import classNames from "classnames";
 
-import { prefix as wy } from "../utils/styles";
 import useReactions from "../hooks/useReactions";
 import useMutateDeleteReaction from "../hooks/useMutateDeleteReaction";
 import { WeavyContext } from "../contexts/WeavyContext";
@@ -69,12 +68,12 @@ export const ReactionsMenu = ({ id, reactions }: ReactionMenuProps) => {
     }
 
     return (
-        <div className={wy(classNames("", { "active": visible }))} style={{ position: 'relative' }}>
-            <Button.UI onClick={toggleReactionMenu}><Icon.UI name="emoticon-outline" size={1} /></Button.UI>
-            <div className={wy('reaction-menu dropdown-menu')} style={{ display: visible ? 'block' : 'none', position: 'absolute', top: '-3.25rem' }}>
-                <div className={wy('reaction-picker')}>
+        <div className={classNames({ "wy-active": visible })} style={{ position: 'relative' }}>
+            <Button.UI onClick={toggleReactionMenu}><Icon.UI name="emoticon-plus" size={1} /></Button.UI>
+            <div className="wy-reaction-menu wy-dropdown-menu" style={{ display: visible ? 'block' : 'none', position: 'absolute', top: '-3.25rem' }}>
+                <div className="wy-reaction-picker">
                     {emojis?.map((r: string, i: number) => {
-                        return <Button.UI key={i} onClick={handleReaction} className={wy(classNames("button-icon reaction-button", { "active": reactedEmoji === r }))} data-emoji={r}>{r}</Button.UI> //reactedEmoji
+                        return <Button.UI key={i} onClick={handleReaction} className={classNames("wy-button-icon wy-reaction-button", { "wy-active": reactedEmoji === r })} data-emoji={r}>{r}</Button.UI> //reactedEmoji
                     })}
                 </div>
             </div>
@@ -89,7 +88,7 @@ export const ReactionsList = ({ id, reactions }: ReactionsProps) => {
     return (
         <>
             {reactionsList && reactionsList.map((r: ReactionGroup, i: number) => {
-                return <span key={i} className={wy('reaction')} title={r.count.toString()}>{r.content}</span> //r.has_reacted
+                return <span key={i} className="wy-reaction" title={r.count.toString()}>{r.content}</span> //r.has_reacted
             })}
         </>
     )

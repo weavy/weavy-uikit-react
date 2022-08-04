@@ -2,7 +2,6 @@ import { useCallback, useContext, useEffect, useLayoutEffect, useState } from "r
 import { UserContext } from "../contexts/UserContext";
 import useEvents from "./useEvents";
 
-
 export default function useReactions(id: number, reactions: ReactableType[]) {
     const { on, off } = useEvents();
     const { user } = useContext(UserContext);

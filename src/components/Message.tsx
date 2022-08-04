@@ -9,13 +9,12 @@ import SeenBy from './SeenBy';
 import Avatar from "./Avatar";
 import MeetingCard from './MeetingCard';
 import usePreview from '../hooks/usePreview';
-import { prefix as wy } from "../utils/styles";
+import classNames from 'classnames';
 
 const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_at, attachments, meeting, parentId, reactions, seenBy }) => {
 
     const { open, close } = usePreview(attachments);
 
-    var messageClassName = wy("message" + (me ? " message-me" : ""));
     var images = attachments?.filter((a: AttachmentType) => a.kind === "image" && a.thumbnail_url);
     var files = attachments?.filter((a: AttachmentType) => a.kind !== "image" || !a.thumbnail_url);
 
@@ -28,20 +27,20 @@ const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_a
 
     return (
         <>
-            <div className={messageClassName}>
+            <div className={classNames("wy-message", { "wy-message-me": me })}>
                 {!me && (
-                    <div className={wy('message-author')}>
+                    <div className="wy-message-author">
                         {avatar && <Avatar src={avatar} size={32} name={name} />}
                     </div>
                 )}
-                <div className={wy('message-content')}>
-                    <div className={wy('message-meta')}>
+                <div className="wy-message-content">
+                    <div className="wy-message-meta">
                         <time dateTime={created_at} title={date.format('LLLL')}>{date.fromNow()}</time>
                     </div>
-                    <div className={wy('message-content-row')}>
-                        <div className={wy('message-bubble')}>
+                    <div className="wy-message-content-row">
+                        <div className="wy-message-bubble">
                             {temp &&
-                                <div className={wy('message-text')}>{html}</div>
+                                <div className="wy-message-text">{html}</div>
                             }
                             {!temp &&
                                 <>
@@ -51,13 +50,13 @@ const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_a
                                         )}
                                     </ImageGrid>}
 
-                                    {html && <div className={wy('message-text')} dangerouslySetInnerHTML={{ __html: joypixels.shortnameToUnicode(html || "") }}></div>}
+                                    {html && <div className="wy-message-text" dangerouslySetInnerHTML={{ __html: joypixels.shortnameToUnicode(html || "") }}></div>}
 
                                     {meeting &&
                                         <MeetingCard meeting={meeting} />
                                     }
 
-                                    {files && !!files.length && <div className={wy('attachments')}>
+                                    {files && !!files.length && <div className="wy-attachments">
                                         {files.map((a: AttachmentType) =>
                                             <Attachment key={a.id} name={a.name} previewFormat={a.kind} provider={a.provider} url={a.download_url} previewUrl={a.provider ? a.external_url : a.preview_url} mediaType={a.media_type} kind={a.kind} size={a.size} />
                                         )}
@@ -66,13 +65,13 @@ const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_a
 
                             }
                         </div>
-                        <div className={wy('message-buttons')}>
+                        <div className="wy-message-buttons">
                             {!temp && <ReactionsMenu id={id} reactions={reactions} />}
                         </div>
                     </div>
 
                     {!temp && (
-                        <div className={wy('reactions')}>
+                        <div className="wy-reactions">
                             <ReactionsList id={id} parentId={parentId} reactions={reactions} />
                         </div>
                     )}

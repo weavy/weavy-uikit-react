@@ -6,7 +6,6 @@ import Messages from './Messages';
 import useMembers from '../hooks/useMembers';
 import Typing from './Typing';
 import useConversation from '../hooks/useConversation';
-import { prefix as wy } from "../utils/styles";
 
 const Chat = ({ id }: ChatProps) => {
     const { client } = useContext(WeavyContext);
@@ -37,9 +36,9 @@ const Chat = ({ id }: ChatProps) => {
     }, [dataChat]);
 
     return (
-        <div className={wy('messenger-conversation scroll-y')}>
-            <header className={wy('appbars')}>
-                <nav className={wy('appbar')}>
+        <div className="wy-messenger-conversation wy-scroll-y">
+            <header className="wy-appbars">
+                <nav className="wy-appbar">
                     <div></div>
                     {selectedId && dataConversation &&
                         <div className="wy-appbar-text">

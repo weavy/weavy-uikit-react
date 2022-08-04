@@ -11,7 +11,6 @@ import useMutateRead from '../hooks/useMutateRead';
 import useMutateMessage from '../hooks/useMutateMessage';
 import { useQueryClient } from 'react-query';
 import { WeavyContext } from '../contexts/WeavyContext';
-import { prefix as wy } from "../utils/styles";
 import Avatar from './Avatar';
 
 type Props = {
@@ -198,16 +197,16 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
         readMessageMutation.mutate({ id: id, read: true })
     }, [id]);
 
-    let messageHeader = <div className={wy('avatar-header')}>
+    let messageHeader = <div className="wy-avatar-header">
         {avatarUrl && displayName && <Avatar src={avatarUrl} name={displayName} id={id} size={128} /> || ''}
-        {displayName && <div className={wy('avatar-display-name')}>{displayName}</div> || ''}
+        {displayName && <div className="wy-avatar-display-name">{displayName}</div> || ''}
     </div>;
 
-    let loadMoreButton = <Button.UI onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage} className={wy('message-readmore')}>Load more</Button.UI>;
+    let loadMoreButton = <Button.UI onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage} className="wy-message-readmore">Load more</Button.UI>;
 
     let messages = (
         <>
-            <div className={wy('message-readmore')} ref={readMoreRef}>
+            <div className="wy-message-readmore" ref={readMoreRef}>
             {isFetchingNextPage
                         ? 'Loading more...'
                         : hasNextPage
@@ -258,10 +257,10 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
 
     return (
         <>
-            <div id="container" className={wy('messages')}>
+            <div id="container" className="wy-messages">
                 {messages}
             </div>
-            <div className={wy('message-editor')}>
+            <div className="wy-message-editor">
                 <ConversationForm key={id} conversationId={id} handleInsert={handleNewMessage} />
             </div>
         </>

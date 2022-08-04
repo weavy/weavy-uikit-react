@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { WeavyContext } from "../contexts/WeavyContext";
 import useBadge from "../hooks/useBadge";
-import { prefix as wy } from "../utils/styles";
 
 const ConversationBadge = () => {
     const { client } = useContext(WeavyContext);
@@ -34,7 +33,7 @@ const ConversationBadge = () => {
     return (
         <>
             {!isLoading && badge > 0 &&
-                <span className={wy('badge badge-danger')}>{badge}</span>
+                <span className="wy-badge wy-badge-danger">{badge}</span>
             }
         </>
 

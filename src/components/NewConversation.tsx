@@ -4,7 +4,6 @@ import Icon from '../ui/Icon';
 import Overlay from '../ui/Overlay';
 import Button from '../ui/Button';
 import SearchUsers from './SearchUsers';
-import { prefix as wy } from "../utils/styles";
 
 const NewConversation = () => {
     const [modalOpen, setModalOpen] = useState(false);
@@ -27,14 +26,13 @@ const NewConversation = () => {
 
     return (
         <>
-
             <Button.UI onClick={handleOpen}><Icon.UI name="plus" /></Button.UI>
 
-            <Overlay.UI isOpen={modalOpen} className={wy('modal')}>
-                <header className={wy('appbars')}>
-                    <nav className={wy('appbar')}>
+            <Overlay.UI isOpen={modalOpen} className="wy-modal">
+                <header className="wy-appbars">
+                    <nav className="wy-appbar">
                         <Button.UI onClick={handleClose}><Icon.UI name='close' /></Button.UI>
-                        <div className={wy('appbar-text')}>Create conversation</div>
+                        <div className="wy-appbar-text">Create conversation</div>
                     </nav>
                 </header>
 

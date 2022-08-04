@@ -2,7 +2,6 @@ import React, { createContext, useEffect, useState } from "react";
 import Overlay from '../ui/Overlay';
 import Button from '../ui/Button';
 import Icon from '../ui/Icon';
-import { prefix as wy } from "../utils/styles";
 
 export const PreviewContext = createContext<PreviewContextProps>({
     openPreview: Function,
@@ -64,11 +63,11 @@ const PreviewProvider = ({ children }: Props) => {
                 {children}
             </PreviewContext.Provider>
 
-            <Overlay.UI isOpen={modalPreviewOpen} className={wy('dark')}>
-                <header className={wy('appbars')}>
-                    <nav className={wy('appbar')}>
+            <Overlay.UI isOpen={modalPreviewOpen} className={'wy-dark'}>
+                <header className={'wy-appbars'}>
+                    <nav className={'wy-appbar'}>
                         <Button.UI onClick={closePreview}><Icon.UI name='close' /></Button.UI>
-                        <div className={wy('appbar-text')}>
+                        <div className={'wy-appbar-text'}>
                             {activeAttachment &&
                                 <span>{activeAttachment.name}</span>
                             }
@@ -102,4 +101,3 @@ const PreviewProvider = ({ children }: Props) => {
 };
 
 export default PreviewProvider;
-

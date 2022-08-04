@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Modal, { Styles } from 'react-modal';
 import classNames from 'classnames';
-import { prefix as wy } from "../utils/styles";
 
 type OverlayProps = {
     children: React.ReactNode,
@@ -26,8 +25,8 @@ const customStyles = {
             ariaHideApp={false}
             onAfterOpen={() => { setModalShowing(true)} }
             onRequestClose={() => { setModalShowing(false)}}
-            className={classNames(wy("panel overlay transition"), className, {[wy("open")]: modalShowing})}
-            overlayClassName={wy('overlays viewport')}
+            className={classNames("wy-panel wy-overlay wy-transition", className, {"wy-open": modalShowing})}
+            overlayClassName="wy-overlays wy-viewport"
             contentLabel="Example Modal"
             style={style}
         >

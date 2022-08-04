@@ -1,5 +1,3 @@
-import { prefix } from "./styles";
-
 // SCROLLBAR DETECTION
 
 /**
@@ -20,9 +18,9 @@ export function checkScrollbar(entries) {
       overflowWidth = element === document.documentElement ? window.innerWidth : element.clientWidth;
       if (overflowWidth !== element.offsetWidth) {
         // we have visible scrollbars, add .scrollbar to html element
-        scrollbarClassnameTarget.classList.add(prefix("scrollbars"));
+        scrollbarClassnameTarget.classList.add("wy-scrollbars");
       } else {
-        scrollbarClassnameTarget.classList.remove(prefix("scrollbars"));
+        scrollbarClassnameTarget.classList.remove("wy-scrollbars");
       }
     } catch (e) {
       console.warn("scrollbar detection failed", e);
@@ -35,12 +33,12 @@ export function checkScrollbar(entries) {
  */
 export default function observeScrollbars() {
   // insert scrollbar detection element
-  var scrollCheck = document.getElementById(prefix("scrollbar-detection"));
+  var scrollCheck = document.getElementById("wy-scrollbar-detection");
 
   if (!scrollCheck) {
     scrollCheck = document.createElement("aside");
-    scrollCheck.id = prefix("scrollbar-detection");
-    scrollCheck.className = prefix("scrollbar-detection");
+    scrollCheck.id = "wy-scrollbar-detection";
+    scrollCheck.className = "wy-scrollbar-detection";
     document.documentElement.insertBefore(scrollCheck, document.body);
   }
 

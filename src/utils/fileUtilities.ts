@@ -1,3 +1,5 @@
+import { isConstructorDeclaration } from "typescript";
+
 export const fileSizeAsString = (size: number) => {
     var s = size;
     var format = [" B", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB"];
@@ -9,7 +11,11 @@ export const fileSizeAsString = (size: number) => {
     return s.toLocaleString() + format[i];
 }
 
-const isAudio = (ext: string) => {
+export function getExtension (name: string) {
+    return name.substring(name.lastIndexOf('.') , name.length) || name;
+}
+
+export function isAudio (ext: string) {
     switch (ext) {
         case ".aac":
         case ".aif":
@@ -35,7 +41,7 @@ const isAudio = (ext: string) => {
     }
 }
 
-const isImage = (ext: string) => {
+export function isImage (ext: string) {
     switch (ext) {
         case ".ai":
         case ".apng":
@@ -60,7 +66,54 @@ const isImage = (ext: string) => {
     }
 }
 
-const isVideo = (ext: string) => {
+export function isWebImage (path: string) {
+    // see https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types
+    var ext = getExtension(path);
+    switch (ext) {
+        case ".apng":
+        case ".bmp":
+        case ".gif":
+        case ".ico":
+        case ".jpg":
+        case ".jpeg":
+        case ".png":
+        case ".svg":
+        case ".webp":
+            return true;
+        default:
+            return false;
+    }
+}
+
+export function isBitmap(path: string) {
+    var ext = getExtension(path);
+    switch (ext) {
+        case ".bmp":
+        case ".gif":
+        case ".ico":
+        case ".jpg":
+        case ".jpeg":
+        case ".png":
+        case ".tif":
+        case ".tiff":
+            return true;
+        default:
+            return false;
+    }
+}
+
+export function isMetaFile(path: string) {
+    var ext = getExtension(path);
+    switch (ext) {
+        case ".emf":
+        case ".wmf":
+            return true;
+        default:
+            return false;
+    }
+}
+
+export function isVideo (ext: string) {
     switch (ext) {
         case ".3g2":
         case ".asx":
@@ -91,7 +144,7 @@ const isVideo = (ext: string) => {
     }
 }
 
-const isMarkup = (ext: string) => {
+export function isMarkup (ext: string) {
     switch (ext) {
         case ".htm":
         case ".html":
@@ -103,91 +156,219 @@ const isMarkup = (ext: string) => {
     }
 }
 
-const isText = (ext: string) => {
+export function isCode (ext: string) {
+    if (isMarkup(ext)) {
+        return true;
+    }
     switch (ext) {
         case ".as":
-            case ".as3":
-            case ".asm":
-            case ".aspx":
-            case ".bat":
-            case ".c":
-            case ".cc":
-            case ".cmake":
-            case ".coffee":
-            case ".cpp":
-            case ".cs":
-            case ".css":
-            case ".cxx":
-            case ".diff":
-            case ".erb":
-            case ".erl":
-            case ".groovy":
-            case ".gvy":
-            case ".h":
-            case ".haml":
-            case ".hh":
-            case ".hpp":
-            case ".html":
-            case ".hxx":
-            case ".java":
-            case ".js":
-            case ".json":
-            case ".jsx":
-            case ".less":
-            case ".lst":
-            case ".m":
-            case ".make":
-            case ".markdown":
-            case ".md":
-            case ".mdown":
-            case ".mkdn":
-            case ".ml":
-            case ".mm":
-            case ".out":
-            case ".patch":
-            case ".php":
-            case ".pl":
-            case ".plist":
-            case ".properties":
-            case ".py":
-            case ".rb":
-            case ".sass":
-            case ".scala":
-            case ".scm":
-            case ".script":
-            case ".scss":
-            case ".sh":
-            case ".sml":
-            case ".sql":
-            case ".txt":
-            case ".vb":
-            case ".vi":
-            case ".vim":
-            case ".xhtml":
-            case ".xml":
-            case ".xsd":
-            case ".xsl":
-            case ".yaml":
-            case ".yml":
+        case ".as3":
+        case ".asm":
+        case ".aspx":
+        case ".bat":
+        case ".c":
+        case ".cc":
+        case ".cmake":
+        case ".coffee":
+        case ".cpp":
+        case ".cs":
+        case ".css":
+        case ".cxx":
+        case ".diff":
+        case ".erb":
+        case ".erl":
+        case ".groovy":
+        case ".gvy":
+        case ".h":
+        case ".haml":
+        case ".hh":
+        case ".hpp":
+        case ".hxx":
+        case ".java":
+        case ".js":
+        case ".json":
+        case ".jsx":
+        case ".less":
+        case ".lst":
+        case ".m":
+        case ".make":
+        case ".markdown":
+        case ".md":
+        case ".mdown":
+        case ".mkdn":
+        case ".ml":
+        case ".mm":
+        case ".out":
+        case ".patch":
+        case ".php":
+        case ".pl":
+        case ".plist":
+        case ".properties":
+        case ".py":
+        case ".rb":
+        case ".sass":
+        case ".scala":
+        case ".scm":
+        case ".script":
+        case ".scss":
+        case ".sh":
+        case ".sml":
+        case ".sql":
+        case ".vb":
+        case ".vi":
+        case ".vim":
+        case ".xsd":
+        case ".xsl":
+        case ".yaml":
+        case ".yml":
             return true;
         default:
             return false;
     }
 }
 
-export const getIcon = (name: string, mediaType?: string): { icon: string, color?: string } => {
-    var ext = name.substring(name.lastIndexOf('.') , name.length) || name;
+export function isText (ext: string) {
+    if (isCode(ext)) {
+        return true;
+    }
+    switch (ext) {
+        case ".txt":
+            return true;
+        default:
+            return false;
+    }
+
+}
+export function isOfficeDocument(path: string) {
+    var ext = getExtension(path);
+    switch (ext) {
+        case ".doc":
+        case ".docm":
+        case ".docx":
+        case ".dotm":
+        case ".dotx":
+        case ".ppt":
+        case ".pptm":
+        case ".pptx":
+        case ".potx":
+        case ".xls":
+        case ".xlsm":
+        case ".xlsx":
+        case ".xltx":
+            return true;
+        default:
+            return false;
+    }
+}
+
+export function canResize(path:string) {
+    return isBitmap(path) || isMetaFile(path);
+}
+
+export function canConvertToImage (filename: string) {
+    var ext = getExtension(filename);
+    if (canResize(ext) || isText(ext)) {
+        return true;
+    }
+    switch (ext) {
+        case ".ai":
+        case ".csv":
+        case ".doc":
+        case ".docm":
+        case ".docx":
+        case ".dot":
+        case ".dotm":
+        case ".dotx":
+        case ".eml":
+        case ".eps":
+        case ".msg":
+        case ".odp":
+        case ".ods":
+        case ".odt":
+        case ".ott":
+        case ".pdf":
+        case ".potm":
+        case ".potx":
+        case ".ppt":
+        case ".pptx":
+        case ".pps":
+        case ".ppsx":
+        case ".pptm":
+        case ".ppsm":
+        case ".psd":
+        case ".rtf":
+        case ".svg":
+        case ".xls":
+        case ".xlsb":
+        case ".xlsm":
+        case ".xlsx":
+        case ".xltm":
+        case ".xltx":
+        case ".webp":
+            return true;
+        default:
+            return false;
+    }
+}
+
+export function canConvertToPdf (filename: string) {
+    var ext = getExtension(filename);
+    switch (ext) {
+        case ".ai":
+        case ".doc":
+        case ".docm":
+        case ".docx":
+        case ".dot":
+        case ".dotm":
+        case ".dotx":
+        case ".eml":
+        case ".html":
+        case ".mhtml":
+        case ".msg":
+        case ".odt":
+        case ".ott":
+        case ".pdf":
+        case ".rtf":
+        case ".txt":
+        case ".xml":
+        case ".xls":
+        case ".xlsb":
+        case ".xlsm":
+        case ".xlsx":
+        case ".xltm":
+        case ".xltx":
+        case ".ods":
+        case ".csv":
+        case ".ppt":
+        case ".pptx":
+        case ".pps":
+        case ".ppsx":
+        case ".pptm":
+        case ".ppsm":
+        case ".potx":
+        case ".potm":
+        case ".odp":
+            return true;
+        default:
+            return false;
+    }
+}
+
+export function getIcon (name: string, mediaType?: string): { icon: string, color?: string } {
+    var ext = getExtension(name);
 
     if (ext === "") return { icon: "file" };
 
     if (isAudio(ext)) {
-        return { icon: "file", color: "indigo" };
+        return { icon: "file-music", color: "indigo" };
     } else if (isImage(ext)) {
         return { icon: "file-image", color: "cyan" };
     } else if (isVideo(ext)) {
-        return { icon: "file-image", color: "pink" };
+        return { icon: "file-video", color: "pink" };
     } else if (isMarkup(ext)) {
         return { icon: "file-xml", color: "purple" };
+    } else if (isCode(ext)) {
+        return { icon: "file-code", color: "purple" };
     } else if (isText(ext)) {
         return { icon: "file-document" };
     } else{
@@ -227,4 +408,31 @@ export const getIcon = (name: string, mediaType?: string): { icon: string, color
 
     // fallback
     return { icon: "file" };
+}
+
+export function getPreviewFormat(filename:string): PreviewFormatType {
+    var ext = getExtension(filename);
+    if (isCode(ext)) {
+        //return "code";
+    }
+    if (isText(ext)) {
+        return "text";
+    }
+    if (isWebImage(ext)) {
+        return "image";
+    }
+    if (isVideo(ext)) {
+        return "video";
+    }
+    if (isAudio(ext)) {
+        return "audio";
+    }
+    if (canConvertToPdf(ext)) {
+        return "document";
+    }
+    if (canConvertToImage(ext)) {
+        return "image";
+    }
+
+    return "none";
 }

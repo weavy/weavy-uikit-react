@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { prefix as wy } from "../utils/styles";
+import React, { useCallback } from "react";
 
 type ImageProps = {
     src: string,
@@ -9,6 +8,33 @@ type ImageProps = {
     more?: number,
     onClick: (e: any) => void
 }
+
+export function checkImageLoad(img: HTMLImageElement) {
+    var isLoaded = img.complete && img.naturalHeight !== 0;
+    if (isLoaded) {
+      if (!img.classList.contains("wy-loading")) {
+        console.debug("image is instantly loaded")
+        img.classList.add("wy-loading", "wy-loaded");
+      } else {
+        img.decode().then(() => {
+          console.debug("image is loaded after delay")
+          img.classList.add("wy-loaded");
+        })
+      }
+
+      
+    } else {
+      console.debug("image is loading")
+      img.classList.add("wy-loading");
+    }
+  }
+
+export function imageLoaded(event: any) {
+    var img = event.target;
+    if (img.tagName === 'IMG' && img.classList.contains("wy-loading") && !img.classList.contains("wy-loaded")) {
+      console.debug("load event"); img.classList.add("wy-loaded")
+      }
+  }
 
 export const Image = ({src, previewSrc, width, height, more, onClick}: ImageProps) => {
     let ratio = width / height;
@@ -20,17 +46,23 @@ export const Image = ({src, previewSrc, width, height, more, onClick}: ImageProp
     let intrinsicWidth = width + "px"
     let maxWidth = (maxScale * width) + "px";
 
+    const imageRef = useCallback((element: HTMLImageElement) => {
+        if (element) {
+            checkImageLoad(element);
+        }
+    }, [])
+
     return (
-        <a href={src} className={wy('image')} onClick={(e) => onClick(e)} style={{
+        <a href={src} className="wy-image" onClick={(e) => onClick(e)} style={{
             flexBasis: flexBasis,
             flexGrow: flexRatio,
             flexShrink: flexRatio,
             width: intrinsicWidth,
             maxWidth: maxWidth
         }}>
-            <div className={wy('image-area')} style={{ paddingBottom: padding}}>
-                <img src={previewSrc} alt="" loading="lazy" decoding="async" />
-                {!!more && <span className={wy('more')}>+{more}</span>}
+            <div className="wy-image-area" style={{ paddingBottom: padding }}>
+                <img ref={imageRef} src={previewSrc} onLoad={imageLoaded} alt="" loading="lazy" decoding="async" />
+                {!!more && <span className="wy-more">+{more}</span>}
             </div>
         </a>
     );
@@ -57,7 +89,7 @@ export const ImageGrid = ({ children, limit = 3}: ImageGridProps) => {
     }
 
     return (        
-        <div className={wy('image-grid')}>
+        <div className="wy-image-grid">
             {firstImages}
         </div>        
     );

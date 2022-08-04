@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import classNames from 'classnames';
 import Icon from "./Icon";
 import Button from "./Button";
-import { prefix as wy } from "../utils/styles";
 
 type DropdownProps = {
     directionX?: "left" | "right";
@@ -30,12 +29,12 @@ const Dropdown = ({ directionX = "right", directionY = "down", children, classNa
     }
 
     return (
-        <span className={classNames(wy("dropdown"), { [wy("dropup")]: directionY === "up" }, className)} {...props}>
-            <Button.UI onClick={(e: any) => handleMenuClick(e)} className={wy(classNames({ "active": visible }))}>
+        <span className={classNames("wy-dropdown", { "wy-dropup": directionY === "up" }, className)} {...props}>
+            <Button.UI onClick={(e: any) => handleMenuClick(e)} className={classNames({ "wy-active": visible })}>
                 <Icon.UI name="dots-vertical" />
             </Button.UI>
 
-            <div className={wy(classNames("dropdown-menu", { "dropdown-menu-end": directionX === "left" }))} hidden={!visible}>
+            <div className={classNames("wy-dropdown-menu", { "wy-dropdown-menu-end": directionX === "left" })} hidden={!visible}>
                 {children}
             </div>
         </span>
@@ -50,7 +49,7 @@ type ItemProps = {
     props?: React.HTMLAttributes<HTMLDivElement>
 }
 const DropdownItem = ({ children, className = "", onClick, ...props }: ItemProps) => {
-    return <div className={classNames(wy("dropdown-item"), className)} onClick={onClick} {...props}>{children}</div>
+    return <div className={classNames("wy-dropdown-item", className)} onClick={onClick} {...props}>{children}</div>
 }
 
 // Export as replacable UI component
