@@ -1,0 +1,140 @@
+@use "config" as *;
+@use "tables";
+
+.wy-files-dragging {
+  &::after {
+    content: "Drop files here to upload.";
+    background-color: rgba(255, 255, 255, .5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed $primary;
+    font-weight: $font-weight-bold;
+    z-index: 10000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.wy-upload-progress{  
+  display: flex;
+  
+
+  progress{    
+    visibility: hidden;
+    flex: 1;
+    border-radius: 0;    
+    height: 0.5rem;
+    position: fixed;
+    width: 100%;
+
+    &::-webkit-progress-value{
+      background-color: $primary;
+    }
+  }
+}
+
+.wy-file-upload-errors{
+  display:flex;
+  flex-direction: column;
+
+  .wy-upload-error-row{
+    display:flex;
+    margin-bottom: 0.5rem;
+    align-items: center;
+    column-gap: 1rem;
+
+    .wy-upload-error-row-title{
+      flex: 1;
+      overflow:hidden; 
+      white-space: nowrap;
+      text-overflow: ellipsis; 
+    }
+
+    .wy-upload-error-row-conflict{
+      color: $warning;
+    }
+
+    .wy-upload-error-row-error{
+      color: $danger;
+    }
+  }
+}
+
+.wy-table-files {
+  @extend %table, %table-hover, %table-icons;
+
+  thead {
+    display: none;
+  }
+
+  tr[data-preview-url-param] {
+    cursor: pointer;
+  }
+
+  td {
+    vertical-align: middle;
+  }
+
+  td:nth-child(2) {
+    // make room for rename form
+    padding: 0 $table-cell-padding-x;
+  }
+
+  // filename
+  td:nth-child(2),
+  th:nth-child(2) {
+    width: 100%;
+    @include text-truncate();
+  }
+
+  // modified
+  td:nth-child(3),
+  th:nth-child(3) {
+    display: none;
+    width: 7rem;
+    @include text-truncate();
+  }
+
+  // kind
+  td:nth-child(4),
+  th:nth-child(4) {
+    display: none;
+    width: 7.5rem;
+    text-align: right;
+    @include text-truncate();
+  }
+
+  // size
+  td:nth-child(5),
+  th:nth-child(5) {
+    display: none;
+    width: 7rem;
+    text-align: right;
+    @include text-truncate();
+  }
+
+  @include media-breakpoint-up(sm) {
+    thead {
+      display: revert;
+    }
+
+    td:nth-child(5),
+    th:nth-child(5) {
+      display: table-cell;
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+
+    td:nth-child(3),
+    th:nth-child(3),
+    td:nth-child(4),
+    th:nth-child(4) {
+      display: table-cell;
+    }
+  }
+}

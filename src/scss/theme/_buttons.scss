@@ -1,0 +1,96 @@
+@use "config" as *;
+@use "bs/buttons";
+
+// basic unstyled button with support for icon and text
+.wy-button {
+  @extend %btn;
+  
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .25rem;
+
+  // align icons
+  &:not(.wy-button-icon) {
+    .wy-icon {
+      &:first-child {
+        margin-left: -.25rem;
+      }
+
+      &:last-child {
+        margin-right: -.25rem;
+      }
+    }
+  }
+ 
+}
+
+// default button
+.wy-button:not(.wy-button-link, .wy-button-primary) {
+    --#{$prefix}btn-hover-border-color: transparent;
+    --#{$prefix}btn-active-border-color: transparent;
+    --#{$prefix}btn-hover-color: var(--#{$prefix}btn-color);
+    --#{$prefix}btn-hover-bg: #{$btn-hover-bg};
+    --#{$prefix}btn-focus-bg: #{$btn-hover-bg};
+    --#{$prefix}btn-active-color: var(--#{$prefix}btn-color);
+    --#{$prefix}btn-active-bg: #{$btn-active-bg};
+
+     // dark mode
+    .wy-dark & {
+      color: var(--#{$prefix}white);
+    }
+}
+
+// button with only icon (no text)
+.wy-button-icon {  
+  width: 2rem;
+  height: 2rem;
+  padding: .25rem;
+  line-height: 1;
+  border-radius: 50%;
+  border-width: 0;
+}
+
+// default icon button
+.wy-button-icon:not(.wy-button-primary) {
+  color: $icon-color;
+
+  &:hover {
+    .wy-icon {
+      color: $icon-hover-color;
+    }
+  }
+  
+  // dark mode
+  .wy-dark & {
+    color: $icon-light-color;
+    .wy-icon {
+      color: $icon-light-color;
+    }
+
+    &:hover {
+      color: $icon-light-hover-color;
+      .wy-icon {
+        color: $icon-light-hover-color;
+      }
+    }
+  }
+}
+
+// primary button
+.wy-button-primary {
+    @extend %btn-primary;
+}
+
+// button that looks and behaves like a link
+.wy-button-link {
+  @extend %btn-link;
+}
+
+// container for proper spacing and alignment of buttons
+.wy-buttons {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+}

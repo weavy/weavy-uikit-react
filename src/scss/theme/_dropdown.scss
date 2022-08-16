@@ -1,0 +1,86 @@
+@use "config" as *;
+@use "bs/dropdown";
+
+.wy-dropdown,
+.wy-dropup {
+  position: relative
+}
+
+.wy-dropup {
+  .wy-dropdown-menu {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: $dropdown-spacer;
+  }
+}
+
+
+.wy-dropdown-toggle {
+  white-space: nowrap;
+}
+
+.wy-dropdown-menu {
+  @extend %dropdown-menu;
+
+  display: block;
+
+  .wy-dropup & {
+      top: auto;
+      bottom: 100%;
+      margin-top: 0;
+      margin-bottom: $dropdown-spacer;
+  }
+
+  // Bootstrap compatibility
+  [data-bs-toggle="dropdown"] ~ & {
+    &:not(.show) {
+      display: none;
+    }
+
+    &[hidden].show {
+        display: block !important;
+    }
+  }
+}
+
+.#{wy}-dropdown-menu-end {
+  right: 0;
+}
+
+.#{wy}-dropdown-item {
+  @extend %dropdown-item;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  > img, .#{wy}-icon {
+    margin-right: .5rem;
+    color: $icon-color;
+  }
+
+  &:active {
+    > .#{wy}-icon {
+      $c: color-contrast($component-active-bg);
+      color: if($c == $color-contrast-light, $icon-light-color!important, $icon-color);
+    }
+  }
+
+  // dropdown item with icon for marking selection option
+  &.#{wy}-option {
+    .wy-icon {
+      visibility: hidden;
+    }
+    &.#{wy}-selected {
+      .wy-icon {
+        visibility: visible;
+      } 
+    }
+  }
+
+}
+
+.#{wy}-dropdown-divider {
+  @extend %dropdown-divider;
+}
+

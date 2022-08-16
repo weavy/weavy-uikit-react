@@ -64,7 +64,7 @@ const SearchUsers = ({handleSubmit, buttonTitle}: SearchUsersProps) => {
                                 </tr>
                             )
                         })}
-                    </tbody>
+                    </tbody> 
                 </table>
             </div>
             {/*<div className="wy-search-group">
@@ -78,7 +78,9 @@ const SearchUsers = ({handleSubmit, buttonTitle}: SearchUsersProps) => {
             <div className="wy-footerbars">
                 <div className="wy-footerbar">
                     <div className="wy-pane-group">
-                        <button className="wy-button-primary" type="button" onClick={() => {handleSubmit(selected); clear();}} disabled={selected.length === 0}>{buttonTitle}</button>
+                        <div className="wy-buttons">
+                            <button className="wy-button wy-button-primary" type="button" onClick={() => {handleSubmit(selected); clear();}} disabled={selected.length === 0}>{buttonTitle}</button>
+                        </div>
                     </div>
                 </div>
             </div>

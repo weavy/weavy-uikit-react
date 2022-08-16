@@ -1,0 +1,47 @@
+@use "config" as *;
+@use "bs/badge";
+
+
+.wy-badge {
+  @extend %badge;
+  border-radius: 50rem;
+  background-color: $primary;
+}
+
+.wy-badge-success {
+  background-color: $success;
+}
+
+.wy-badge-warning {
+  background-color: $warning;
+}
+
+.wy-badge-danger {
+  background-color: $danger;
+}
+
+.wy-button {
+  position: relative; // so that we can position .badge
+
+  // badge, e.g. notification count
+  .wy-badge {
+    font-size: $font-size-xs;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 1rem;
+    margin: 0;
+    padding: .25rem;
+    min-width: 1rem;
+    max-width: 2rem;
+    height: 1rem;
+    line-height: .5rem;
+    display: block;
+    text-align: center;
+    @include text-truncate();
+
+    &:empty {
+      display: none;
+    }
+  }
+}

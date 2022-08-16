@@ -1,0 +1,62 @@
+@use "variables" as *;
+
+.wy-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  position: relative;
+
+  &:not([width]) {
+    width: 1.5rem;
+  }
+
+  &:not([height]) {
+    height: 1.5rem;
+  }
+}
+
+.wy-icon-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: var(--#{$prefix}white);
+  border-radius: 50%;
+  border: 1px solid var(--#{$prefix}white);
+}
+
+// stacked icons (icon+overlay icon)
+.wy-icon-stack {
+  display: inline-block;
+  position: relative;
+  line-height: 1;
+  width: 1.5rem;
+  height: 1.5rem;
+
+  .wy-icon:first-child {
+    width: 100%;
+    height: 100%;
+  }
+
+  .wy-icon:last-child {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 50%;
+    height: 50%;
+    background-color: var(--#{$prefix}body-bg);
+    border-radius: 50%;
+  }
+}
+
+// icons normally inherit the text color of its parent
+.wy-icon:not([class*="wy-icon-"]) * {
+  fill: currentColor;
+}
+
+// colored icons
+@each $color, $value in $theme-colors {
+  .wy-icon-#{$color} * {
+    fill: var(--#{$prefix}#{$color});
+  }
+}

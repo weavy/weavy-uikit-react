@@ -1,0 +1,90 @@
+@use "config" as *;
+@use "mixins/backdrop";
+@use "mixins/position";
+
+.wy-message-editor {
+  @include position.sticky-bottom;
+  @include backdrop.filter;
+
+  background-color: rgba($light, $opacity-backdrop);
+}
+
+.wy-message-form {
+  .wy-spinner {
+    display: none;
+  }
+
+  &.wy-uploading {
+    .wy-spinner {
+      display: block;
+    }
+
+    .wy-icon-attachment {
+      display: none;
+    }
+  }
+
+  .wy-picker-list:not(:empty) {
+    border-top: $border-width solid $border-color;
+  }
+}
+
+.wy-message-editor-inputs {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  border-top: $border-width solid rgba($gray-200, $opacity-backdrop);
+  padding: .5rem;
+  min-height: 3rem;
+
+  > :not(:last-child) {
+    margin-right: .5rem;
+  }
+}
+
+.wy-message-editor-buttons {
+  flex: 1 0 auto;
+}
+
+.wy-message-editor-text {
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+}
+%message-editor-textfield,
+.wy-message-editor-textfield {
+  flex: 1 1 100%;
+  outline: $light solid 1px;
+  max-height: 10.2rem;
+  background-color: $input-bg;
+  border-radius: $border-radius-xl;
+  border: none;
+}
+
+%message-editor-textcontent,
+.wy-message-editor-textcontent {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  padding: $input-padding-y $input-padding-x;
+}
+
+%message-editor-grow,
+.#{wy}-message-editor-grow {
+    display: grid;
+
+    &::after, > textarea {
+        @extend %message-editor-textfield;
+        grid-area: 1 / 1 / 2 / 2;
+    }
+
+    &::after {
+        content: attr(data-replicated-value) " ";
+        white-space: pre-wrap;
+        visibility: hidden;
+    }
+
+    > textarea {
+        resize: none;
+        overflow: hidden;
+    }
+}

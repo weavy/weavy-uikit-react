@@ -1,0 +1,56 @@
+@use "config" as *;
+
+// Include mixin in the relative class that should be suffixed with -check
+@mixin button-check {
+
+  // From bootstrap/scss/forms/_form_check
+  &-check {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    pointer-events: none;
+  
+    &[disabled] + &,
+    &:disabled + & {
+      pointer-events: none;
+      filter: none;
+      opacity: $form-check-btn-check-disabled-opacity;
+    }
+  }
+
+  // From bootstrap/scss/_buttons
+  &-check:focus + &,
+  &:focus {
+    outline: 0;
+    box-shadow: $btn-focus-box-shadow;
+  }
+  &-check:checked + &,
+  &-check:active + & {
+    @include box-shadow($btn-active-box-shadow);
+  
+    &:focus {
+      @include box-shadow($btn-focus-box-shadow, $btn-active-box-shadow);
+    }
+  }
+
+  // Custom icons
+  &-check + .#{wy}-button-icon {
+    svg:last-child {
+      display: none;
+    }
+  }
+
+  &-check:checked + .#{wy}-button-icon {
+    svg:first-child {
+      display: none;
+    }
+  
+    svg:last-child {
+      display: inline-block;
+    }
+  }
+}
+
+// Create a suffixed subclass from .wy-button -> .wy-button-check
+.wy-button {
+  @include button-check;
+}

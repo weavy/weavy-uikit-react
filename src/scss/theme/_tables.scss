@@ -1,0 +1,53 @@
+@use "config" as *;
+@use "bs/tables";
+
+
+// table with avatar/icon in first and last column
+%table-icons {
+  table-layout: fixed;
+
+  th, td {
+    // cell with img or icon
+    &:first-child, &:last-child {
+      color: $icon-color !important;
+      vertical-align: middle;
+      text-align: center;
+      padding: $table-cell-padding-y-sm $table-cell-padding-x;
+      width: 2rem + $table-cell-padding-x;
+      // reset th styles (for dropdown menus in th)
+      font-size: $font-size-base;
+      font-weight: $font-weight-base;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    &:first-child {
+      padding-right: 0;
+    }
+
+    &:last-child {
+      padding-left: 0;
+    }
+  }
+}
+
+
+.wy-table-trashed {
+  th, td {
+    color: $text-muted;
+    text-decoration: line-through;
+    &:not(:last-child) {
+      opacity: $btn-disabled-opacity;
+    }
+
+    > a {
+      color: $text-muted;
+    }
+  }
+
+  &:hover {
+    th, td {
+      opacity: 1;
+    }
+  }
+}

@@ -1,0 +1,37 @@
+@use "config" as *;
+
+
+.wy-picker-list {
+  border: none;
+
+  > .wy-picker-list-item:first-child, > :first-child .wy-picker-list-item {
+    border-top: none;
+  }
+
+  > .wy-picker-list-item:last-child, > :last-child .wy-picker-list-item {
+    //border-top: $border-width solid $border-color;
+    border-bottom: none;
+  }
+}
+
+.wy-picker-list-item {
+  display: flex;
+  align-items: center;
+  padding: .25rem .5rem;
+
+  > .wy-icon {
+    margin-left: .25rem;
+    margin-right: .25rem;
+    flex: 0 0 auto;
+  }
+
+  > button {
+    margin-block-start: auto;
+    flex: 0 0 auto;
+  }
+}
+
+.wy-picker-list-item-title {
+  flex-grow: 1;
+  @include text-truncate();
+}

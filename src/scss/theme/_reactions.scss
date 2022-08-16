@@ -1,0 +1,58 @@
+@use "config" as *;
+@use "bs/dropdown";
+@use "tables";
+
+
+.wy-reaction-count {
+  margin: 0 .25rem;
+  line-height: 1;
+  color: $text-muted;
+  font-size: $font-size-sm;
+}
+
+.wy-reaction-menu {
+  padding: .5rem;
+  font-size: 1.125rem;
+  border-radius: 2.5rem;
+}
+
+.wy-reaction-picker {
+  display: flex;
+
+  .wy-reaction-button {
+    color: unset;
+  }
+}
+
+.wy-reactions {
+  display: inline-flex;
+  align-items: center;
+  column-gap: .125rem;
+
+  // hidden when empty
+  &:empty {
+    display: none;
+  }
+}
+
+.wy-table-reactions {
+  @extend %table, %table-icons;
+
+  // avatar
+  td:first-child {
+    width: 2rem;
+    padding-left: 0;
+  }
+
+  // name
+  td:nth-child(2) {
+    width: 100%;
+    @include text-truncate();
+  }
+
+  // reaction
+  td:last-child {
+    width: 2rem;
+    padding-right: 0;
+  }
+}

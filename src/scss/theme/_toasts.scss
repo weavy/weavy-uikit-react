@@ -1,0 +1,47 @@
+@use "sass:map";
+@use "variables" as *;
+
+.wy-toasts {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: $zindex-fixed;
+}
+
+.wy-toast {
+  margin: 0 0 1rem;
+}
+
+.wy-toast-body {
+  padding: $toast-padding-y $toast-padding-x;
+}
+
+.wy-button-toast {
+  font-weight: $font-weight-normal;
+  text-decoration: $link-decoration;
+
+  &:hover {
+    color: $btn-link-hover-color;
+    text-decoration: $link-hover-decoration;
+  }
+
+  &:focus {
+    text-decoration: $link-hover-decoration;
+    box-shadow: none;
+  }
+
+  &:disabled,
+  &.wy-disabled {
+    color: $btn-link-disabled-color;
+  }
+
+  color: map.get($utilities-text-colors, "info");
+  text-transform: uppercase;
+  font-weight: 500;
+}

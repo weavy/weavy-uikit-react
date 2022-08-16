@@ -1,0 +1,7 @@
+// markdown or code with syntax highlighting
+.wy-content-html {
+  pre, code {    
+    word-break: break-word;
+    white-space: pre-wrap;
+  }
+}

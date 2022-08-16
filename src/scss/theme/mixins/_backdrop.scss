@@ -1,0 +1,13 @@
+$enable-backdrop-filter: true !default;
+$backdrop-filter: blur(.5rem) !default;
+
+@mixin filter($backdrop-filter: $backdrop-filter) {
+  backface-visibility: hidden;
+
+  @if($enable-backdrop-filter) {
+    @supports(backdrop-filter: $backdrop-filter) {
+      backdrop-filter: $backdrop-filter;
+      @content;
+    }
+  }
+}

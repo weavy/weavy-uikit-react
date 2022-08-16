@@ -1,0 +1,112 @@
+@use "config" as *;
+@use "mixins/backdrop";
+@use "mixins/position";
+
+.wy-appbars {
+  @include position.sticky-top;
+
+  @include backdrop.filter {
+    > .wy-appbar {
+      backdrop-filter: none;
+    }
+  }
+}
+
+.wy-appbar {
+  display: grid;
+  align-items: center;
+  justify-content: space-between;
+  height: $appbar-height;
+  padding: $navbar-padding-y $navbar-padding-x;
+  flex: 0 0 $appbar-height;
+  grid-template-columns: minmax(2rem, max-content) minmax(0, max-content) minmax(2rem, max-content);
+  column-gap: .5rem;
+
+  @include backdrop.filter;
+
+  .wy-badge {
+    align-self: center;
+  }
+
+  .wy-button {
+    max-height: 2rem;
+  }
+}
+
+.wy-appbar-buttons {
+  display: flex;
+  flex: 0 0 1rem;
+}
+
+.wy-appbar-text {
+  @include text-truncate();
+  color: inherit !important;
+  user-select: none;
+
+  a {
+    color: inherit;
+
+    &:hover {
+      color: inherit;
+    }
+  }
+}
+
+.wy-appbar {
+  // light theme (default)
+  &, .wy-light &, &.wy-light {
+    background-color: rgba($gray-50, $opacity-backdrop);
+    color: $navbar-light-color;
+    border-bottom: $border-width solid rgba($gray-200, $opacity-backdrop);
+  }
+  // dark theme
+  .wy-dark &, &.wy-dark {
+    background-color: rgba($dark, $opacity-backdrop);
+    color: $navbar-dark-color;
+    border-bottom: $border-width solid rgba($gray-800, $opacity-backdrop);
+  }
+}
+
+.wy-footerbars {
+  padding-bottom: $footerbar-height;
+}
+
+.wy-footerbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: $zindex-sticky;
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100vw;
+    left: 0;
+    bottom: 0;
+    height: $footerbar-height;
+    border-top: $border-width solid rgba($gray-200, $opacity-backdrop);
+    background: rgba($gray-50, $opacity-backdrop);
+    z-index: -1;
+
+    @include backdrop.filter;
+  }
+
+  .wy-buttons {
+    flex-direction: row-reverse;
+
+    > :not(:last-child) {
+      margin: 0 0 0 .5rem;
+    }
+  }
+}
+
+.wy-footerbars-fixed {
+  .wy-footerbar {
+    position: fixed;
+
+    &::after {
+      position: fixed;
+    }
+  }
+}

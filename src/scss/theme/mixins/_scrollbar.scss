@@ -1,0 +1,110 @@
+@use "../colors";
+
+@mixin scroll-y {
+  overflow-y: auto;
+  touch-action: pan-y, pan-x;
+
+  // to enable HW acceleration and not cause repaint on scroll
+  // opacity needed for custom scrollbar to paint
+  will-change: scroll-position, opacity;
+  backface-visibility: hidden;
+
+  // ios momentum scrolling on iOS <= 12, cannot be used on the <body> element!
+  &:not(body) {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  max-height: 100%;
+}
+
+@mixin scroll-x {
+  overflow-x: auto;
+  touch-action: pan-y, pan-x;
+
+  // to enable HW acceleration and not cause repaint on scroll
+  will-change: scroll-position, opacity;
+  backface-visibility: hidden;
+  max-width: 100%;
+}
+
+// custom scrollbar styling
+@mixin custom-scrollbar {
+  // custom scrollbar for webkit browsers
+  // reference https://webkit.org/blog/363/styling-scrollbars/
+
+  &::-webkit-scrollbar {
+    height: .625rem;
+    width: .625rem;
+    background: transparent;
+    z-index: 999;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(colors.$gray-500, 0.75);
+    border: .125rem solid transparent;
+    border-radius: .5rem;
+    background-clip: padding-box;
+
+    &:hover {
+      background-color: rgba(colors.$gray-700, 0.75);
+    }
+
+    &:window-inactive {
+      background-color: rgba(colors.$gray-500, 0.5);
+    }
+  }
+
+  // custom scrollbar for firefox
+  scrollbar-width: thin;
+  scrollbar-color: rgba(colors.$gray-500, 0.75) transparent;
+}
+
+// custom scrollbar styling
+@mixin thin-scrollbar {
+  // custom scrollbar for webkit browsers
+  &::-webkit-scrollbar {
+    height: .375rem;
+    width: .375rem;
+    background: transparent;
+    z-index: 999;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(colors.$gray-700, 0.75);
+    border: 0 solid transparent;
+    border-radius: 0;
+    background-clip: padding-box;
+
+    &:hover {
+      background-color: rgba(colors.$gray-500, 0.75);
+    }
+
+    &:window-inactive {
+      background-color: rgba(colors.$gray-500, 0.5);
+    }
+  }
+  
+  // custom scrollbar for firefox
+  scrollbar-width: thin;
+  scrollbar-color: rgba(colors.$gray-700, 0.75) transparent;
+}
+
+@mixin scrollbar-top-padding($scrollbar-padding) {
+  &::-webkit-scrollbar-button:vertical:start {
+    height: $scrollbar-padding;
+  }
+}
+
+@mixin scrollbar-bottom-padding($scrollbar-padding) {
+  &::-webkit-scrollbar-button:vertical:end {
+    height: $scrollbar-padding;
+  }
+}

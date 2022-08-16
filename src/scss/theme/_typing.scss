@@ -1,0 +1,26 @@
+.wy-typing-show {
+  font-style: italic;
+  display: none;
+}
+
+.wy-typing-active {
+  .wy-typing-show {
+    display: block;
+  }
+
+  .wy-typing-hide {
+    display: none;
+  }
+}
+
+.wy-appbar {
+  .wy-typing-hide {
+    position: relative;
+    padding: 0 1.25rem;
+
+    .wy-presence.wy-presence-active {
+      top: .375rem;
+      left: .25rem;
+    }
+  }
+}

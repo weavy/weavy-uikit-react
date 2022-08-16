@@ -1,0 +1,42 @@
+@use "config" as *;
+@use "mixins/scrollbar";
+@use "message-editor";
+
+.ͼ1 .cm-scroller {
+    font-family: unset;
+    line-height: 1.25;
+}
+
+.ͼ1 .cm-widgetBuffer {
+  vertical-align: unset;
+}
+
+.cm-editor {
+  @extend %message-editor-textfield;
+
+  &.cm-focused {
+    /* default theme in codemirror seems difficult to override */
+    outline: $light solid 1px !important;
+  }
+
+  .cm-content {
+    @extend %message-editor-textcontent;
+  }
+
+  .cm-scroller {
+    overflow: auto;
+
+    .wy-scrollbars & {
+      @include scrollbar.custom-scrollbar;
+    }
+  }
+}
+
+textarea.is-invalid + [data-editor-target] .cm-editor {
+  padding-right: $input-height-inner;
+  background-image: escape-svg($form-feedback-icon-invalid);
+  background-repeat: no-repeat;
+  background-position: right $input-height-inner-quarter top $input-height-inner-quarter;
+  background-size: $input-height-inner-half $input-height-inner-half;
+  outline-color: $form-feedback-invalid-color !important;
+}

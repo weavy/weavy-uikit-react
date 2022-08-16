@@ -1,0 +1,157 @@
+@use "config" as *;
+
+.wy-viewport {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2147483647; /* max possible z-index */;
+    pointer-events: none;
+}
+
+// Overlays
+
+.wy-overlays {
+    pointer-events: none;
+    width: auto;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    max-width: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-style: preserve-3d;
+    overflow-y: initial;
+    overflow-x: initial;
+    perspective: 100rem;
+    perspective-origin: center center;
+
+    .wy-panel {
+        background-color: rgba(mix($white, #FFF), $opacity-backdrop);
+        //max-height: 100vh; // Causes height error in safari
+
+        &:not(.wy-transition) {
+            transform: translateZ(-4rem) !important;
+        }
+
+        .wy-controls {
+            position: absolute;
+            border-bottom: none;
+            flex-direction: row;
+            transition: opacity .1s .2s step-end;
+
+
+            .wy-icon {
+                color: $icon-color;
+            }
+        }
+
+        &.wy-loaded {
+            .wy-controls {
+                pointer-events: none;
+                opacity: 0;
+            }
+        }
+
+        .wy-panel-frame {
+            background-color: transparent;
+        }
+
+        &.wy-controls-light {
+            .wy-icon {
+                color: $icon-color;
+            }
+        }
+
+        &.wy-light {
+            background-color: rgba(mix($white, #FFF), $opacity-backdrop);
+
+            .wy-icon {
+                color: $icon-color;
+            }
+        }
+
+        &.wy-controls-dark {
+            .wy-icon {
+                color: $navbar-dark-color;
+
+                &:hover, &:focus {
+                    color: $navbar-dark-hover-color;
+                }
+
+                &:active {
+                    color: $navbar-dark-active-color;
+                }
+            }
+        }
+
+        &.wy-dark {
+            background-color: rgba(mix($dark, #000), $opacity-backdrop);
+
+            .wy-icon {
+                color: $navbar-dark-color;
+
+                &:hover, &:focus {
+                    color: $navbar-dark-hover-color;
+                }
+
+                &:active {
+                    color: $navbar-dark-active-color;
+                }
+            }
+
+            &.wy-open[data-title]::before {
+                background: rgba($dark, $opacity-backdrop);
+                color: $navbar-dark-color;
+                border-bottom: $border-width #000 solid;
+            }
+        }
+
+        &.wy-floating {
+            @include media-breakpoint-up(md, $grid-breakpoints) {
+                left: 1rem;
+                top: 1rem;
+                right: 1rem;
+                bottom: 1rem;
+                border-radius: .1875rem;
+                box-shadow: $md-shadow-16dp;
+                &:not(.wy-scroll-y) {
+                    overflow: hidden;
+                }
+            }
+        }
+
+        &.wy-modal {
+            background-color: rgba(mix($white, #FFF), $opacity-backdrop);
+
+            @include media-breakpoint-up(md, $grid-breakpoints) {
+                left: auto;
+                right: auto;
+                top: 2rem;
+                bottom: 3.2rem;
+                margin-left: 4rem;
+                margin-top: auto;
+                margin-right: 4rem;
+                margin-bottom: auto;
+                border-radius: .25rem;
+                box-shadow: $md-shadow-16dp;
+                width: 32rem;
+                max-height: 32rem;
+                &:not(.wy-scroll-y) {
+                    overflow: hidden;
+                }
+            }
+        }
+
+        &.wy-loading {
+            .wy-controls {
+                transition: opacity $md-animation-duration $md-animation-curve-default;
+                //transition: opacity .2s .2s variables.$md-animation-curve-default;
+                opacity: 1;
+            }
+        }
+    }
+}

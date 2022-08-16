@@ -1,0 +1,520 @@
+@use "sass:map";
+@use "palette";
+@import "bootstrap/functions";
+
+// primary color
+$primary: #156B93;
+
+// genererate colors based on $primary
+$generated-colors: palette.generate-colors($primary);
+
+// gray color variables
+$white: #fff;
+$gray-50: palette.color-shade($white, "50");
+$gray-100: palette.color-shade($white, "100");
+$gray-200: palette.color-shade($white, "200");
+$gray-300: palette.color-shade($white, "300");
+$gray-400: palette.color-shade($white, "400");
+$gray-500: palette.color-shade($white, "500");
+$gray-600: palette.color-shade($white, "600");
+$gray-700: palette.color-shade($white, "700");
+$gray-800: palette.color-shade($white, "800");
+$gray-900: palette.color-shade($white, "900");
+$gray-950: palette.color-shade($white, "950");
+$black: #000;
+
+// gray-colors-map
+$grays: (
+  "50": $gray-50,
+  "100": $gray-100,
+  "200": $gray-200,
+  "300": $gray-300,
+  "400": $gray-400,
+  "500": $gray-500,
+  "600": $gray-600,
+  "700": $gray-700,
+  "800": $gray-800,
+  "900": $gray-900,
+  "950": $gray-950
+);
+
+// color variables
+$red: map.get($generated-colors, "red");
+$pink: map.get($generated-colors, "pink");
+$purple: map.get($generated-colors, "purple");
+$deep-purple: map.get($generated-colors, "deep-purple");
+$indigo: map.get($generated-colors, "indigo");
+$blue: map.get($generated-colors, "blue");
+$light-blue: map.get($generated-colors, "light-blue");
+$cyan: map.get($generated-colors, "cyan");
+$teal: map.get($generated-colors, "teal");
+$green: map.get($generated-colors, "green");
+$light-green: map.get($generated-colors, "light-green");
+$lime: map.get($generated-colors, "lime");
+$yellow: map.get($generated-colors, "yellow");
+$amber: map.get($generated-colors, "amber");
+$orange: map.get($generated-colors, "orange");
+$deep-orange: map.get($generated-colors, "deep-orange");
+
+// colors-map
+$colors: map.merge($generated-colors, (
+  "black": $black,
+  "white": $white,
+  "gray": $gray-600,
+  "gray-dark": $gray-800
+));
+
+// The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
+$min-contrast-ratio: 3; // 4.5;
+
+// color palette
+$primary-50:  palette.color-shade($primary, "50");
+$primary-100: palette.color-shade($primary, "100");
+$primary-200: palette.color-shade($primary, "200");
+$primary-300: palette.color-shade($primary, "300");
+$primary-400: palette.color-shade($primary, "400");
+$primary-500: palette.color-shade($primary, "500");
+$primary-600: palette.color-shade($primary, "600");
+$primary-700: palette.color-shade($primary, "700");
+$primary-800: palette.color-shade($primary, "800");
+$primary-900: palette.color-shade($primary, "900");
+$primary-950: palette.color-shade($primary, "950");
+
+$red-50: palette.color-shade($red, "50");
+$red-100: palette.color-shade($red, "100");
+$red-200: palette.color-shade($red, "200");
+$red-300: palette.color-shade($red, "300");
+$red-400: palette.color-shade($red, "400");
+$red-500: $red;
+$red-600: palette.color-shade($red, "600");
+$red-700: palette.color-shade($red, "700");
+$red-800: palette.color-shade($red, "800");
+$red-900: palette.color-shade($red, "900");
+$red-950: palette.color-shade($red, "950");
+
+$pink-50: palette.color-shade($pink, "50");
+$pink-100: palette.color-shade($pink, "100");
+$pink-200: palette.color-shade($pink, "200");
+$pink-300: palette.color-shade($pink, "300");
+$pink-400: palette.color-shade($pink, "400");
+$pink-500: $pink;
+$pink-600: palette.color-shade($pink, "600");
+$pink-700: palette.color-shade($pink, "700");
+$pink-800: palette.color-shade($pink, "800");
+$pink-900: palette.color-shade($pink, "900");
+$pink-950: palette.color-shade($pink, "950");
+
+$purple-50:  palette.color-shade($purple, "50");
+$purple-100: palette.color-shade($purple, "100");
+$purple-200: palette.color-shade($purple, "200");
+$purple-300: palette.color-shade($purple, "300");
+$purple-400: palette.color-shade($purple, "400");
+$purple-500: $purple;
+$purple-600: palette.color-shade($purple, "600");
+$purple-700: palette.color-shade($purple, "700");
+$purple-800: palette.color-shade($purple, "800");
+$purple-900: palette.color-shade($purple, "900");
+$purple-950: palette.color-shade($purple, "950");
+
+$deep-purple-50:  palette.color-shade($deep-purple, "50");
+$deep-purple-100: palette.color-shade($deep-purple, "100");
+$deep-purple-200: palette.color-shade($deep-purple, "200");
+$deep-purple-300: palette.color-shade($deep-purple, "300");
+$deep-purple-400: palette.color-shade($deep-purple, "400");
+$deep-purple-500: $deep-purple;
+$deep-purple-600: palette.color-shade($deep-purple, "600");
+$deep-purple-700: palette.color-shade($deep-purple, "700");
+$deep-purple-800: palette.color-shade($deep-purple, "800");
+$deep-purple-900: palette.color-shade($deep-purple, "900");
+$deep-purple-950: palette.color-shade($deep-purple, "950");
+
+$indigo-50: palette.color-shade($indigo, "50");
+$indigo-100: palette.color-shade($indigo, "100");
+$indigo-200: palette.color-shade($indigo, "200");
+$indigo-300: palette.color-shade($indigo, "300");
+$indigo-400: palette.color-shade($indigo, "400");
+$indigo-500: $indigo;
+$indigo-600: palette.color-shade($indigo, "600");
+$indigo-700: palette.color-shade($indigo, "700");
+$indigo-800: palette.color-shade($indigo, "800");
+$indigo-900: palette.color-shade($indigo, "900");
+$indigo-950: palette.color-shade($indigo, "950");
+
+$blue-50: palette.color-shade($blue, "50");
+$blue-100: palette.color-shade($blue, "100");
+$blue-200: palette.color-shade($blue, "200");
+$blue-300: palette.color-shade($blue, "300");
+$blue-400: palette.color-shade($blue, "400");
+$blue-500: $blue;
+$blue-600: palette.color-shade($blue, "600");
+$blue-700: palette.color-shade($blue, "700");
+$blue-800: palette.color-shade($blue, "800");
+$blue-900: palette.color-shade($blue, "900");
+$blue-950: palette.color-shade($blue, "950");
+
+$light-blue-50: palette.color-shade($light-blue, "50");
+$light-blue-100: palette.color-shade($light-blue, "100");
+$light-blue-200: palette.color-shade($light-blue, "200");
+$light-blue-300: palette.color-shade($light-blue, "300");
+$light-blue-400: palette.color-shade($light-blue, "400");
+$light-blue-500: $light-blue;
+$light-blue-600: palette.color-shade($light-blue, "600");
+$light-blue-700: palette.color-shade($light-blue, "700");
+$light-blue-800: palette.color-shade($light-blue, "800");
+$light-blue-900: palette.color-shade($light-blue, "900");
+$light-blue-950: palette.color-shade($light-blue, "950");
+
+$cyan-50: palette.color-shade($cyan, "50");
+$cyan-100: palette.color-shade($cyan, "100");
+$cyan-200: palette.color-shade($cyan, "200");
+$cyan-300: palette.color-shade($cyan, "300");
+$cyan-400: palette.color-shade($cyan, "400");
+$cyan-500: $cyan;
+$cyan-600: palette.color-shade($cyan, "600");
+$cyan-700: palette.color-shade($cyan, "700");
+$cyan-800: palette.color-shade($cyan, "800");
+$cyan-900: palette.color-shade($cyan, "900");
+$cyan-950: palette.color-shade($cyan, "950");
+
+$teal-50: palette.color-shade($teal, "50");
+$teal-100: palette.color-shade($teal, "100");
+$teal-200: palette.color-shade($teal, "200");
+$teal-300: palette.color-shade($teal, "300");
+$teal-400: palette.color-shade($teal, "400");
+$teal-500: $teal;
+$teal-600: palette.color-shade($teal, "600");
+$teal-700: palette.color-shade($teal, "700");
+$teal-800: palette.color-shade($teal, "800");
+$teal-900: palette.color-shade($teal, "900");
+$teal-950: palette.color-shade($teal, "950");
+
+$green-50: palette.color-shade($green, "50");
+$green-100: palette.color-shade($green, "100");
+$green-200: palette.color-shade($green, "200");
+$green-300: palette.color-shade($green, "300");
+$green-400: palette.color-shade($green, "400");
+$green-500: $green;
+$green-600: palette.color-shade($green, "600");
+$green-700: palette.color-shade($green, "700");
+$green-800: palette.color-shade($green, "800");
+$green-900: palette.color-shade($green, "900");
+$green-950: palette.color-shade($green, "950");
+
+$light-green-50: palette.color-shade($light-green, "50");
+$light-green-100: palette.color-shade($light-green, "100");
+$light-green-200: palette.color-shade($light-green, "200");
+$light-green-300: palette.color-shade($light-green, "300");
+$light-green-400: palette.color-shade($light-green, "400");
+$light-green-500: $light-green;
+$light-green-600: palette.color-shade($light-green, "600");
+$light-green-700: palette.color-shade($light-green, "700");
+$light-green-800: palette.color-shade($light-green, "800");
+$light-green-900: palette.color-shade($light-green, "900");
+$light-green-950: palette.color-shade($light-green, "950");
+
+$lime-50: palette.color-shade($lime, "50");
+$lime-100: palette.color-shade($lime, "100");
+$lime-200: palette.color-shade($lime, "200");
+$lime-300: palette.color-shade($lime, "300");
+$lime-400: palette.color-shade($lime, "400");
+$lime-500: $lime;
+$lime-600: palette.color-shade($lime, "600");
+$lime-700: palette.color-shade($lime, "700");
+$lime-800: palette.color-shade($lime, "800");
+$lime-900: palette.color-shade($lime, "900");
+$lime-950: palette.color-shade($lime, "950");
+
+$yellow-50: palette.color-shade($yellow, "50");
+$yellow-100: palette.color-shade($yellow, "100");
+$yellow-200: palette.color-shade($yellow, "200");
+$yellow-300: palette.color-shade($yellow, "300");
+$yellow-400: palette.color-shade($yellow, "400");
+$yellow-500: $yellow;
+$yellow-600: palette.color-shade($yellow, "600");
+$yellow-700: palette.color-shade($yellow, "700");
+$yellow-800: palette.color-shade($yellow, "800");
+$yellow-900: palette.color-shade($yellow, "900");
+$yellow-950: palette.color-shade($yellow, "950");
+
+$amber-50: palette.color-shade($amber, "50");
+$amber-100: palette.color-shade($amber, "100");
+$amber-200: palette.color-shade($amber, "200");
+$amber-300: palette.color-shade($amber, "300");
+$amber-400: palette.color-shade($amber, "400");
+$amber-500: $amber;
+$amber-600: palette.color-shade($amber, "600");
+$amber-700: palette.color-shade($amber, "700");
+$amber-800: palette.color-shade($amber, "800");
+$amber-900: palette.color-shade($amber, "900");
+$amber-950: palette.color-shade($amber, "950");
+
+$orange-50:  palette.color-shade($orange, "50");
+$orange-100: palette.color-shade($orange, "100");
+$orange-200: palette.color-shade($orange, "200");
+$orange-300: palette.color-shade($orange, "300");
+$orange-400: palette.color-shade($orange, "400");
+$orange-500: $orange;
+$orange-600: palette.color-shade($orange, "600");
+$orange-700: palette.color-shade($orange, "700");
+$orange-800: palette.color-shade($orange, "800");
+$orange-900: palette.color-shade($orange, "900");
+$orange-950: palette.color-shade($orange, "950");
+
+$deep-orange-50:  palette.color-shade($deep-orange, "50");
+$deep-orange-100: palette.color-shade($deep-orange, "100");
+$deep-orange-200: palette.color-shade($deep-orange, "200");
+$deep-orange-300: palette.color-shade($deep-orange, "300");
+$deep-orange-400: palette.color-shade($deep-orange, "400");
+$deep-orange-500: $deep-orange;
+$deep-orange-600: palette.color-shade($deep-orange, "600");
+$deep-orange-700: palette.color-shade($deep-orange, "700");
+$deep-orange-800: palette.color-shade($deep-orange, "800");
+$deep-orange-900: palette.color-shade($deep-orange, "900");
+$deep-orange-950: palette.color-shade($deep-orange, "950");
+
+$primaries: (
+  "primary-50":  $primary-50,
+  "primary-100": $primary-100,
+  "primary-200": $primary-200,
+  "primary-300": $primary-300,
+  "primary-400": $primary-400,
+  "primary-500": $primary-500,
+  "primary-600": $primary-600,
+  "primary-700": $primary-700,
+  "primary-800": $primary-800,
+  "primary-900": $primary-900,
+  "primary-950": $primary-950
+);
+
+$reds: (
+  "red-50":  $red-50,
+  "red-100": $red-100,
+  "red-200": $red-200,
+  "red-300": $red-300,
+  "red-400": $red-400,
+  "red-500": $red-500,
+  "red-600": $red-600,
+  "red-700": $red-700,
+  "red-800": $red-800,
+  "red-900": $red-900,
+  "red-950": $red-950
+);
+
+$pinks: (
+  "pink-50":  $pink-50,
+  "pink-100": $pink-100,
+  "pink-200": $pink-200,
+  "pink-300": $pink-300,
+  "pink-400": $pink-400,
+  "pink-500": $pink-500,
+  "pink-600": $pink-600,
+  "pink-700": $pink-700,
+  "pink-800": $pink-800,
+  "pink-900": $pink-900,
+  "pink-950": $pink-950
+);
+
+$purples: (
+  "purple-50":  $purple-50,
+  "purple-100": $purple-100,
+  "purple-200": $purple-200,
+  "purple-300": $purple-300,
+  "purple-400": $purple-400,
+  "purple-500": $purple-500,
+  "purple-600": $purple-600,
+  "purple-700": $purple-700,
+  "purple-800": $purple-800,
+  "purple-900": $purple-900,
+  "purple-950": $purple-950
+);
+
+$deep-purples: (
+  "deep-purple-50":  $deep-purple-50,
+  "deep-purple-100": $deep-purple-100,
+  "deep-purple-200": $deep-purple-200,
+  "deep-purple-300": $deep-purple-300,
+  "deep-purple-400": $deep-purple-400,
+  "deep-purple-500": $deep-purple-500,
+  "deep-purple-600": $deep-purple-600,
+  "deep-purple-700": $deep-purple-700,
+  "deep-purple-800": $deep-purple-800,
+  "deep-purple-900": $deep-purple-900,
+  "deep-purple-950": $deep-purple-950
+);
+
+$indigos: (
+  "indigo-50":  $indigo-50,
+  "indigo-100": $indigo-100,
+  "indigo-200": $indigo-200,
+  "indigo-300": $indigo-300,
+  "indigo-400": $indigo-400,
+  "indigo-500": $indigo-500,
+  "indigo-600": $indigo-600,
+  "indigo-700": $indigo-700,
+  "indigo-800": $indigo-800,
+  "indigo-900": $indigo-900,
+  "indigo-950": $indigo-950
+);
+
+$blues: (
+  "blue-50":  $blue-50,
+  "blue-100": $blue-100,
+  "blue-200": $blue-200,
+  "blue-300": $blue-300,
+  "blue-400": $blue-400,
+  "blue-500": $blue-500,
+  "blue-600": $blue-600,
+  "blue-700": $blue-700,
+  "blue-800": $blue-800,
+  "blue-900": $blue-900,
+  "blue-950": $blue-950
+);
+
+$light-blues: (
+  "light-blue-50":  $light-blue-50,
+  "light-blue-100": $light-blue-100,
+  "light-blue-200": $light-blue-200,
+  "light-blue-300": $light-blue-300,
+  "light-blue-400": $light-blue-400,
+  "light-blue-500": $light-blue-500,
+  "light-blue-600": $light-blue-600,
+  "light-blue-700": $light-blue-700,
+  "light-blue-800": $light-blue-800,
+  "light-blue-900": $light-blue-900,
+  "light-blue-950": $light-blue-950
+);
+
+$cyans: (
+  "cyan-50":  $cyan-50,
+  "cyan-100": $cyan-100,
+  "cyan-200": $cyan-200,
+  "cyan-300": $cyan-300,
+  "cyan-400": $cyan-400,
+  "cyan-500": $cyan-500,
+  "cyan-600": $cyan-600,
+  "cyan-700": $cyan-700,
+  "cyan-800": $cyan-800,
+  "cyan-900": $cyan-900,
+  "cyan-950": $cyan-950
+);
+
+$teals: (
+  "teal-50":  $teal-50,
+  "teal-100": $teal-100,
+  "teal-200": $teal-200,
+  "teal-300": $teal-300,
+  "teal-400": $teal-400,
+  "teal-500": $teal-500,
+  "teal-600": $teal-600,
+  "teal-700": $teal-700,
+  "teal-800": $teal-800,
+  "teal-900": $teal-900,
+  "teal-950": $teal-950
+);
+
+$greens: (
+  "green-50":  $green-50,
+  "green-100": $green-100,
+  "green-200": $green-200,
+  "green-300": $green-300,
+  "green-400": $green-400,
+  "green-500": $green-500,
+  "green-600": $green-600,
+  "green-700": $green-700,
+  "green-800": $green-800,
+  "green-900": $green-900,
+  "green-950": $green-950
+);
+
+$light-greens: (
+  "light-green-50":  $light-green-50,
+  "light-green-100": $light-green-100,
+  "light-green-200": $light-green-200,
+  "light-green-300": $light-green-300,
+  "light-green-400": $light-green-400,
+  "light-green-500": $light-green-500,
+  "light-green-600": $light-green-600,
+  "light-green-700": $light-green-700,
+  "light-green-800": $light-green-800,
+  "light-green-900": $light-green-900,
+  "light-green-950": $light-green-950
+);
+
+$limes: (
+  "lime-50":  $lime-50,
+  "lime-100": $lime-100,
+  "lime-200": $lime-200,
+  "lime-300": $lime-300,
+  "lime-400": $lime-400,
+  "lime-500": $lime-500,
+  "lime-600": $lime-600,
+  "lime-700": $lime-700,
+  "lime-800": $lime-800,
+  "lime-900": $lime-900,
+  "lime-950": $lime-950
+);
+
+$yellows: (
+  "yellow-50":  $yellow-50,
+  "yellow-100": $yellow-100,
+  "yellow-200": $yellow-200,
+  "yellow-300": $yellow-300,
+  "yellow-400": $yellow-400,
+  "yellow-500": $yellow-500,
+  "yellow-600": $yellow-600,
+  "yellow-700": $yellow-700,
+  "yellow-800": $yellow-800,
+  "yellow-900": $yellow-900,
+  "yellow-950": $yellow-950
+);
+
+$ambers: (
+  "amber-50":  $amber-50,
+  "amber-100": $amber-100,
+  "amber-200": $amber-200,
+  "amber-300": $amber-300,
+  "amber-400": $amber-400,
+  "amber-500": $amber-500,
+  "amber-600": $amber-600,
+  "amber-700": $amber-700,
+  "amber-800": $amber-800,
+  "amber-900": $amber-900,
+  "amber-950": $amber-950
+);
+
+$oranges: (
+  "orange-50":  $orange-50,
+  "orange-100": $orange-100,
+  "orange-200": $orange-200,
+  "orange-300": $orange-300,
+  "orange-400": $orange-400,
+  "orange-500": $orange-500,
+  "orange-600": $orange-600,
+  "orange-700": $orange-700,
+  "orange-800": $orange-800,
+  "orange-900": $orange-900,
+  "orange-950": $orange-950
+);
+
+$deep-oranges: (
+  "deep-orange-50":  $deep-orange-50,
+  "deep-orange-100": $deep-orange-100,
+  "deep-orange-200": $deep-orange-200,
+  "deep-orange-300": $deep-orange-300,
+  "deep-orange-400": $deep-orange-400,
+  "deep-orange-500": $deep-orange-500,
+  "deep-orange-600": $deep-orange-600,
+  "deep-orange-700": $deep-orange-700,
+  "deep-orange-800": $deep-orange-800,
+  "deep-orange-900": $deep-orange-900,
+  "deep-orange-950": $deep-orange-950
+);
+
+// theme color variables
+$secondary: $gray-600;
+$success: $green-600;
+$info: $light-blue;
+$warning: $yellow;
+$danger: $red;
+$light: $gray-50;
+$dark: $gray-950;

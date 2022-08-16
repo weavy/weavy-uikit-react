@@ -1,0 +1,165 @@
+@use "sass:map";
+@use "sass:list";
+@use "sass:string";
+@use "sass:math";
+@use "sass:color";
+
+// RYB COLOR WHEEL
+// HSL mapping based on http://computergraphics.stackexchange.com/questions/1748/function-to-convert-hsv-angle-to-ryb-angle
+// Matching bootstrap and MD colors
+$color-names: (
+    "red": null,
+    "deep-orange": null,
+    "orange": null,
+    "amber": null,
+    "yellow": null,
+    "lime": null,
+    "light-green": null,
+    "green": null,
+    "teal": null,
+    "cyan": null,
+    "light-blue": null,
+    "blue": null,
+    "indigo": null,
+    "deep-purple": null,
+    "purple": null,
+    "pink": null
+) !default;
+
+// Matching MD shades
+// Added 950 for dark theme compatibility
+$color-shades: (
+    "50": 95,
+    "100": 90,
+    "200": 80,
+    "300": 70,
+    "400": 60,
+    "500": 50,
+    "600": 42,
+    "700": 36,
+    "800": 28,
+    "900": 22,
+    "950": 16
+) !default;
+
+// color mapping
+$ryb-rgb-mapping: (
+  (0, 0) // Red
+  (50, 35) // Orange
+  (110, 60) // Yellow
+  (165, 120) // Green
+  (210, 180) // Cyan
+  (285, 240) // Blue
+  (330, 300) // Purple
+  (360, 360) // Red (same as 0)
+) !default;
+
+// saturation mapping
+$hue-sat-mapping: (
+  (0, 85) // Red
+  (110, 100) // Yellow
+  (165, 60) // Green
+  (210, 88) // Cyan
+  (285, 97) // Blue
+  (330, 65) // Purple
+  (360, 85) // Red (same as 0)
+) !default;
+
+@function ryb-hue($h, $reverse: false) {
+  $deg: $h % 360;
+
+  $from: 1;
+  $to: 2;
+
+  @if $reverse {
+      $from: 2;
+      $to: 1;
+  }
+
+  $lower: 1;
+  $upper: 2;
+
+  @while $deg > list.nth(list.nth($ryb-rgb-mapping, $upper), $from) {
+      $lower: $upper;
+      $upper: $upper + 1;
+  }
+
+  $lower-from: list.nth(list.nth($ryb-rgb-mapping, $lower), $from);
+  $lower-to: list.nth(list.nth($ryb-rgb-mapping, $lower), $to);
+  $upper-from: list.nth(list.nth($ryb-rgb-mapping, $upper), $from);
+  $upper-to: list.nth(list.nth($ryb-rgb-mapping, $upper), $to);
+
+  $percent: math.div(($deg - $lower-from), ($upper-from - $lower-from));
+  $hue: $lower-to + ($upper-to - $lower-to) * $percent;
+
+  @return $hue;
+}
+
+@function ryb-saturation($rybHue, $saturation, $reverse: false) {
+  $deg: $rybHue % 360;
+  $sat: math.clamp(0, $saturation, 100);
+
+  $index: 1;
+  $value: 2;
+
+  $lower: 1;
+  $upper: 2;
+
+  @while $deg > list.nth(list.nth($hue-sat-mapping, $upper), $index) {
+      $lower: $upper;
+      $upper: $upper + 1;
+  }
+
+  $lower-index: list.nth(list.nth($hue-sat-mapping, $lower), $index);
+  $upper-index: list.nth(list.nth($hue-sat-mapping, $upper), $index);
+  $lower-value: list.nth(list.nth($hue-sat-mapping, $lower), $value);
+  $upper-value: list.nth(list.nth($hue-sat-mapping, $upper), $value);
+
+  $percent: math.div(($deg - $lower-index), ($upper-index - $lower-index));
+  $interpolation: math.div(($lower-value + ($upper-value - $lower-value) * $percent), 100);
+
+  @if $reverse {
+    @return math.div($sat, $interpolation);
+  } @else {
+    @return $sat * $interpolation;
+  }
+
+}
+
+@function hsl-to-ryb-as-hsl($h, $s, $l) {
+    $hue: math.floor(ryb-hue($h));
+    $saturation: ryb-saturation($h, $s) * 1%;
+    $lightness: $l * 1%;
+    @return hsl($hue, $saturation, $lightness);
+}
+
+@function generate-colors($base-color) {
+    $h: ryb-hue(math.div(hue($base-color), 1deg), true);
+    $divisions: list.length($color-names);
+
+    // 33% is minimum threshold to not get all colors gray
+    $normalizedS: math.clamp(ryb-saturation($h, 33), math.div(saturation($base-color), 1%), ryb-saturation($h, 100));
+    $s: ryb-saturation($h, $normalizedS, true);
+
+    $distance: math.div(360, $divisions);
+
+    $start-offset: $h % $distance;
+
+    // Clone
+    $generated-colors: map.merge($color-names, ());
+
+    @for $i from 1 through $divisions  {
+      $ih: $start-offset + ($i - 1) * $distance;
+      $il: map.get($color-shades, "500");
+      $iname: list.nth(map.keys($color-names), $i);
+      $icolor: hsl-to-ryb-as-hsl($ih, $s, $il);
+      //@debug $iname $icolor;
+      $generated-colors: map.set($generated-colors, $iname, $icolor);
+    }
+
+    @return $generated-colors;
+}
+
+@function color-shade($color, $shade, $shades: $color-shades) {
+  @return color.change($color, $lightness: map.get($shades, $shade) * 1%)
+}

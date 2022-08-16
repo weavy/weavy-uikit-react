@@ -1,0 +1,63 @@
+@use "variables";
+
+$body-bg: variables.$body-bg !default;
+$border-radius: variables.$border-radius !default;
+$border-width: variables.$border-width !default;
+
+// images in posts, messages and comments
+.wy-image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  position: relative;
+  border-radius: $border-radius;
+  overflow: hidden;
+  //background-color: $body-bg;
+  column-gap: $border-width;
+  row-gap: $border-width;
+
+  .wy-image {
+    padding: 0;
+    width: 50%;
+    position: relative;
+    flex: auto;
+    background-color: inherit;
+    background-clip: content-box;
+    min-width: max(25%, 4rem);
+    min-height: 4rem;
+
+    // 1 of not 2
+    &:first-of-type:not(:nth-last-of-type(2)) {
+      flex-basis: 100% !important;
+    }
+  }
+
+  .wy-image-area {
+    display: block;
+    height: 100%;
+    cursor: pointer;
+
+    img {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      // TODO: scale down only for small images like icons (with inline style?)
+      object-fit: contain;
+    }
+  }
+
+  .wy-more {
+    position: absolute;
+    line-height: 100%;
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+}

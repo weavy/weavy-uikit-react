@@ -1,0 +1,17 @@
+@use "colors" as *;
+
+.turbo-progress-bar {
+  background-color: $primary;
+  height: .25rem;
+}
+
+[data-turbo-link] {
+  cursor: pointer;
+}
+
+
+html[data-turbo-preview] {
+  main {
+    opacity: .6;
+  }
+}

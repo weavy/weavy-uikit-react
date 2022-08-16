@@ -1,0 +1,137 @@
+@use "config" as *;
+@use "mixins/backdrop";
+
+.wy-panels {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overscroll-behavior: contain;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.wy-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background-color: rgba(mix($white, #FFF), $opacity-backdrop);
+    display: flex;
+    flex-direction: column;
+
+    .wy-controls {
+        top: .5rem;
+        left: .5rem;
+        min-width: 2rem;
+        width: auto;
+        display: flex;
+        z-index: 10000;
+        order: -1;
+        flex-direction: row-reverse;
+
+        &:empty {
+            display: none;
+        }
+
+        .wy-icon {
+            color: $icon-color;
+        }
+
+        border-bottom: 1px solid $border-color;
+    }
+
+    .wy-panel-frame {
+        transition: opacity .1s .2s $md-animation-curve-default;
+        opacity: 1;
+    }
+
+    &:not(.wy-loaded) .wy-panel-frame {
+        opacity: 0;
+        transition: opacity .2s .1s step-start;
+    }
+
+    &.wy-open {
+        pointer-events: all;
+        z-index: 5;
+
+        &[data-title]::before {
+            content: attr(data-title);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: ($appbar-height - .0625rem);
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba($gray-50, $opacity-backdrop);
+            color: $navbar-light-color;
+            border-bottom: $border-width solid $border-color;
+            transition: opacity .1s .2s step-end;
+            font-family: $font-family-base;
+            line-height: $line-height-base;
+            font-weight: $font-weight-base;
+
+            @include backdrop.filter;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity $md-animation-duration $md-animation-curve-default 0s;
+        }
+
+        &.wy-loading {
+            &[data-title]::before {
+                transition: opacity $md-animation-duration $md-animation-curve-default;
+                opacity: 1;
+            }
+
+            &::after {
+                transition: opacity $md-animation-duration $md-animation-curve-default .5s;
+                opacity: 1;
+                // spinner.svg encoded with https://codepen.io/jakob-e/pen/doMoML
+                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' width='24' height='24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cstyle type='text/css'%3Eg%7Banimation:rotate 2s linear infinite;transform-origin:center center%7Dcircle%7Bstroke-dasharray:1,100;stroke-dashoffset:0;animation:dash 1.5s ease-in-out infinite,color 6s ease-in-out infinite%7D@keyframes rotate%7B100%25%7Btransform:rotate(360deg)%7D%7D@keyframes dash%7B0%25%7Bstroke-dasharray:1,100;stroke-dashoffset:0%7D50%25%7Bstroke-dasharray:44.5,100;stroke-dashoffset:-17.5px%7D100%25%7Bstroke-dasharray:44.5,100;stroke-dashoffset:-62px%7D%7D@keyframes color%7B0%25,100%25%7Bstroke:%23216eb4%7D40%25%7Bstroke:%2328b7cf%7D66%25%7Bstroke:%23216eb4%7D80%25,90%25%7Bstroke:%2328b7cf%7D%7D%3C/style%3E%3Cg%3E%3Ccircle fill='none' cx='12' cy='12' r='11' stroke-linecap='butt' stroke-width='2' /%3E%3C/g%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: 50%;
+                background-size: rem(2);
+                background-color: transparent;
+            }
+        }
+    }
+}
+
+// Transitions
+.wy-panel {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity $md-animation-duration-fast $md-animation-curve-default .01s, transform $md-animation-duration-fast $md-animation-curve-default .01s, visibility .01s step-end $md-animation-duration-fast;
+
+    &.wy-open {
+        transition: opacity $md-animation-duration $md-animation-curve-default, transform $md-animation-duration $md-animation-curve-default, visibility $md-animation-duration step-start;
+        visibility: visible;
+
+        &.wy-transition {
+            opacity: 1;
+            transform: none;
+        }
+    }
+}
+
+.wy-panel-frame {
+    flex: 1 1 100%;
+    border: 0;
+}

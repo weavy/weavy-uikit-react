@@ -1,0 +1,54 @@
+@use "config" as *;
+@use "bs/forms";
+
+.wy-avatar {
+  border-radius: 50%;
+}
+
+.wy-avatar-header {
+  padding: 1.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.wy-avatar-input {
+  @extend %form-control, %form-control-sm;
+  background: $light;
+  border-color: transparent;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1.5rem;
+}
+
+.wy-avatar-presence {
+  position: relative;
+}
+
+.wy-avatar-display-name {
+  font-size: $h4-font-size;
+  font-weight: $display-font-weight;
+  line-height: $display-line-height;
+  text-align: center;
+}
+
+
+// presence indicator
+.wy-presence {
+  display: none; // initially hidden
+  background-color: $gray-100;
+  width: .75rem;
+  height: .75rem;
+  border-radius: 50%;
+  outline: .125rem solid $white;
+  position: absolute;
+  bottom: 0;
+  right: -5%;
+}
+
+// online
+.wy-presence-active {
+  background-color: $green-400;
+  display: block;
+}

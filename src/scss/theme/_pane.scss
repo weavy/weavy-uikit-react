@@ -1,0 +1,16 @@
+.wy-pane {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.wy-pane-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.wy-pane-group {
+  padding: .5rem;
+}

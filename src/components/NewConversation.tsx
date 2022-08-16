@@ -36,7 +36,7 @@ const NewConversation = () => {
                     </nav>
                 </header>
 
-                <SearchUsers handleSubmit={handleCreate} buttonTitle="Create conversation"/>
+                <SearchUsers handleSubmit={handleCreate} buttonTitle="Next"/>
             </Overlay.UI>
         </>
 

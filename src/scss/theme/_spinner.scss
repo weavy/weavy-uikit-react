@@ -1,0 +1,63 @@
+@use "colors" as *;
+
+$spinner-offset: 187 !default;
+$spinner-duration: 1.4s !default;
+
+svg.wy-spinner {
+
+  circle {
+    stroke-dasharray: 1, 100;
+    stroke-dashoffset: 0;
+    transform-origin: center;
+  }
+
+  &.wy-spin {
+    // add class .wy-spin to animate the spinner (otherwise it will not be visible)
+    animation: wy-rotate $spinner-duration linear infinite;
+  
+    circle {
+      animation: wy-dash $spinner-duration ease-in-out infinite, wy-color ($spinner-duration*2) ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes wy-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes wy-dash {
+  0% {
+    stroke-dasharray: 1, 100;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 44.5, 100;
+    stroke-dashoffset: -17.5;
+  }
+
+  100% {
+    stroke-dasharray: 44.5, 100;
+    stroke-dashoffset: -62;
+  }
+}
+
+@keyframes wy-color {
+  0%, 100% {
+    stroke: $blue;
+  }
+
+  25% {
+    stroke: $red;
+  }
+
+  50% {
+    stroke: $yellow;
+  }
+
+  75% {
+    stroke: $green;
+  }
+}

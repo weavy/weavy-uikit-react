@@ -1,0 +1,15 @@
+@use "config" as *;
+
+// user content. e.g. text in comments, messages etc.
+
+// hashtags
+.wy-hashtag {
+  color: $text-muted;
+}
+
+// mentions
+.wy-mention {
+  font-weight: 500;
+}
+
+

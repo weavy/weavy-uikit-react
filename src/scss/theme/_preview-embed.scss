@@ -1,0 +1,38 @@
+@use "variables" as *;
+
+// Embedded iframes
+
+.wy-content-iframe, [data-controller~="embed"] {
+  border: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  flex: 1 1 100%;
+
+  &:not(.wy-loading):not([data-controller~="embed"]), &[data-controller~="embed"].wy-loaded {
+    background: $white;
+
+    ~ .wy-content-iframe-fallback, ~ .wy-spinner {
+      display: none;
+    }
+  }
+
+  &.wy-loading:not(.wy-loaded), &[data-controller~="embed"]:not(.wy-loaded) {
+    position: absolute;
+    visibility: hidden;
+    z-index: -1;
+    pointer-events: none;
+
+    &:not(.wy-fallback) ~ .wy-content-iframe-fallback {
+      display: none;
+    }
+
+    &.wy-fallback ~ .wy-spinner {
+      display: none;
+    }
+  }
+
+  ~ .wy-spinner {
+    margin: auto;
+  }
+}
