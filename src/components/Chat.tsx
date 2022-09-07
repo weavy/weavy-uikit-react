@@ -7,7 +7,7 @@ import useMembers from '../hooks/useMembers';
 import Typing from './Typing';
 import useConversation from '../hooks/useConversation';
 
-const Chat = ({ id }: ChatProps) => {
+const Chat = ({ uid }: ChatProps) => {
     const { client } = useContext(WeavyContext);
     const [selectedId, setSelectedId] = useState<number | null>(null)
 
@@ -15,7 +15,7 @@ const Chat = ({ id }: ChatProps) => {
         throw new Error('Weavy Chat component must be used within an WeavyProvider');
     }
 
-    const { isLoading: isLoadingChat, data: dataChat } = useChat(id, {});
+    const { isLoading: isLoadingChat, data: dataChat } = useChat(uid, {});
 
     const { isLoading: isLoadingMembers, data: dataMembers } = useMembers(selectedId, {
         // The query will not execute until the activeConversation exists
@@ -51,7 +51,7 @@ const Chat = ({ id }: ChatProps) => {
             </header>
 
             {!isLoadingChat && !dataChat &&
-                <div>No chat with the contextual id <strong>{id}</strong></div>
+                <div>No chat with the contextual id <strong>{uid}</strong></div>
             }
 
             {selectedId && dataMembers &&

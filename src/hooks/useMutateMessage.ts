@@ -22,19 +22,14 @@ export default function useMutateMessage() {
     }
 
     const mutateMessage = async ({ id, text, userId, attachments, meetings }: MutateProps) => {
-        const response = await fetch(client.url + "/api/apps/" + id + "/messages", {
-            method: "POST",
-            body: JSON.stringify({
+
+        const response = await client.post("/api/apps/" + id + "/messages",
+            "POST",
+            JSON.stringify({
                 text: text,
                 blobs: attachments.map((a: FileType) => { return a.id }),
                 meeting_id: meetings.length > 0 ? meetings[0].id : null
-            }),
-            headers: {
-                "content-type": "application/json",
-                "Authorization": "Bearer " + await client.tokenFactory()
-            }
-        });
-
+            }));
         return response.json();
     };
 
@@ -46,7 +41,7 @@ export default function useMutateMessage() {
                 // update cache
                 const newPagesArray = previousData.pages.map((page: any, i: number) => {
 
-                    
+
 
                     // remove temp message                    
                     if (i === 0) {
@@ -54,7 +49,7 @@ export default function useMutateMessage() {
                             ...page.data.filter((message: MessageType) => message.id !== context.tempId),
                             data
                         ]
-                       
+
                     }
 
                     return page;
@@ -68,7 +63,7 @@ export default function useMutateMessage() {
             }
 
             // refetch conversations list
-            queryClient.invalidateQueries("conversations");   
+            queryClient.invalidateQueries("conversations");
 
         },
         onMutate: async (variables: any) => {
@@ -100,8 +95,8 @@ export default function useMutateMessage() {
 
                 // update cache
                 queryClient.setQueryData(["messages", variables.id], (data: any) => {
-                    let updatedPages = [lastPage];                    
-                    if (data?.pages.length > 1) {                        
+                    let updatedPages = [lastPage];
+                    if (data?.pages.length > 1) {
                         updatedPages = [lastPage, ...data?.pages.slice(1)];
                     }
                     return {

@@ -16,20 +16,14 @@ export default function useMutateReaction() {
 
     type MutateProps = {
         id: number | null,
-        reaction: string        
+        reaction: string
     }
 
-    const mutateReaction = async ({id, reaction }: MutateProps) => {
+    const mutateReaction = async ({ id, reaction }: MutateProps) => {
 
-      
-        const response = await fetch(client.url + "/api/messages/" + id + "/reactions/", {
-            method: "POST",
-            body: JSON.stringify({ content: reaction}),
-            headers: {
-                "content-type": "application/json",
-                "Authorization": "Bearer " + await client.tokenFactory()
-            }
-        });
+        const response = await client.post("/api/messages/" + id + "/reactions/",
+            "POST",
+            JSON.stringify({ content: reaction }));
 
         return response;
     };

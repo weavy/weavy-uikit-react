@@ -104,9 +104,9 @@
             }
 
             &.wy-open[data-title]::before {
-                background: rgba($dark, $opacity-backdrop);
+                background-color: rgba($dark, $opacity-backdrop);
                 color: $navbar-dark-color;
-                border-bottom: $border-width #000 solid;
+                box-shadow: rgba($gray-800, $opacity-backdrop) 0px -1px 0px 0px inset
             }
         }
 

@@ -119,7 +119,7 @@
 
   @include media-breakpoint-up(sm) {
     thead {
-      display: revert;
+      display: table-header-group;
     }
 
     td:nth-child(5),

@@ -2,77 +2,158 @@ import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 export default class WeavyClient {
     url;
-    tokenFactory;
     connection;
-    groups: string[];
-    connectionEvents: any[];
+    tokenFactory;
+    groups: string[] = [];
+    connectionEvents: any[] = [];
     isConnectionStarted: any;
-
+    token: string = "";
+    tokenPromise: Promise<string> | null;
     EVENT_NAMESPACE = ".connection";
     EVENT_CLOSE = "close";
     EVENT_RECONNECTING = "reconnecting";
     EVENT_RECONNECTED = "reconnected";
 
+
     constructor(options: WeavyClientOptions) {
         this.url = options.url;
-        this.tokenFactory = options.tokenFactory
-        this.groups = [];
-        this.connectionEvents = [];
-         
+        this.tokenFactory = options.tokenFactory;
+        this.tokenPromise = null;        
         this.connection = new HubConnectionBuilder()
             .configureLogging(LogLevel.None)
             .withUrl(this.url + "/hubs/rtm", {
-                accessTokenFactory: this.tokenFactory
+                accessTokenFactory: () => { return this.tokenFactoryInternal.call(this, true, true) }
             })
             .withAutomaticReconnect()
             .build();
-        
-            this.isConnectionStarted = this.connection.start();           
+
+        this.isConnectionStarted = this.connection.start();
 
         this.connection.onclose(error => this.triggerHandler(this.EVENT_CLOSE, error));
         this.connection.onreconnecting(error => this.triggerHandler(this.EVENT_RECONNECTING, error));
         this.connection.onreconnected(connectionId => this.triggerHandler(this.EVENT_RECONNECTED, connectionId));
-        
+
     }
 
+    async get(url: string, retry: boolean = true): Promise<Response> {
+        //const token = await this.tokenFactoryInternal();
+        //console.log("GET:", url, " - t:", token);
+        const response = await fetch(this.url + url, {
+            headers: {
+                "content-type": "application/json",
+                "Authorization": "Bearer " + await this.tokenFactoryInternal()
+            }
+        });
 
-    async subscribe(group: string, event: string, callback: any) {        
+        if (!response.ok) {            
+            if ((response.status === 401 || response.status === 403) && retry) {
+                await this.tokenFactoryInternal(true);                
+                return await this.get(url, false);
+            }
+
+            console.error(`Error calling endpoint ${url}`, response)
+        }
+
+        return response;
+    }
+
+    async post(url: string, method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH", body: string | FormData, contentType: string = "application/json", retry: boolean = true): Promise<Response> {
+        let headers: HeadersInit = {         
+            "Authorization": "Bearer " + await this.tokenFactoryInternal()
+        };
+
+        if(contentType !== ""){
+            headers["content-type"] = contentType
+        }
+        const response = await fetch(this.url + url, {
+            method: method,
+            body: body,
+            headers: headers
+        });
+
+        if (!response.ok) {
+            if ((response.status === 401 || response.status === 403) && retry) {
+                await this.tokenFactoryInternal(true);                
+                return await this.post(url, method, body, contentType, false);
+            }
+
+            console.error(`Error calling endpoint ${url}`, response)
+        }
+
+        return response;
+    }
+
+    async getToken(refresh: boolean) {
+        console.log("Refresh, ", refresh)
+        if (!this.token || refresh) {
+            console.log("Getting new token...")
+            this.token = await this.tokenFactory(true);
+            //return await this.tokenFactory(refresh);
+        }
+        //this.tokenPromise = null;
+        console.log("Resolve new token...")
+        return this.token;
+    }
+
+    async tokenFactoryInternal(refresh: boolean = false, fromSR: boolean = false): Promise<string> {
+        //console.log("Get token with refresh: ", refresh, fromSR)
+        if(this.token && !refresh) return this.token;
+
+        if(!this.tokenPromise){
+            //console.log("No ongoing promise, create new one. Refresh: ", refresh)
+            this.tokenPromise = this.tokenFactory(refresh);
+            let token = await this.tokenPromise;
+            //console.log("Got token: ", token)
+            this.tokenPromise = null;
+            this.token = token;
+            return this.token;
+        } else{
+            //console.log("Already a promise in action, wait for it to resolve...")
+            return this.tokenPromise;
+        }
+    }
+
+    async subscribe(group: string, event: string, callback: any) {
         await this.isConnectionStarted;
-        
+
         try {
             var name = group ? group + ":" + event : event;
             await this.connection.invoke("AddToGroup", name);
             this.groups.push(name);
             this.connection.on(name, callback);
-        } catch(err: any){
+        } catch (err: any) {
             console.warn("Error in AddToGroup:", err)
         }
-        
+
     }
 
     async unsubscribe(group: string, event: string, callback: any) {
         await this.isConnectionStarted;
         var name = group ? group + ":" + event : event;
-        
+
         // get first occurence of group name and remove it                        
         const index = this.groups.findIndex(e => e === name);
-        if(index !== -1){
+        if (index !== -1) {
             this.groups = this.groups.splice(index, 1);
 
-            try {                
+            try {
                 // if no more groups, remove from server
-                if(!this.groups.find(e => e === name)){
+                if (!this.groups.find(e => e === name)) {
                     await this.connection.invoke("RemoveFromGroup", name);
                 }
-                
-            } catch(err: any){
+
+            } catch (err: any) {
                 console.warn("Error in RemoveFromGroup:", err)
             }
         }
-            
+
         this.connection.off(name, callback);
     }
- 
+
+    destroy(){
+        this.connection.stop();        
+    }
+
     triggerHandler(name: string, ...data: any) {
         name = name.endsWith(this.EVENT_NAMESPACE) ? name : name + this.EVENT_NAMESPACE;
         let event = new CustomEvent(name, { cancelable: false });

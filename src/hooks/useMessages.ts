@@ -13,13 +13,7 @@ export default function useMessages(id: number | null, options: any) {
 
     const getMessages = async (opt: any) => {
         let skip = opt.pageParam || 0;
-
-        const response = await fetch(client.url + "/api/apps/" + id + "/messages?orderby=createdat+desc&skip=" + skip + "&top=" + PAGE_SIZE, {
-            headers: {
-                "content-type": "application/json",
-                "Authorization": "Bearer " + await client.tokenFactory()
-            }
-        });
+        const response = await client.get("/api/apps/" + id + "/messages?orderby=createdat+desc&skip=" + skip + "&top=" + PAGE_SIZE);
         let result = await response.json();
         result.data = result.data?.reverse() || [];
         return result;

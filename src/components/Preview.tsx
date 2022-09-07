@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Icon from "../ui/Icon";
+import Spinner from "../ui/Spinner";
 import classNames from "classnames";
 import PdfViewer from "./PdfViewer";
 import { checkImageLoad, imageLoaded } from "./Image";
@@ -45,8 +46,8 @@ export const PreviewImage = ({ src, width, height }: ImageProps) => {
         <>
             {width && height ?
                 <div className="wy-content-image wy-responsive-image" style={{ ["--width" as any]: width, ["--height" as any]: height }}>
-                    <img ref={imageRef} src={src} onLoad={imageLoaded} width={width} height={height} decoding="async" />
-                    {/* TODO: spinner here */}
+                    <img className="wy-loading-transition" ref={imageRef} src={src} onLoad={imageLoaded} width={width} height={height} decoding="async" />
+                    <Spinner.UI />
                 </div>
                 :
                 <div className="wy-content-image wy-responsive-image wy-intrinsic-image">
@@ -58,12 +59,16 @@ export const PreviewImage = ({ src, width, height }: ImageProps) => {
 }
 
 type DocumentProps = {
-    src: string
+    src: string,
+    client: any 
 }
 
-export const PreviewDocument = ({ src }: DocumentProps) => {
+export const PreviewDocument = ({ src, client }: DocumentProps) => {
+    let pdfWorkerUrl = (new URL("/js/preview.worker.js", client.url)).toString();
+    let pdfCMapsUrl = (new URL("/js/cmaps/", client.url)).toString();
+    
     return (
-        <PdfViewer src={src} />
+        <PdfViewer src={src} pdfWorkerUrl={pdfWorkerUrl} pdfCMapsUrl={pdfCMapsUrl} />
     );
 }
 
@@ -111,38 +116,56 @@ function codecError(event: any) {
     }
 }
 
-type VideoProps = {
+type MediaProps = {
+    format: string,
     src: string,
     name: string,
     mediaType?: string
 }
 
-export const PreviewVideo = ({ src, name, mediaType }: VideoProps) => {
-    /* TODO: loading, error handling and stopping */
+export const PreviewMedia = ({ format, src, name, mediaType }: MediaProps) => {
 
-    return (
+    const [mediaElement, setMediaElement] = useState<HTMLVideoElement|HTMLAudioElement>();
+    const mediaRef = useCallback((element: any) => {
+        if (element) {
+            element.classList.add("wy-loading");
+            setMediaElement(element);
+        }
+    }, [])
+
+    useEffect(() => {
+        if (mediaElement) {
+
+            mediaElement.addEventListener('error', mediaError, true); // needs capturing
+            mediaElement.addEventListener('loadedmetadata', mediaLoaded, true); // needs capturing
+            mediaElement.addEventListener('loadedmetadata', codecError, true); // needs capturing
+            
+            return () => {
+                // cleanup
+                mediaElement.pause();
+                mediaElement.removeAttribute("autoplay");
+                mediaElement.setAttribute("preload", "none");
+
+                mediaElement.removeEventListener('error', mediaError, true); // needs capturing
+                mediaElement.removeEventListener('loadedmetadata', mediaLoaded, true); // needs capturing
+                mediaElement.removeEventListener('loadedmetadata', codecError, true); // needs capturing    
+            }
+        }
+
+    }, [mediaElement])
+
+    return (format === "video" ?
         <>
-            <video className="wy-content-video" controls crossOrigin="use-credentials" autoPlay>
+            <video ref={mediaRef} className="wy-content-video" controls crossOrigin="use-credentials" autoPlay>
                 <source src={src} type={mediaType} />
                 <PreviewIcon src={src} name={name} icon="file-video" download />
             </video>
-            {/* TODO: spinner here */}
+            <Spinner.UI />
         </>
-    );
-}
-
-type AudioProps = {
-    src: string,
-    name: string,
-    mediaType?: string
-}
-
-export const PreviewAudio = ({ src, name, mediaType }: AudioProps) => {
-    /* TODO: loading, error handling and stopping */
-    return (
+    :
         <>
             <PreviewIcon src={src} name={name} icon="file-music" download>
-                <audio className="wy-content-audio" controls crossOrigin="use-credentials" autoPlay>
+                <audio ref={mediaRef} className="wy-content-audio" controls crossOrigin="use-credentials" autoPlay>
                     <source src={src} type={mediaType} />
                 </audio>
             </PreviewIcon>
@@ -175,22 +198,23 @@ export const PreviewText = ({ src, html = false, code = false }: TextProps) => {
         <>
             {html ?
                 code ?
-                    <div className="wy-content-code" dangerouslySetInnerHTML={{ __html: textContent }}></div>
+                    <div className="wy-content-code wy-code" dangerouslySetInnerHTML={{ __html: textContent }}></div>
                     :
-                    <div className="wy-content-text">
-                        <pre className="wy-document" dangerouslySetInnerHTML={{ __html: textContent }}></pre>
+                    <div className="wy-document">
+                        <div className="wy-content-html" dangerouslySetInnerHTML={{ __html: textContent }}></div>
                     </div>
                 :
                 code ?
                     <div className="wy-content-code">{textContent}</div>
                     :
-                    <div className="wy-content-text">
-                        <pre className="wy-document">{textContent}</pre>
+                    <div className="wy-document">
+                        <pre className="wy-content-text">{textContent}</pre>
                     </div>
             }
         </>
     );
 }
+
 
 type EmbedProps = {
     src: string,
@@ -200,13 +224,47 @@ type EmbedProps = {
 }
 
 export const PreviewEmbed = ({ src, name, icon, provider }: EmbedProps) => {
-    /* TODO: add loading and error handling */
+    const [embedElement, setEmbedElement] = useState<HTMLObjectElement>();
+    const embedRef = useCallback((element: any) => {
+        if (element) {
+            element.classList.add("wy-loading");
+            setEmbedElement(element);
+        }
+    }, [])
+
+    useEffect(() => {
+        if (embedElement) {
+            let embedFallbackTimeout = setTimeout(function () {
+                console.log("fallback");
+                embedElement.classList.add("wy-fallback");
+              }, 2500)
+
+            let embedLoaded = (event: any) => {
+                var obj = event.target;
+                if (obj.tagName === 'OBJECT' && obj.classList.contains("wy-loading") && !obj.classList.contains("wy-loaded")) {
+                  console.log("loaded");
+                  obj.classList.add("wy-loaded");
+                  clearTimeout(embedFallbackTimeout);
+                }
+            }
+
+            embedElement.addEventListener('load', embedLoaded, true); // needs capturing
+            
+            return () => {
+                // cleanup
+                embedElement.removeEventListener('load', embedLoaded, true); // needs capturing
+                clearTimeout(embedFallbackTimeout);
+            }
+        }
+
+    }, [embedElement])
+
     return (
         <>
             {/* iframe needs to be object to not render error pages when content is blocked */}
-            <object className="wy-content-iframe" data={src}></object>
+            <object ref={embedRef} className="wy-content-iframe" data={src}></object>
 
-            {/* TODO: add spinner here */}
+            <Spinner.UI />
 
             <PreviewIcon src={src} name={name} icon={icon} provider={provider} className="wy-content-iframe-fallback" />
         </>
@@ -225,13 +283,16 @@ type IconProps = {
 
 export const PreviewIcon = ({ children, src, icon, name, provider, download = false, className }: IconProps) => {
     return (
-        <div className={classNames("wy-content-media", className)}>
+        <div className={classNames("wy-content-icon", className)}>
             <div className="wy-content-icon">
                 <Icon.UI name={icon} />
             </div>
             <div className="wy-content-name">
                 {provider ?
-                    <a href={src} target="_blank" title={`Open in ${provider}`}>{name} <Icon.UI name="open-in-new" size={1} /></a>
+                    <>
+                        <span>No preview available. </span> 
+                        <a href={src} target="_blank" title={name}>{`Open in ${provider}?`}</a>
+                    </>
                     : download ?
                         <a href={src} target="_top" download>{name}</a>
                         :
@@ -244,7 +305,9 @@ export const PreviewIcon = ({ children, src, icon, name, provider, download = fa
 }
 
 type PreviewProps = {
+    client: any,
     src: string,
+    link?: string,
     format: PreviewFormatType,
     name: string,
     icon: string,
@@ -254,39 +317,37 @@ type PreviewProps = {
     provider?: string
 }
 
-export const Preview = ({ src, format, name, icon, width, height, mediaType, provider }: PreviewProps) => {
+export const Preview = ({ client, src, link, format, name, icon, width, height, mediaType, provider }: PreviewProps) => {
     return (
         <>
             {format === "image" &&
-                <PreviewImage src={src} width={width} height={height} />
+                <PreviewImage key={src} src={src} width={width} height={height} />
             }
-            {format === "document" &&
-                <PreviewDocument src={src} />
+            {format === "pdf" &&
+                /* Key not needed since component is reused and handles cleanup */
+                <PreviewDocument src={src} client={client} />
             }
-            {format === "video" &&
-                <PreviewVideo src={src} name={name} mediaType={mediaType} />
-            }
-            {format === "audio" &&
-                <PreviewAudio src={src} name={name} mediaType={mediaType} />
+            {(format === "video" || format === "audio") &&
+                <PreviewMedia key={src} format={format} src={src} name={name} mediaType={mediaType} />
             }
             {format === "text" &&
-                <PreviewText src={src} />
+                <PreviewText key={src} src={src} />
             }
             {format === "code" &&
-                <PreviewText src={src} html code />
+                <PreviewText key={src} src={src} html code />
             }
-            {format === "markup" &&
-                <PreviewText src={src} html />
+            {format === "html" &&
+                <PreviewText key={src} src={src} html />
             }
             {format === "embed" &&
-                <PreviewEmbed src={src} name={name} icon={icon} provider={provider} />
+                <PreviewEmbed key={src} src={src} name={name} icon={icon} provider={provider} />
             }
-            {format === "link" &&
-                <PreviewIcon src={src} name={name} icon={icon} provider={provider} />
-            }
-            {format === "download" &&
-                <PreviewIcon src={src} name={name} icon={icon} download />
-            }
+            {format === "none" && (
+                link ?
+                    <PreviewIcon src={src} name={name} icon={icon} provider={provider} />
+                :
+                    <PreviewIcon src={src} name={name} icon={icon} download />
+            )}
         </>
     )
 }

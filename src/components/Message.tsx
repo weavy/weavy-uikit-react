@@ -58,7 +58,7 @@ const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_a
 
                                     {files && !!files.length && <div className="wy-attachments">
                                         {files.map((a: AttachmentType) =>
-                                            <Attachment key={a.id} name={a.name} previewFormat={a.kind} provider={a.provider} url={a.download_url} previewUrl={a.provider ? a.external_url : a.preview_url} mediaType={a.media_type} kind={a.kind} size={a.size} />
+                                            <Attachment key={a.id} onClick={(e) => handlePreviewClick(e, a.id)} name={a.name} previewFormat={a.kind} provider={a.provider} url={a.download_url} previewUrl={a.provider ? a.external_url : a.preview_url} mediaType={a.media_type} kind={a.kind} size={a.size} />
                                         )}
                                     </div>}
                                 </>

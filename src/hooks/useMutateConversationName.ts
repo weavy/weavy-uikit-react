@@ -14,28 +14,26 @@ export default function useMutateConversationName() {
 
 
     type MutateProps = {
-        id: number | null, 
+        id: number | null,
         name: string
     }
 
     const mutateConversationName = async ({ id, name }: MutateProps) => {
 
-        const response = await fetch(client.url + "/api/apps/" + id, {
-            method: "PATCH",
-            body: JSON.stringify({ name: name }),
-            headers: {
-                "content-type": "application/json",
-                "Authorization": "Bearer " + await client.tokenFactory()
-            }
-        });
+        const response = await client.post("/api/apps/" + id,
+            "PATCH",
+            JSON.stringify({
+                type: 'ChatRoom',
+                name: name
+            }));
 
         return response.json();
     };
 
     return useMutation(mutateConversationName, {
         onSuccess: (data: any, variables: any, context: any) => {
-            queryClient.invalidateQueries("conversations");            
-            queryClient.invalidateQueries(["conversation", variables.id]);     
-        }        
+            queryClient.invalidateQueries("conversations");
+            queryClient.invalidateQueries(["conversation", variables.id]);
+        }
     });
 }

@@ -21,17 +21,12 @@ export default function useMutateChat() {
     // create new conversation
     const mutateChat = async ({ identifier, members }: MutateProps) => {
 
-        const response = await fetch(client.url + "/api/apps/", {
-            method: "POST",
-            body: JSON.stringify({ 
+        const response = await client.post("/api/apps/",
+            "POST",
+            JSON.stringify({
                 identifier: identifier,
-                members: members 
-            }),
-            headers: {
-                "content-type": "application/json",
-                "Authorization": "Bearer " + await client.tokenFactory()
-            }
-        });
+                members: members
+            }));
 
         return response.json();
     };
@@ -39,6 +34,6 @@ export default function useMutateChat() {
     return useMutation(mutateChat, {
         onSuccess: () => {
             //queryClient.invalidateQueries("conversations");            
-        }        
+        }
     });
 }

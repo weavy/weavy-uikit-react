@@ -1,13 +1,16 @@
 interface WeavyClient {
     url: string,
-    tokenFactory: (() => string | Promise<string>),
+    tokenFactoryInternal: () => Promise<string>,
     subscribe: Function,
     unsubscribe: Function,
+    destroy: Function,
+    get: (url: string, retry?: boolean) => Promise<Response>,
+    post: (url: string, method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH", body: string | FormData, contentType?: string, retry?: boolean) => Promise<Response>
 }
 
 type WeavyClientOptions = {
     url: string,
-    tokenFactory: (() => string | Promise<string>)
+    tokenFactory: (refresh: boolean) => Promise<string>
 }
 
 type WeavyContextProps = {
@@ -21,6 +24,8 @@ type WeavyContextOptions = {
     enableCloudFiles?: boolean,
     enableScrollbarDetection?: boolean,
     filebrowserUrl?: string,
+    pdfWorkerUrl?: string,
+    pdfCMapsUrl?: string,
     reactions?: string[]
 }
 
@@ -132,12 +137,18 @@ type AttachmentType = {
     size: number,
     provider: string,
     download_url: string,
-    preview_url: string,
+    embed_url: string,
+    external_url: string,
     thumbnail_url: string,
-    external_url: string
+    preview_format: PreviewFormatType,
+    application_url: string,
+    preview_url: string,
+    created_at: string,
+    created_by?: UserType,
+    createdById?: number
 }
 
-type PreviewFormatType = "text"|"code"|"markup"|"image"|"video"|"audio"|"document"|"embed"|"link"|"download"|"none";
+type PreviewFormatType = "audio"|"code"|"embed"|"html"|"image"|"pdf"|"text"|"video"|"none";
 
 type ReactionType = {    
     id: number,

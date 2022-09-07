@@ -22,14 +22,9 @@ export default function useMutateDeleteReaction() {
     const mutateDeleteReaction = async ({ id, reaction }: MutateProps) => {
 
         // remove the existing reaction
-        const response = await fetch(client.url + "/api/messages/" + id + "/reactions/", {
-            method: "DELETE",
-            headers: {
-                "content-type": "application/json",
-                "Authorization": "Bearer " + await client.tokenFactory()
-            }
-        });
-
+        const response = await client.post("/api/messages/" + id + "/reactions/",
+        "DELETE",
+        "");
 
         return response;
     };

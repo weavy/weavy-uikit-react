@@ -234,7 +234,7 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
                                 parentId={id}
                                 reactions={item.reactions}
                                 //reactions_count={item.reactions_count}
-                                seenBy={members.data.length > 0 ? members.data.filter((member) => {
+                                seenBy={(members.data && members.data.length > 0) ? members.data.filter((member) => {
                                     const hasRead = member.read_at >= item.created_at;
                                     const nothingLaterRead = !data.pages.map((p) => p.data).flat().find((message: MessageType) => { return message.id > item.id && member.read_at >= message.created_at });
                                     return hasRead && nothingLaterRead && member.id !== user.id;

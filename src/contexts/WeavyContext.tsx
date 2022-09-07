@@ -7,7 +7,6 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import PreviewProvider from "./PreviewContext";
-import WeavyClient from "../client/WeavyClient";
 import detectScrollbars from '../utils/scrollbarDetection';
 
 dayjs.extend(relativeTime);
@@ -21,7 +20,7 @@ export const WeavyContext = createContext<WeavyContextProps>({
   options: {}
 });
 
-type Props = {
+type WeavyProviderProperties = {
   children: React.ReactNode,
   client: WeavyClient,
   options?: WeavyContextOptions
@@ -35,7 +34,7 @@ const queryClient = new QueryClient({
   },
 })
 
-const WeavyProvider = ({ children, client, options }: Props) => {
+const WeavyProvider = ({ children, client, options }: WeavyProviderProperties) => {
 
   let defaultOptions: WeavyContextOptions = {
     zoomAuthenticationUrl: undefined,
@@ -52,13 +51,17 @@ const WeavyProvider = ({ children, client, options }: Props) => {
     detectScrollbars();
   }
 
+  if(!client){
+    queryClient.clear();
+  }
+
   return (
     <>
       {client &&
         <QueryClientProvider client={queryClient}>
           <WeavyContext.Provider value={{ client, options: opts }}>
             <UserProvider client={client}>
-              <PreviewProvider>
+              <PreviewProvider client={client}>
                 {children}
               </PreviewProvider>              
             </UserProvider>

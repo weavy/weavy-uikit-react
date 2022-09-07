@@ -144,6 +144,16 @@ export function isVideo (ext: string) {
     }
 }
 
+export function isMarkdown (ext: string) {
+    switch (ext) {
+        case ".markdown":
+        case ".md":
+            return true;
+        default:
+            return false;
+    }
+}
+
 export function isMarkup (ext: string) {
     switch (ext) {
         case ".htm":
@@ -192,10 +202,6 @@ export function isCode (ext: string) {
         case ".lst":
         case ".m":
         case ".make":
-        case ".markdown":
-        case ".md":
-        case ".mdown":
-        case ".mkdn":
         case ".ml":
         case ".mm":
         case ".out":
@@ -228,7 +234,7 @@ export function isCode (ext: string) {
 }
 
 export function isText (ext: string) {
-    if (isCode(ext)) {
+    if (isCode(ext) || isMarkdown(ext)) {
         return true;
     }
     switch (ext) {
@@ -255,99 +261,6 @@ export function isOfficeDocument(path: string) {
         case ".xlsm":
         case ".xlsx":
         case ".xltx":
-            return true;
-        default:
-            return false;
-    }
-}
-
-export function canResize(path:string) {
-    return isBitmap(path) || isMetaFile(path);
-}
-
-export function canConvertToImage (filename: string) {
-    var ext = getExtension(filename);
-    if (canResize(ext) || isText(ext)) {
-        return true;
-    }
-    switch (ext) {
-        case ".ai":
-        case ".csv":
-        case ".doc":
-        case ".docm":
-        case ".docx":
-        case ".dot":
-        case ".dotm":
-        case ".dotx":
-        case ".eml":
-        case ".eps":
-        case ".msg":
-        case ".odp":
-        case ".ods":
-        case ".odt":
-        case ".ott":
-        case ".pdf":
-        case ".potm":
-        case ".potx":
-        case ".ppt":
-        case ".pptx":
-        case ".pps":
-        case ".ppsx":
-        case ".pptm":
-        case ".ppsm":
-        case ".psd":
-        case ".rtf":
-        case ".svg":
-        case ".xls":
-        case ".xlsb":
-        case ".xlsm":
-        case ".xlsx":
-        case ".xltm":
-        case ".xltx":
-        case ".webp":
-            return true;
-        default:
-            return false;
-    }
-}
-
-export function canConvertToPdf (filename: string) {
-    var ext = getExtension(filename);
-    switch (ext) {
-        case ".ai":
-        case ".doc":
-        case ".docm":
-        case ".docx":
-        case ".dot":
-        case ".dotm":
-        case ".dotx":
-        case ".eml":
-        case ".html":
-        case ".mhtml":
-        case ".msg":
-        case ".odt":
-        case ".ott":
-        case ".pdf":
-        case ".rtf":
-        case ".txt":
-        case ".xml":
-        case ".xls":
-        case ".xlsb":
-        case ".xlsm":
-        case ".xlsx":
-        case ".xltm":
-        case ".xltx":
-        case ".ods":
-        case ".csv":
-        case ".ppt":
-        case ".pptx":
-        case ".pps":
-        case ".ppsx":
-        case ".pptm":
-        case ".ppsm":
-        case ".potx":
-        case ".potm":
-        case ".odp":
             return true;
         default:
             return false;
@@ -408,31 +321,4 @@ export function getIcon (name: string, mediaType?: string): { icon: string, colo
 
     // fallback
     return { icon: "file" };
-}
-
-export function getPreviewFormat(filename:string): PreviewFormatType {
-    var ext = getExtension(filename);
-    if (isCode(ext)) {
-        //return "code";
-    }
-    if (isText(ext)) {
-        return "text";
-    }
-    if (isWebImage(ext)) {
-        return "image";
-    }
-    if (isVideo(ext)) {
-        return "video";
-    }
-    if (isAudio(ext)) {
-        return "audio";
-    }
-    if (canConvertToPdf(ext)) {
-        return "document";
-    }
-    if (canConvertToImage(ext)) {
-        return "image";
-    }
-
-    return "none";
 }

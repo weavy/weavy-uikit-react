@@ -20,21 +20,18 @@ export default function useMutateConversation() {
     // create new conversation
     const mutateConversation = async ({ members }: MutateProps) => {
 
-        const response = await fetch(client.url + "/api/conversations/", {
-            method: "POST",
-            body: JSON.stringify({ members: members }),
-            headers: {
-                "content-type": "application/json",
-                "Authorization": "Bearer " + await client.tokenFactory()
-            }
-        });
+        const response = await client.post("/api/conversations/",
+            "POST",
+            JSON.stringify({
+                members: members
+            }));
 
         return response.json();
     };
 
     return useMutation(mutateConversation, {
         onSuccess: () => {
-            queryClient.invalidateQueries("conversations");            
-        }        
+            queryClient.invalidateQueries("conversations");
+        }
     });
 }

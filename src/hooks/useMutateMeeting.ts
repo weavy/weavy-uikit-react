@@ -14,26 +14,21 @@ export default function useMutateMeeting() {
 
 
     type MutateProps = {
-        provider: string         
+        provider: string
     }
 
     const mutateMeeting = async ({ provider }: MutateProps) => {
 
-        const response = await fetch(client.url + "/api/meetings", {
-            method: "POST",
-            body: JSON.stringify({provider: provider}),
-            headers: {
-                "content-type": "application/json",
-                "Authorization": "Bearer " + await client.tokenFactory()
-            }
-        });
+        const response = await client.post("/api/meetings",
+            "POST",
+            JSON.stringify({ provider: provider }));
 
         return response.json();
     };
 
     return useMutation(mutateMeeting, {
         onSuccess: (variables: any) => {
-            
-        }        
+
+        }
     });
 }

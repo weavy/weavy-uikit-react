@@ -14,26 +14,21 @@ export default function useMutateExternalBlobs() {
 
 
     type MutateProps = {
-        blobs: []         
+        blobs: []
     }
 
     const mutateExternalBlobs = async ({ blobs }: MutateProps) => {
 
-        const response = await fetch(client.url + "/api/blobs/external", {
-            method: "POST",
-            body: JSON.stringify(blobs),
-            headers: {
-                "content-type": "application/json",
-                "Authorization": "Bearer " + await client.tokenFactory()
-            }
-        });
+        const response = await client.post("/api/blobs/external",
+            "POST",
+            JSON.stringify(blobs));
 
         return response.json();
     };
 
     return useMutation(mutateExternalBlobs, {
         onSuccess: (variables: any) => {
-            
-        }        
+
+        }
     });
 }

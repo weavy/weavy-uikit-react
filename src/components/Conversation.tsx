@@ -25,7 +25,7 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
     const { selectedConversationId, setSelectedConversationId } = useContext(MessengerContext);
     const { user } = useContext(UserContext);
     const [modalAddOpen, setModalAddOpen] = useState(false);
-    const [modalDetailsOpen, setModalDetailsOpen] = useState(false);    
+    const [modalDetailsOpen, setModalDetailsOpen] = useState(false);
     const [title, setTitle] = useState<string>("");
 
     const ChatRoom = "edb400ac-839b-45a7-b2a8-6a01820d1c44";
@@ -186,7 +186,7 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
                             <div className="wy-pane-group">
                                 <table className="wy-search-result-table">
                                     <tbody>
-                                        {dataMembers?.data.map((m: MemberType) => {
+                                        {dataMembers && dataMembers.data && dataMembers.data.map((m: MemberType) => {
                                             return (
                                                 <tr key={m.id} className="wy-search-result-table-checkbox">
                                                     <td className="wy-search-result-table-icon"><Avatar src={m.avatar_url} name={m.display_name} id={m.id} size={24} presence={m.presence} /></td>
@@ -203,7 +203,7 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
                 </div>
             </Overlay.UI>
 
-           
+
         </>
     )
 }

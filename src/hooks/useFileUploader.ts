@@ -17,13 +17,11 @@ export default function useFileUploader(callback: Function) {
             const formData = new FormData();
             formData.append('blob', request.file);
 
-            var response = await fetch(client.url + "/api/blobs", {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    "Authorization": "Bearer " + await client.tokenFactory()
-                }
-            });
+
+            const response = await client.post("/api/blobs",
+                "POST",
+                formData,
+                "");
 
             var uploaded = await response.json();
             callback(uploaded);
@@ -32,7 +30,7 @@ export default function useFileUploader(callback: Function) {
             onError: (e: any) => {
 
             },
-            onSuccess: (data: any, variables: any) => {                
+            onSuccess: (data: any, variables: any) => {
             },
         }
     );

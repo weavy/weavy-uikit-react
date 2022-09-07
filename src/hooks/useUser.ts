@@ -1,12 +1,8 @@
-//import { useContext } from "react";
 import { useQuery } from "react-query";
 import WeavyClient from "../client/WeavyClient";
-//import { WeavyContext } from "../contexts/WeavyContext";
 
 /// GET current user
-export default function useUser(client: WeavyClient) {
-    //const { client } = useContext(WeavyContext);
-
+export default function useUser(client: WeavyClient) {    
     if (!client) {
         throw new Error('useUser must be used within an WeavyProvider');
     }
@@ -14,17 +10,10 @@ export default function useUser(client: WeavyClient) {
     const getUser = async () => {
 
         try {
-            const response = await fetch(client.url + "/api/user", {
-                headers: {
-                    "content-type": "application/json",
-                    "Authorization": "Bearer " + await client.tokenFactory()
-                }
-            });
-    
+            const response = await client.get("/api/user");            
             if(response.ok){
                 return await response.json();            
-            }
-    
+            }    
             console.error("Could not load Weavy user data...")
             return null;
         } catch(err: any){

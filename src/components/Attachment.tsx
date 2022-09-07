@@ -10,19 +10,20 @@ type Props = {
     name: string,
     kind: string,
     size: number,
-    provider: string
+    provider: string,
+    onClick?: (e: any) => void
 }
 
-const Attachment = ({ previewFormat, url, previewUrl, mediaType, name, kind, size, provider }: Props) => {
+const Attachment = ({ previewFormat, url, previewUrl, mediaType, name, kind, size, provider, onClick }: Props) => {
     let fileSize = size > 0 ? fileSizeAsString(size) : null;
     let { icon, color } = getIcon(name, mediaType)
     return (
-        <a href={previewUrl || url} className={'wy-attachment'} target={"_blank"} title={name}>
-            <div className={'wy-attachment-icon'} title={kind}><Icon.UI name={icon} color={color} size={2} /></div>
-            <div className={'wy-attachment-content'}>
-                <div className={'wy-attachment-title'}>{name}</div>
+        <a href={previewUrl || url} className="wy-attachment" target={"_blank"} title={name} onClick={onClick ? (e) => onClick(e) : undefined}>
+            <div className="wy-attachment-icon" title={kind}><Icon.UI name={icon} color={color} size={2} /></div>
+            <div className="wy-attachment-content">
+                <div className="wy-attachment-title">{name}</div>
                 {fileSize &&
-                    <div className={'wy-attachment-meta'} title={fileSize}>{fileSize}</div>
+                    <div className="wy-attachment-meta" title={fileSize}>{fileSize}</div>
                 }
             </div>
         </a>

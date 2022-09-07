@@ -2,14 +2,14 @@
 
 // Embedded iframes
 
-.wy-content-iframe, [data-controller~="embed"] {
+.wy-content-iframe {
   border: 0;
   display: block;
   width: 100%;
   height: 100%;
   flex: 1 1 100%;
 
-  &:not(.wy-loading):not([data-controller~="embed"]), &[data-controller~="embed"].wy-loaded {
+  &.wy-loaded {
     background: $white;
 
     ~ .wy-content-iframe-fallback, ~ .wy-spinner {
@@ -17,7 +17,7 @@
     }
   }
 
-  &.wy-loading:not(.wy-loaded), &[data-controller~="embed"]:not(.wy-loaded) {
+  &.wy-loading:not(.wy-loaded) {
     position: absolute;
     visibility: hidden;
     z-index: -1;

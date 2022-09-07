@@ -18,7 +18,7 @@
     height: 100%;
     width: 100%;
     // Similar to object-fit: contain; but works for divs. Must subtract margins.
-    --max-width: #{'min(calc((100vh - 3rem - 1px) * (var(--width) / var(--height))), calc(var(--width) * 1px), 100%)'};
+    --max-width: #{'min(calc((100vh - 3rem) * (var(--width) / var(--height))), calc(var(--width) * 1px), 100%)'};
     --max-height: #{'min(calc(100vw * (var(--height) / var(--width))), calc(var(--height) * 1px), 100%)'};
 /*     // With sidebar
     body.controller-content & {

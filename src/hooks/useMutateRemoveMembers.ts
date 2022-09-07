@@ -16,28 +16,23 @@ export default function useMutateRemoveMembers() {
 
 
     type MutateProps = {
-        id:  number | null, 
+        id: number | null,
         members: number[]
     }
 
     const mutateRemove = async ({ id, members }: MutateProps) => {
 
-        const response = await fetch(client.url + "/api/apps/" + id + "/members/" + members.join(","), {
-            method: "DELETE",        
-            body: JSON.stringify(members),    
-            headers: {
-                "content-type": "application/json",
-                "Authorization": "Bearer " + await client.tokenFactory()
-            }
-        });
+        const response = await client.post("/api/apps/" + id + "/members/" + members.join(","),
+            "DELETE",
+            JSON.stringify(members));
 
         return response;
     };
 
     return useMutation(mutateRemove, {
         onSuccess: () => {
-            queryClient.invalidateQueries("conversations");         
-            setSelectedConversationId(null);   
-        }        
+            queryClient.invalidateQueries("conversations");
+            setSelectedConversationId(null);
+        }
     });
 }

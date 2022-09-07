@@ -48,12 +48,12 @@ const SearchUsers = ({handleSubmit, buttonTitle}: SearchUsersProps) => {
             </div>
 
             <div className="wy-pane-group">
-                {data && data.data.length === 0 &&
+                {data && (!data.data || data.data.length === 0) &&
                     <div className="wy-search-no-result">Your search did not match any people.</div>
                 }
                 <table className="wy-search-result-table">
                     <tbody>
-                        {data && data.data.length > 0 && data.data.map((user: MemberType) => {
+                        {data && data.data && data.data.length > 0 && data.data.map((user: MemberType) => {
                             return (
                                 <tr key={user.id} className="wy-search-result-table-checkbox">
                                     <td className="wy-search-result-table-icon">

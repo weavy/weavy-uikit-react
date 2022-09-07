@@ -32,7 +32,7 @@
   }
 }
 
-textarea.is-invalid + [data-editor-target] .cm-editor {
+.wy-is-invalid + [data-editor-target] .cm-editor {
   padding-right: $input-height-inner;
   background-image: escape-svg($form-feedback-icon-invalid);
   background-repeat: no-repeat;

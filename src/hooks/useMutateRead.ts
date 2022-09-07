@@ -19,16 +19,7 @@ export default function useMutateRead() {
     }
 
     const mutateRead = async ({ id, read }: MutateProps) => {
-
-        const response = await fetch(client.url + "/api/conversations/" + id + "/read", {
-            method:  !read ? "DELETE": "PUT",
-            body: "",
-            headers: {
-                "content-type": "application/json",
-                "Authorization": "Bearer " + await client.tokenFactory()
-            }
-        });
-
+        const response = await client.post("/api/conversations/" + id + "/read", !read ? "DELETE": "PUT", "")
         return response.json();
     };
 
