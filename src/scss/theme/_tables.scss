@@ -1,47 +1,83 @@
-@use "config" as *;
-@use "bs/tables";
+@use "base/vars";
+@use "base/colors";
+@use "base/text";
 
-
-// table with avatar/icon in first and last column
-%table-icons {
+.wy-table {
+  --wy-component-color: #{colors.$on-background};
+  --wy-component-background-color: #{colors.$background};
+  color: var(--wy-component-color);
+  background-color: var(--wy-component-background-color);
   table-layout: fixed;
+  width: 100%;
+  //margin-bottom: 1rem;
+  vertical-align: top;
+  border-collapse: collapse;
 
   th, td {
-    // cell with img or icon
-    &:first-child, &:last-child {
-      color: $icon-color !important;
-      vertical-align: middle;
-      text-align: center;
-      padding: $table-cell-padding-y-sm $table-cell-padding-x;
-      width: 2rem + $table-cell-padding-x;
-      // reset th styles (for dropdown menus in th)
-      font-size: $font-size-base;
-      font-weight: $font-weight-base;
-      text-transform: none;
-      letter-spacing: normal;
-    }
+    padding: vars.$table-cell-padding-y vars.$table-cell-padding-x;
+    box-shadow: #{colors.$outline-variant} 0px -1px 0px 0px inset;
+    line-height: 1;
+    vertical-align: middle;
+    height: 2.5rem;
 
     &:first-child {
-      padding-right: 0;
+      padding-left: calc(#{vars.$table-cell-padding-x} * 2);
     }
 
     &:last-child {
-      padding-left: 0;
+      padding-right: calc(#{vars.$table-cell-padding-x} * 2);
     }
+  }
+
+  > tbody {
+    vertical-align: inherit;
+  }
+
+  > thead {
+    vertical-align: bottom;
+  }
+
+  .wy-table-cell-icon {
+    color: var(--wy-component-color);
+    vertical-align: middle;
+    text-align: center;
+    padding: calc(#{vars.$table-cell-padding-y} * .5) vars.$table-cell-padding-x;
+    width: calc(2.5rem + #{vars.$table-cell-padding-x} * 2);
+    // reset th styles (for dropdown menus in th)
+    font-size: vars.$font-size-base;
+    font-weight: vars.$font-weight-base;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  .wy-table-cell-text {
+    @include text.truncate;
+    width: 100%;
   }
 }
 
+.wy-table-hover {
+  > tbody > tr:not(.wy-pager):hover > * {
+    --wy-component-color: #{colors.$on-surface};
+    --wy-component-background-color: #{colors.$surface-2};
+    color: var(--color);
+    background-color: var(--wy-component-background-color);
+    cursor: pointer;
+  }
+}
 
 .wy-table-trashed {
   th, td {
-    color: $text-muted;
     text-decoration: line-through;
+
     &:not(:last-child) {
-      opacity: $btn-disabled-opacity;
+      > * {
+        opacity: vars.$opacity-disabled;
+      }
     }
 
     > a {
-      color: $text-muted;
+      color: var(--wy-component-color);
     }
   }
 
@@ -50,4 +86,15 @@
       opacity: 1;
     }
   }
+}
+
+.wy-table-no-result {
+  text-align: center;
+  padding: 1rem;
+}
+
+
+.wy-table-sort-link {
+  display: inline-flex;
+  align-items: center;
 }

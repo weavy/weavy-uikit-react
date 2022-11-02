@@ -1,0 +1,169 @@
+@use "base/vars";
+@use "base/colors";
+@use "base/text";
+
+// An individual (list) item with support for icon/img, content and actions.
+.wy-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .25rem .75rem;
+  text-decoration: none;
+  min-height: 3rem;
+  // Adjust position of icon/avatar (makes padding/margin look ok for all combinations of item content)
+  > .wy-avatar, > .wy-icon, > .wy-icon-stack {
+    margin-left: -.25rem;
+  }
+}
+
+.wy-item-body {
+  width: 100%;
+  @include text.truncate;
+
+  > * {
+    @include text.truncate;
+  }
+  // adjust position of buttons/emoji
+  + .wy-dropdown, + .wy-button-icon, + .wy-item-actions {
+    margin-right: -.5rem;
+  }
+
+  + .wy-emoji {
+    margin-right: .125rem;
+  }
+
+}
+
+.wy-item-title {
+  color: colors.$on-background;
+  font-weight: vars.$headings-font-weight;
+  @include text.truncate;
+}
+
+.wy-item-text {
+  color: colors.$outline;
+  @include text.truncate;
+  font-size: vars.$font-size-sm;
+
+  .wy-emoji, .wy-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    vertical-align: -.3125rem;
+  }
+}
+
+// For items with more than one action, and items with top/bottom positioned actions
+.wy-item-actions {
+  --wy-component-background-color: transparent;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.wy-item-actions-top {
+  position: absolute;
+  top: .25rem;
+  right: .25rem;
+  margin:0 !important;
+}
+
+.wy-item-actions-bottom {
+  position: absolute;
+  bottom: .25rem;
+  right: .25rem;
+  margin: 0 !important;
+}
+
+.wy-item-body:has(+ .wy-item-actions-bottom) {
+  .wy-item-row:last-child {
+    // room for 2 icons
+    margin-right: 4.5rem;
+  }
+}
+
+.wy-item-body:has(+ .wy-item-actions-top) {
+  .wy-item-row:first-child {
+    // room for 1 icon
+      margin-right: 2rem;
+  }
+}
+
+.wy-item-row {
+  display: flex;
+  align-items: center;
+
+  &:first-child {
+    margin-bottom: .125rem;
+  }
+
+  .wy-item-title {
+    margin-right: auto;
+  }
+
+  .wy-item-text {
+    margin-right: auto;
+  }
+
+
+  .wy-meta {
+    margin: 0 .25rem;
+    white-space: nowrap;
+  }
+}
+
+// An actionable item with hover, disabled, and active states.
+.wy-item-hover {
+  //--wy-component-background-color: #{colors.$surface-1};
+  //--wy-component-color: #{colors.$on-surface};
+  //background-color: var(--wy-component-background-color);
+  //color: var(--wy-component-color);
+
+  user-select: none;
+  cursor: pointer;
+
+  // Hover state
+  &:hover,
+  &:focus {
+    --wy-component-background-color: #{colors.$surface-2};
+    --wy-component-color: #{colors.$on-surface};
+    background-color: var(--wy-component-background-color);
+    color: var(--wy-component-color);
+    text-decoration: none;
+  }
+
+  &:active {
+    --wy-component-background-color: #{colors.$surface-variant};
+    --wy-component-color: #{colors.$on-surface-variant};
+    background-color: var(--wy-component-background-color);
+    color: var(--wy-component-color);
+  }
+
+  &.wy-disabled,
+  &:disabled {
+    //--wy-component-background-color: #{colors.$surface-1};
+    //background-color: var(--wy-component-background-color);
+    opacity: vars.$opacity-disabled;
+    pointer-events: none;
+  }
+  // Include both here for `<a>`s and `<button>`s
+  &.wy-active {
+    --wy-component-background-color: #{colors.$primary-container};
+    --wy-component-color: #{colors.$on-primary-container};
+    background-color: var(--wy-component-background-color);
+    color: var(--wy-component-color);
+    border-color: var(--wy-component-background-color);
+  }
+}
+
+// Item with room for larger icon and two rows of content
+.wy-item-lg {
+  padding: .75rem;
+  min-height: 4.5rem;
+  gap: .75rem;
+
+  // adjust position of icon/avatar
+  > .wy-avatar, > .wy-icon, > .wy-icon-stack {
+    margin-left: 0;
+  }
+}

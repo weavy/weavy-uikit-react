@@ -1,9 +1,10 @@
 // weavy reboot
-@use "theme/reboot";
+@use "theme/base/reboot";
+@use "theme/base/scroll";
+@use "theme/base/colors";
 
 // weavy ui components 
 @use "theme/appbar";
-@use "theme/attachments";
 @use "theme/avatar";
 @use "theme/badge";
 @use "theme/buttons";
@@ -15,9 +16,12 @@
 @use "theme/emoji";
 @use "theme/icons";
 @use "theme/image-grid";
-@use "theme/inputs";
+@use "theme/input";
+@use "theme/item";
+@use "theme/list";
 @use "theme/messages";
 @use "theme/message-editor";
+@use "theme/meta";
 @use "theme/overlays";
 @use "theme/pager";
 @use "theme/pane";
@@ -27,35 +31,47 @@
 @use "theme/preview-code";
 @use "theme/preview-embed";
 @use "theme/preview-html";
-@use "theme/preview-icon";
 @use "theme/preview-image";
 @use "theme/preview-media";
 @use "theme/preview-pdf";
 @use "theme/preview-text";
 @use "theme/reactions";
-@use "theme/search";
-@use "theme/scroll";
 @use "theme/spinner";
+@use "theme/tables";
+@use "theme/type";
 @use "theme/typing";
+@use "theme/meeting";
 
 // layout
 .wy-messenger-provider {
-    display: flex;
-    min-height: 0;
-    min-width: 0;
-    flex: 1 1 0;
-  }
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+  flex: 1 1 0;
+}
   
-  .wy-messenger-sidebar {
-    width: 300px;
-    border-right: 1px solid #ccc;
-  }
+.wy-messenger-sidebar {
+  ---background-color: #{colors.$background};
+  ---color: #{colors.$on-background};
+
+  background-color: var(---background-color);
+  color: var(---color);
+
+  width: 300px;
+  border-right: 1px solid #{colors.$outline-variant};
+}
   
-  .wy-messenger-conversation{
-    overflow-anchor: none;
-    display: flex;
-    flex-direction: column;                    
-    flex: 1 1 0;
-  }
+.wy-messenger-conversation {
+  ---background-color: #{colors.$background};
+  ---color: #{colors.$on-background};
+
+  background-color: var(---background-color);
+  color: var(---color);
+
+  overflow-anchor: none;
+  display: flex;
+  flex-direction: column;                    
+  flex: 1 1 0;
+}
   
   

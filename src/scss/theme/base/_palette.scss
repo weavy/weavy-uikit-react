@@ -1,0 +1,130 @@
+// initial color used to generate palette
+$seed: #00658e;
+
+// primary
+$primary-0: #000000;
+$primary-10: #001e2e;
+$primary-20: #00344c;
+$primary-30: #004c6c;
+$primary-40: #00658e;
+$primary-50: #007fb2;
+$primary-60: #2f9ad0;
+$primary-70: #53b5ec;
+$primary-80: #84cfff;
+$primary-90: #c7e7ff;
+$primary-95: #e4f3ff;
+$primary-99: #fbfcff;
+$primary-100: #ffffff;
+
+// secondary
+$secondary-0: #000000;
+$secondary-10: #201c00;
+$secondary-20: #373100;
+$secondary-30: #504700;
+$secondary-40: #6a5f00;
+$secondary-50: #857800;
+$secondary-60: #a0921a;
+$secondary-70: #bcad36;
+$secondary-80: #d9c84f;
+$secondary-90: #f6e468;
+$secondary-95: #fff2a4;
+$secondary-99: #fffbff;
+$secondary-100: #ffffff;
+
+// tertiary
+$tertiary-0: #000000;
+$tertiary-10: #002106;
+$tertiary-20: #003910;
+$tertiary-30: #00531b;
+$tertiary-40: #206c2f;
+$tertiary-50: #3c8645;
+$tertiary-60: #56a15c;
+$tertiary-70: #70bc75;
+$tertiary-80: #8bd88e;
+$tertiary-90: #a6f5a8;
+$tertiary-95: #c7ffc4;
+$tertiary-99: #f6fff1;
+$tertiary-100: #ffffff;
+
+// error
+$error-0: #000000;
+$error-10: #410002;
+$error-20: #690005;
+$error-30: #93000a;
+$error-40: #ba1a1a;
+$error-50: #de3730;
+$error-60: #ff5449;
+$error-70: #ff897d;
+$error-80: #ffb4ab;
+$error-90: #ffdad6;
+$error-95: #ffedea;
+$error-99: #fffbff;
+$error-100: #ffffff;
+
+// neutral
+$neutral-0: #000000;
+$neutral-10: #191c1e;
+$neutral-20: #2e3133;
+$neutral-30: #454749;
+$neutral-40: #5c5e61;
+$neutral-50: #75777a;
+$neutral-60: #8f9193;
+$neutral-70: #aaabae;
+$neutral-80: #c5c6c9;
+$neutral-90: #e2e2e5;
+$neutral-95: #f0f1f3;
+$neutral-99: #fcfcff;
+$neutral-100: #ffffff;
+
+// neutral variant
+$neutral-variant-0: #000000;
+$neutral-variant-10: #161c21;
+$neutral-variant-20: #2b3136;
+$neutral-variant-30: #41484d;
+$neutral-variant-40: #595f65;
+$neutral-variant-50: #71787e;
+$neutral-variant-60: #8b9198;
+$neutral-variant-70: #a5acb2;
+$neutral-variant-80: #c1c7ce;
+$neutral-variant-90: #dde3ea;
+$neutral-variant-95: #ebf1f8;
+$neutral-variant-99: #fbfcff;
+$neutral-variant-100: #ffffff;
+
+// custom colors
+$blue-light: #7aadfa;
+$indigo-light: #8489e0;
+$purple-light: #bd78c2;
+$pink-light: #d072a2;
+$red-light: #da717c;
+$orange-light: #ef9646;
+$yellow-light: #d9c84f;
+$green-light: #56a15c;
+$teal-light: #00a29d;
+$cyan-light: #008398;
+$gray-light: #75777a;
+
+$blue-dark: #a7c8ff;
+$indigo-dark: #8489e0;
+$purple-dark: #da92de;
+$pink-dark: #ee8cbe;
+$red-dark: #da717c;
+$orange-dark: #ef9646;
+$yellow-dark: #d9c84f;
+$green-dark: #56a15c;
+$teal-dark: #00a29d;
+$cyan-dark: #009fb8;
+$gray-dark: #8f9193;
+
+// surface levels
+$surface-1-light: #f0f4f9; // $neutral-99 + $primary-40 with 5% opacity
+$surface-2-light: #e8f0f6; // $neutral-99 + $primary-40 with 8% opacity
+$surface-3-light: #e0ebf2; // $neutral-99 + $primary-40 with 11% opacity
+$surface-4-light: #deeaf1; // $neutral-99 + $primary-40 with 12% opacity
+$surface-5-light: #d9e7ef; // $neutral-99 + $primary-40 with 14 opacity
+
+$surface-1-dark: #1e2428; // $neutral-10 + $primary-80 with 5% opacity
+$surface-2-dark: #212a2f; // $neutral-10 + $primary-80 with 8% opacity
+$surface-3-dark: #242f36; // $neutral-10 + $primary-80 with 11% opacity
+$surface-4-dark: #253138; // $neutral-10 + $primary-80 with 12% opacity
+$surface-5-dark: #27343c; // $neutral-10 + $primary-80 with 14 opacity

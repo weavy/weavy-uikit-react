@@ -1,0 +1,19 @@
+// Material design animation and shadows from https://fezvrasta.github.io/bootstrap-material-design/
+$animation-curve-fast-out-slow-in: cubic-bezier(0.4, 0, 0.2, 1);
+$animation-curve-linear-out-slow-in: cubic-bezier(0, 0, 0.2, 1);
+$animation-curve-fast-out-linear-in: cubic-bezier(0.4, 0, 1, 1);
+$animation-curve-default: $animation-curve-fast-out-slow-in;
+$animation-duration: .2s;
+$animation-duration-fast: .1s;
+
+$shadow-umbra-opacity: 0.2;
+$shadow-penumbra-opacity: 0.14;
+$shadow-ambient-opacity: 0.12;
+$shadow-focus: 0 0 .5rem rgba(#000, .18), 0 .5rem 1rem rgba(#000, .36);
+$shadow-2dp: 0 .125rem .125rem 0 rgba(#000, $shadow-penumbra-opacity), 0 .1875rem .0625rem -.125rem rgba(#000, $shadow-umbra-opacity), 0 .0625rem .3125rem 0 rgba(#000, $shadow-ambient-opacity);
+$shadow-3dp: 0 .1875rem .25rem 0 rgba(#000, $shadow-penumbra-opacity), 0 .1875rem .1875rem -.125rem rgba(#000, $shadow-umbra-opacity), 0 .0625rem .5rem 0 rgba(#000, $shadow-ambient-opacity);
+$shadow-4dp: 0 .25rem .3125rem 0 rgba(#000, $shadow-penumbra-opacity), 0 .0625rem .625rem 0 rgba(#000, $shadow-ambient-opacity), 0 .125rem .25rem -.0625rem rgba(#000, $shadow-umbra-opacity);
+$shadow-6dp: 0 .375rem .625rem 0 rgba(#000, $shadow-penumbra-opacity), 0 .0625rem 1.5rem 0 rgba(#000, $shadow-ambient-opacity), 0 .1875rem .3125rem -.0625rem rgba(#000, $shadow-umbra-opacity);
+$shadow-8dp: 0 .5rem .625rem .0625rem rgba(#000, $shadow-penumbra-opacity), 0 .1875rem 1.25rem .125rem rgba(#000, $shadow-ambient-opacity), 0 .3125rem .3125rem -.1875rem rgba(#000, $shadow-umbra-opacity);
+$shadow-16dp: 0 1rem 2.25rem .125rem rgba(#000, $shadow-penumbra-opacity), 0 .375rem 1.875rem .3125rem rgba(#000, $shadow-ambient-opacity), 0 .5rem .625rem -.3125rem rgba(#000, $shadow-umbra-opacity);
+$shadow-24dp: 0 .5625rem 4.375rem .5rem rgba(#000, $shadow-penumbra-opacity), 0 1.0625rem 1.3125rem -.4375rem rgba(#000, $shadow-ambient-opacity), 0 2.25rem 3.5rem .1875rem rgba(#000, $shadow-umbra-opacity);

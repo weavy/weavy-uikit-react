@@ -1,0 +1,72 @@
+@use "base/colors";
+@use "base/vars";
+
+.wy-tabs {
+    display: flex;
+    justify-content: space-evenly;
+    padding:.25rem;
+}
+
+.wy-tab {
+    --wy-component-color: #{colors.$primary};
+    --wy-component-background-color: transparent; // #{colors.$surface-2};
+  
+    color: var(--wy-component-color);
+    background: var(--wy-component-background-color);
+
+    border: none;
+    border-radius: vars.$border-radius-lg;
+
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .25rem;
+    position: relative;
+
+    text-align: center;
+    text-decoration: none;
+  
+    cursor: pointer;
+    user-select: none;
+
+    .wy-tab-icon {
+        // State layer
+        position: relative;
+        padding: .25rem 1rem;
+        border-radius: var(--wy-btn-border-radius);
+        display: inline-flex;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            background: var(--wy-component-color);
+            opacity: 0%;
+        }
+    }
+
+    &:hover {
+        .wy-tab-icon::before {
+            opacity: 8%;
+        }
+    }
+
+    &:focus, &:active, &.wy-active {
+        .wy-tab-icon::before {
+            opacity: 12%;
+        }
+    }
+
+    .wy-tab-label {
+        font-family: var(--wy-btn-font-family);
+        line-height: var(--wy-btn-line-height);
+    
+        font-size: vars.$font-size-xs;
+        font-weight: vars.$font-weight-base;
+    }
+}

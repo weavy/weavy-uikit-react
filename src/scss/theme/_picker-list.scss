@@ -1,7 +1,9 @@
-@use "config" as *;
-
+@use "base/text";
 
 .wy-picker-list {
+  background: var(--wy-component-background-color);
+  color: var(--wy-component-color);
+  
   border: none;
 
   > .wy-picker-list-item:first-child, > :first-child .wy-picker-list-item {
@@ -33,5 +35,5 @@
 
 .wy-picker-list-item-title {
   flex-grow: 1;
-  @include text-truncate();
+  @include text.truncate;
 }

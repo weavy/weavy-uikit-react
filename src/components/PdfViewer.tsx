@@ -248,19 +248,19 @@ const PdfViewer = ({ src, pdfCMapsUrl, pdfWorkerUrl }: Props) => {
 
     return (
         <div className="wy-content-pdf" data-controller="pdf" data-pdf-url-value="">
-            <div className="wy-toolbar">
-                <nav className="wy-tools">
-                    <div className="wy-tool">
+            <div className="wy-toolbars-bottom">
+                <nav className="wy-toolbar">
+                    <div className="wy-toolbar-buttons">
                         <input type="text" className="wy-input" ref={pageNumberRef} onChange={updatePage} onClick={select} data-pdf-target="pageNumber"/>
                         <span>/</span>
                         <span ref={totalPagesRef}>1</span>
                     </div>
-                    <div className="wy-tool">
+                    <div className="wy-toolbar-buttons">
                         <button className="wy-button wy-button-icon btn-zoom-out" onClick={zoomOut} title="Zoom out"><Icon.UI name="minus" /></button>
                         <input type="text" className="wy-input" ref={zoomLevelRef} onChange={updateZoom} onClick={select} value="100%" data-pdf-target="zoomLevel"/>
                         <button className="wy-button wy-button-icon btn-zoom-in" onClick={zoomIn} title="Zoom in"><Icon.UI name="plus" /></button>
                     </div>
-                    <div className="wy-tool">
+                    <div className="wy-toolbar-buttons">
                         <button className="wy-button wy-button-icon btn-fit-page" onClick={fitToWidth} title="Fit to width"><Icon.UI name="fit-width" /></button>
                         <button className="wy-button wy-button-icon" onClick={fitToPage} title="Fit to screen"><Icon.UI name="fit-screen" /></button>
                     </div>

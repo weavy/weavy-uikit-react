@@ -18,12 +18,12 @@ const Attachment = ({ previewFormat, url, previewUrl, mediaType, name, kind, siz
     let fileSize = size > 0 ? fileSizeAsString(size) : null;
     let { icon, color } = getIcon(name, mediaType)
     return (
-        <a href={previewUrl || url} className="wy-attachment" target={"_blank"} title={name} onClick={onClick ? (e) => onClick(e) : undefined}>
-            <div className="wy-attachment-icon" title={kind}><Icon.UI name={icon} color={color} size={2} /></div>
-            <div className="wy-attachment-content">
-                <div className="wy-attachment-title">{name}</div>
+        <a href={previewUrl || url} className="wy-item wy-item-hover wy-item-lg wy-attachment" target={"_blank"} title={name} onClick={onClick ? (e) => onClick(e) : undefined}>
+            <Icon.UI name={icon} color={color} size={2} />
+            <div className="wy-item-body wy-attachment-content">
+                <div className="wy-item-title wy-attachment-title">{name}</div>
                 {fileSize &&
-                    <div className="wy-attachment-meta" title={fileSize}>{fileSize}</div>
+                    <div className="wy-item-text wy-attachment-meta" title={fileSize}>{fileSize}</div>
                 }
             </div>
         </a>

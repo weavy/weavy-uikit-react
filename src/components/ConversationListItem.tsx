@@ -27,22 +27,40 @@ const ConversationListItem = ({ item, refetchConversations }: ConversationListIt
 
     const ChatRoom = "edb400ac-839b-45a7-b2a8-6a01820d1c44";
 
-    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: any) => {
-        e.preventDefault();
-        setSelectedConversationId(id);
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>, id: any) => {
+        if (!e.defaultPrevented) {
+            e.preventDefault();
+            setSelectedConversationId(id);
+        }
     }
 
-    const handleAppUpdated = useCallback((data: ConversationType) => {
-        if (data.id !== item.id) return;
+    const handleAppUpdated = useCallback((realtimeEvent: RealtimeApp) => {   
+        if (realtimeEvent.app.id !== item.id) return;
         refetchConversations();
 
-    }, [item.id])
+    }, [item.id]);
+
+    const handleMessageCreated = useCallback((realtimeEvent: RealtimeMessage) => {   
+        if (realtimeEvent.message.app_id !== item.id) return;
+        refetchConversations();
+
+    }, [item.id]);
+
+    const handleMemberAdded = useCallback((realtimeEvent: RealtimeMember) => {   
+        if (realtimeEvent.app.id !== item.id) return;
+        refetchConversations();
+
+    }, [item.id]);
 
     useEffect(() => {
-        client?.subscribe(`a${item.id}`, "app-updated", handleAppUpdated);
+        client?.subscribe(`a${item.id}`, "app_updated", handleAppUpdated);
+        client?.subscribe(`a${item.id}`, "message_created", handleMessageCreated);
+        client?.subscribe(`a${item.id}`, "member_added", handleMemberAdded);
 
         return () => {
-            client?.unsubscribe(`a${item.id}`, "app-updated", handleAppUpdated);
+            client?.unsubscribe(`a${item.id}`, "app_updated", handleAppUpdated);
+            client?.unsubscribe(`a${item.id}`, "message_created", handleMessageCreated);
+            client?.unsubscribe(`a${item.id}`, "member_added", handleMemberAdded);
         }
     }, [item.id])
 
@@ -50,12 +68,12 @@ const ConversationListItem = ({ item, refetchConversations }: ConversationListIt
 
     const handleUnread = (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
-        readMutation.mutate({ id: item.id, read: false });
+        readMutation.mutate({ id: item.id, read: false, messageId: null });
     }
 
     const handleRead = (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
-        readMutation.mutate({ id: item.id, read: true });
+        readMutation.mutate({ id: item.id, read: true, messageId: item.last_message.id });
     }
 
     const handlePin = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -78,18 +96,18 @@ const ConversationListItem = ({ item, refetchConversations }: ConversationListIt
     // }
 
     return (
-        <div className={classNames('wy-conversation', {"wy-unread": item.is_unread})} key={item.id}>
-            <a className={classNames('wy-conversation-link', { "wy-active": selectedConversationId === item.id})} href="#" onClick={(e) => handleClick(e, item.id)}>
-                <Avatar src={item.avatar_url} id={otherId || -1} presence={item.type !== ChatRoom ? "away" : ""} name={item.display_name} />
+        <div className={classNames('wy-item wy-item-lg wy-item-hover wy-conversation', {"wy-unread": item.is_unread, "wy-active": selectedConversationId === item.id})} key={item.id} onClick={(e) => handleClick(e, item.id)}>
+            <Avatar src={item.avatar_url} id={otherId || -1} presence={item.type !== ChatRoom ? "away" : ""} name={item.display_name} />
 
-                <div className="wy-conversation-body">
-                    <div className="wy-conversation-header">
-                        <div className="wy-conversation-title">{item.display_name}</div>
-                        {item.last_message &&
-                            <time className="wy-conversation-time" dateTime={item.last_message.created_at.toString()} title={date.format('LLLL')}>{date.fromNow()}</time>
-                        }
-                    </div>
-                    <div className="wy-conversation-summary">
+            <div className="wy-item-body">
+                <div className="wy-item-row">
+                    <div className="wy-item-title">{item.display_name}</div>
+                    {item.last_message &&
+                        <time className="wy-meta" dateTime={item.last_message.created_at.toString()} title={date.format('LLLL')}>{date.fromNow()}</time>
+                    }
+                </div>
+                <div className="wy-item-row">
+                    <div className="wy-item-text">
                         <Typing id={item.id} context="listitem">
 
                             {item.last_message?.html &&
@@ -108,44 +126,43 @@ const ConversationListItem = ({ item, refetchConversations }: ConversationListIt
 
                         </Typing>
                     </div>
+                    
+
                 </div>
-            </a>
-
-            <div className="wy-conversation-actions">
-                {item.is_pinned &&
-                    <Button.UI onClick={handleUnpin}>
-                        <Icon.UI name="pin" size={.75} />
-                    </Button.UI>
-
-                }
-
-                <Dropdown.UI directionX='left'>
-                    <>
-                        {item.is_unread &&
-                            <Dropdown.Item onClick={handleRead}>Mark as read</Dropdown.Item>
-                        }
-                        {!item.is_unread &&
-                            <Dropdown.Item onClick={handleUnread}>Mark as unread</Dropdown.Item>
-                        }
-                    </>
-                    <>
-                        {item.is_pinned &&
-                            <Dropdown.Item onClick={handleUnpin}>Unpin</Dropdown.Item>
-                        }
-                        {!item.is_pinned &&
-                            <Dropdown.Item onClick={handlePin}>Pin</Dropdown.Item>
-                        }
-                    </>
-                    {item.type === ChatRoom &&
-                        <Dropdown.Item onClick={handleLeaveConversation}>Leave conversation</Dropdown.Item>
-                    }
-
-                    {/* <li><Button.UI onClick={handleStar}>Star</Button.UI></li> */}
-                </Dropdown.UI>
-
-
-
             </div>
+            <div className="wy-item-actions wy-item-actions-bottom">
+                        {item.is_pinned &&
+                            <Button.UI onClick={handleUnpin}>
+                                <Icon.UI name="pin" size={1/1.5} />
+                            </Button.UI>
+
+                        }
+
+                        <Dropdown.UI directionX='left'>
+                            <>
+                                {item.is_unread &&
+                                    <Dropdown.Item onClick={handleRead}>Mark as read</Dropdown.Item>
+                                }
+                                {!item.is_unread &&
+                                    <Dropdown.Item onClick={handleUnread}>Mark as unread</Dropdown.Item>
+                                }
+                            </>
+                            <>
+                                {item.is_pinned &&
+                                    <Dropdown.Item onClick={handleUnpin}>Unpin</Dropdown.Item>
+                                }
+                                {!item.is_pinned &&
+                                    <Dropdown.Item onClick={handlePin}>Pin</Dropdown.Item>
+                                }
+                            </>
+                            {item.type === ChatRoom &&
+                                <Dropdown.Item onClick={handleLeaveConversation}>Leave conversation</Dropdown.Item>
+                            }
+
+                            {/* <li><Button.UI onClick={handleStar}>Star</Button.UI></li> */}
+                        </Dropdown.UI>
+
+                    </div>
         </div>
     )
 }

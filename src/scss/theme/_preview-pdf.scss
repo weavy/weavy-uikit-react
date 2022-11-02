@@ -1,13 +1,8 @@
-@use "config" as *;
-@use "inputs";
-@use "mixins/backdrop";
-@use "mixins/scrollbar";
+@use "base/vars";
+@use "base/colors";
+@use "base/scroll";
 
-$zindex-fixed: $zindex-fixed !default;
-$border-radius: $border-radius !default;
-$opacity-backdrop: $opacity-backdrop !default;
-
-:root {
+:root, :host > * {
   --pdfViewer-padding-bottom: 0;
   --page-margin: 2rem auto;
   --page-border: none;
@@ -18,7 +13,7 @@ $opacity-backdrop: $opacity-backdrop !default;
 
 // How to test?
 @media screen and (forced-colors: active) {
-  :root {
+  :root, :host > * {
     --pdfViewer-padding-bottom: 9px;
     --page-margin: 9px auto 0;
     --page-border: none;
@@ -51,11 +46,11 @@ $opacity-backdrop: $opacity-backdrop !default;
     bottom: 0;
     left: 0;
 
-    @include scrollbar.scroll-y;
-    @include scrollbar.scroll-x;
+    @include scroll.scroll-y;
+    @include scroll.scroll-x;
 
     .wy-scrollbars & {
-      @include scrollbar.custom-scrollbar;
+      @include scroll.custom-scrollbar;
 
       @supports (overflow-y: overlay) {
         overflow-y: overlay;
@@ -732,8 +727,8 @@ $opacity-backdrop: $opacity-backdrop !default;
     border: var(--page-border);
     background-clip: content-box;
     //border-image: url(/images/pdf/shadow.png) 9 9 repeat;
-    box-shadow: $box-shadow-sm;
-    background-color: rgba(255, 255, 255, 1);
+    box-shadow: vars.$shadow-level2;
+    background-color: colors.$white;
   }
 
   .pdfViewer .dummyPage {

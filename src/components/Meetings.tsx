@@ -22,7 +22,7 @@ const Meetings = ({ onMeetingAdded }: Props) => {
         return () => {
             window.removeEventListener("message", createMeeting);
         }
-    }, [])
+    }, [onMeetingAdded])
 
     const createMeeting = async (e: any) => {
 

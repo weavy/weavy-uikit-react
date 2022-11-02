@@ -1,4 +1,4 @@
-@use "variables" as *;
+@use "base/colors";
 
 // Embedded iframes
 
@@ -7,10 +7,16 @@
   display: block;
   width: 100%;
   height: 100%;
+  top: 0;
+  left: 0;
   flex: 1 1 100%;
 
   &.wy-loaded {
-    background: $white;
+    --wy-component-background-color: #{colors.$surface-1};
+    --wy-component-color: #{colors.$on-surface};
+
+    background-color: var(--wy-component-background-color);
+    color: var(--wy-component-color);
 
     ~ .wy-content-iframe-fallback, ~ .wy-spinner {
       display: none;

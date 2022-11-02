@@ -15,11 +15,13 @@ export default function useMutateRead() {
 
     type MutateProps = {
         id: number | null,
-        read: boolean
+        read: boolean,
+        messageId: number | null
     }
 
-    const mutateRead = async ({ id, read }: MutateProps) => {
-        const response = await client.post("/api/conversations/" + id + "/read", !read ? "DELETE": "PUT", "")
+    const mutateRead = async ({ id, read, messageId }: MutateProps) => {
+        const url = read ? `/api/conversations/${id}/read?messageId=${messageId}`: `/api/conversations/${id}/read`;
+        const response = await client.post(url, !read ? "DELETE": "PUT", "")
         return response.json();
     };
 

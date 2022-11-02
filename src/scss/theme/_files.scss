@@ -1,5 +1,12 @@
-@use "config" as *;
-@use "tables";
+@use "base/colors";
+@use "base/vars";
+@use "base/text";
+@use "base/breakpoints";
+
+.wy-filename {
+  font-size: vars.$font-size-sm;
+  @include text.truncate;
+}
 
 .wy-files-dragging {
   &::after {
@@ -8,8 +15,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px dashed $primary;
-    font-weight: $font-weight-bold;
+    border: 2px dashed colors.$primary;
+    font-weight: vars.$font-weight-bold;
     z-index: 10000;
     position: fixed;
     top: 0;
@@ -19,105 +26,127 @@
   }
 }
 
-.wy-upload-progress{  
-  display: flex;
-  
 
-  progress{    
-    visibility: hidden;
+
+.wy-upload-progress-item {
+  flex-direction: column;
+  padding: 0.75rem .25rem;
+
+  .wy-upload-progress-item-content {
     flex: 1;
-    border-radius: 0;    
-    height: 0.5rem;
-    position: fixed;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.25rem;
+  }
+
+  .wy-upload-progress-success {
+    display: flex;
+    align-items: center;
+  }
+
+  .wy-upload-progress {
+    display: flex;
     width: 100%;
 
-    &::-webkit-progress-value{
-      background-color: $primary;
+    progress {
+      flex: 1;
+      height: 0.5rem;
+      accent-color: colors.$primary;
     }
   }
 }
 
-.wy-file-upload-errors{
-  display:flex;
+.wy-upload-error {
+  align-items: flex-start;  
+  flex-direction: column;
+  white-space: normal;
+
+  .wy-upload-error-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.25rem;
+  }
+
+  .wy-upload-error-text {
+    color: colors.$error;
+  }
+
+  .wy-upload-error-actions {
+    white-space: nowrap;
+  }
+}
+
+.wy-file-upload-errors {
+  display: flex;
   flex-direction: column;
 
-  .wy-upload-error-row{
-    display:flex;
+  .wy-upload-error-row {
+    display: flex;
     margin-bottom: 0.5rem;
     align-items: center;
     column-gap: 1rem;
 
-    .wy-upload-error-row-title{
+    .wy-upload-error-row-title {
       flex: 1;
-      overflow:hidden; 
+      overflow: hidden;
       white-space: nowrap;
-      text-overflow: ellipsis; 
+      text-overflow: ellipsis;
     }
 
-    .wy-upload-error-row-conflict{
-      color: $warning;
+    .wy-upload-error-row-conflict {
+      background-color: colors.$error-container;
+      color: colors.$on-error-container;
     }
 
-    .wy-upload-error-row-error{
-      color: $danger;
+    .wy-upload-error-row-error {
+      color: colors.$error;
     }
   }
 }
 
 .wy-table-files {
-  @extend %table, %table-hover, %table-icons;
-
   thead {
     display: none;
-  }
-
-  tr[data-preview-url-param] {
-    cursor: pointer;
-  }
-
-  td {
-    vertical-align: middle;
+    text-align: left;
   }
 
   td:nth-child(2) {
     // make room for rename form
-    padding: 0 $table-cell-padding-x;
+    padding: 0 vars.$table-cell-padding-x;
   }
-
   // filename
   td:nth-child(2),
   th:nth-child(2) {
     width: 100%;
-    @include text-truncate();
+    @include text.truncate;
   }
-
   // modified
   td:nth-child(3),
   th:nth-child(3) {
     display: none;
     width: 7rem;
-    @include text-truncate();
+    @include text.truncate;
   }
-
   // kind
   td:nth-child(4),
   th:nth-child(4) {
     display: none;
     width: 7.5rem;
     text-align: right;
-    @include text-truncate();
+    @include text.truncate;
   }
-
   // size
   td:nth-child(5),
   th:nth-child(5) {
     display: none;
     width: 7rem;
     text-align: right;
-    @include text-truncate();
+    @include text.truncate;
   }
-
-  @include media-breakpoint-up(sm) {
+  // TODO: REMOVE BREAKPOINTS
+  @include breakpoints.media-breakpoint-up(sm) {
     thead {
       display: table-header-group;
     }
@@ -128,7 +157,7 @@
     }
   }
 
-  @include media-breakpoint-up(md) {
+  @include breakpoints.media-breakpoint-up(md) {
 
     td:nth-child(3),
     th:nth-child(3),

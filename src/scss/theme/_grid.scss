@@ -1,0 +1,8 @@
+@use "base/text";
+
+.wy-grid {
+  display: grid;
+  grid-auto-flow: dense;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  grid-gap: .75rem;
+}

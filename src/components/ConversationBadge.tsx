@@ -10,10 +10,10 @@ const ConversationBadge = () => {
         throw new Error('Weavy Badge component must be used within an WeavyProvider');
     }
 
-    const { isLoading, data } = useBadge();
+    const { isLoading, data, refetch } = useBadge();
 
-    const handleBadge = (data: BadgeType) => {
-        setBadge(data.private + data.rooms);
+    const handleBadge = (data: BadgeType) => {        
+        refetch();
     }
 
     useEffect(() => {
@@ -23,10 +23,12 @@ const ConversationBadge = () => {
     }, [data])
 
     useEffect(() => {
-        client.subscribe(null, "conversation-badge", handleBadge);
+        client.subscribe(null, "message_created", handleBadge);
+        client.subscribe(null, "conversation_marked", handleBadge);
 
         return () => {
-            client.unsubscribe(null, "conversation-badge", handleBadge);
+            client.unsubscribe(null, "message_created", handleBadge);
+            client.unsubscribe(null, "conversation_marked", handleBadge);
         }
     }, [])
 

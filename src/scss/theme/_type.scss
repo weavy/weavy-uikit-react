@@ -1,0 +1,41 @@
+@use "base/vars";
+
+@mixin heading {
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  font-style: vars.$headings-font-style;
+  font-weight: vars.$headings-font-weight;
+  line-height: vars.$headings-line-height;
+}
+
+// We never use H1 since we are in a context
+
+// ~ H2
+.wy-title {
+  @include heading;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  font-weight: 400;
+  font-size: 2.5rem;
+  line-height: 3rem;
+}
+
+// ~ H3
+.wy-headline {
+  @include heading;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+// ~ H4
+.wy-label {
+  @include heading;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}

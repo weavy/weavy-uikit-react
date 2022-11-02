@@ -1,0 +1,66 @@
+@use "base/colors";
+@use "base/vars";
+@use "base/text";
+@use "reactions";
+
+.wy-comments {
+  padding: 0 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.wy-comments-count {
+  padding: 0 .5rem;
+  @include text.truncate;
+}
+
+
+.wy-comment {
+  --wy-component-background-color: #{colors.$surface-3};
+  --wy-component-color: #{colors.$on-surface};
+  --wy-component-border-radius: #{vars.$border-radius};
+  border-radius: var(--wy-component-border-radius);
+  background-color: var(--wy-component-background-color);
+  color: var(--wy-component-color);
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  padding: .25rem;
+  position: relative;
+
+  .wy-item {
+    padding-left: .75rem;
+    padding-right: .75rem;
+
+    > .wy-avatar, > .wy-icon, > .wy-icon-stack {
+      margin-left: -.25rem;
+    }
+  }
+
+  .wy-reactions-line {
+    position: absolute;
+    bottom: -1.125rem;
+    right: .25rem;
+  }
+}
+
+/*.wy-comment-header {
+  //padding-right: .25rem;
+}*/
+
+.wy-comment-body {
+
+  flex: 1 0 auto;
+  z-index: 1;
+    
+}
+
+.wy-comment-content {
+  padding: 0 .5rem .5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+
+

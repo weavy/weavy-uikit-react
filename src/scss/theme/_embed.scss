@@ -1,0 +1,135 @@
+@use "base/vars";
+@use "base/colors";
+@use "base/text";
+
+
+.wy-embed {
+  display: flex;
+  flex-direction: column;
+  word-wrap: break-word;
+}
+
+// responsive image
+.wy-embed-photo {
+  a {
+    display: flex;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+// center small images
+.wy-embed-photo-sm {
+  a {
+    padding: 0 1rem;
+  }
+
+  img {
+    display: block;
+    margin: 0 auto;
+    width: auto;
+    max-width: 100%;
+    border-radius: #{vars.$border-radius-sm};
+  }
+}
+
+// responsive video
+.wy-embed-video {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+
+  &::before {
+    display: block;
+    content: "";
+    padding-top: 56.25% // 16:9 aspect ratio
+  }
+
+  iframe, embed, object, video {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0
+  }
+}
+
+// embed caption with link, title and description
+.wy-embed-caption {
+  --wy-component-background-color: #{colors.$surface-3};
+  --wy-component-color: #{colors.$on-surface};
+  background-color: var(--wy-component-background-color);
+  color: var(--wy-component-color);
+  padding: .5rem 1rem 1rem;
+  position: relative; // so that entore footer can become clickable
+}
+
+.wy-embed-link {
+  color: colors.$outline;
+  text-transform: uppercase;
+  font-size: #{vars.$font-size-sm};
+  // make entire footer clickable via a ::after pseudo element.
+  @include text.stretched-link;
+}
+
+.wy-embed-title {
+  font-weight: #{vars.$headings-font-weight};
+  margin-bottom: .5rem;
+}
+
+.wy-embed-description {
+  color: colors.$outline;
+}
+
+// Override some styles when previewing the embed in editor
+.wy-embed-preview {
+  // prevent link click
+  a[target=_blank] {
+    pointer-events: none;
+  }
+  // add som margins and borders in preview
+  .wy-embed {
+    display: none;
+
+    &:first-child {
+      display: block;
+    }
+
+    margin: .75rem;
+    border: 1px solid colors.$outline-variant;
+    border-radius: #{vars.$border-radius};
+  }
+
+  .wy-embed-caption {
+    border-bottom-left-radius: #{vars.$border-radius};
+    border-bottom-right-radius: #{vars.$border-radius};
+  }
+
+  // show cycle/remove
+  .wy-embed-actions {
+    display: flex;
+  }  
+}
+
+
+// buttons for cycling through and removing embeds (only visible in editor)
+.wy-embed-actions {
+  display: none;
+  justify-content: space-between;
+  padding: .5rem .25rem;
+}
+
+.wy-embed-cycle {
+  visibility: hidden;
+
+  .wy-embed-show-cycle & {
+    visibility: visible;
+  }
+}

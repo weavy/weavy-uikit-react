@@ -22,6 +22,13 @@ const SearchUsers = ({handleSubmit, buttonTitle}: SearchUsersProps) => {
     const throttledCb = useDebounce(() => refetch(), 250);
     useEffect(throttledCb, [text])
 
+    const toggleChecked = (e: any) => {
+        let checkbox = e.currentTarget.querySelector("input[type=checkbox]");
+        if (checkbox !== e.target && !e.target.matches("label, input[type=checkbox]")) {
+            checkbox?.click();
+        }
+    };
+
     const isChecked = (id: number): boolean => {
         return selected.find((u) => { return u.id === id }) != null;
     }
@@ -42,25 +49,28 @@ const SearchUsers = ({handleSubmit, buttonTitle}: SearchUsersProps) => {
 
     return (
         <div className="wy-search wy-scroll-y">
-            <div className="wy-search-form wy-pane-group">
-                <Button.UI><Icon.UI name="magnify" /></Button.UI>
-                <input className="wy-search-input" value={text} onChange={(e) => setText(e.target.value)} name="text" placeholder='Search...' />
+            <div className="wy-pane-group">
+                <div className="wy-search-form wy-input-group">
+                    <input className="wy-search-input wy-input wy-input-filled" value={text} onChange={(e) => setText(e.target.value)} name="text" placeholder='Search...' />
+                    <Button.UI type="reset" onClick={() => clear()}><Icon.UI name="close-circle" /></Button.UI>
+                    <Button.UI><Icon.UI name="magnify" /></Button.UI>
+                </div>
             </div>
 
             <div className="wy-pane-group">
                 {data && (!data.data || data.data.length === 0) &&
-                    <div className="wy-search-no-result">Your search did not match any people.</div>
+                    <div className="wy-table-no-result">Your search did not match any people.</div>
                 }
-                <table className="wy-search-result-table">
+                <table className="wy-table wy-table-hover wy-search-result-table">
                     <tbody>
                         {data && data.data && data.data.length > 0 && data.data.map((user: MemberType) => {
                             return (
-                                <tr key={user.id} className="wy-search-result-table-checkbox">
-                                    <td className="wy-search-result-table-icon">
+                                <tr key={user.id} onClick={toggleChecked}>
+                                    <td className="wy-table-cell-icon">
                                         <Avatar src={user.avatar_url} size={24} id={user.id} presence={user.presence} name={user.display_name} />
                                     </td>
-                                    <td><label htmlFor={'chk' + user.id}>{user.display_name}</label></td>
-                                    <td className="wy-search-result-table-icon"><input type="checkbox" id={'chk' + user.id} checked={isChecked(user.id)} onChange={(e) => handleSelected(e, user)} /></td>
+                                    <td className="wy-table-cell-text"><label htmlFor={'chk' + user.id}>{user.display_name}</label></td>
+                                    <td className="wy-table-cell-icon"><input type="checkbox" id={'chk' + user.id} checked={isChecked(user.id)} onChange={(e) => handleSelected(e, user)} /></td>
                                 </tr>
                             )
                         })}

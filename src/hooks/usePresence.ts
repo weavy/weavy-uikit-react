@@ -10,11 +10,10 @@ export default function usePresence() {
     }
 
     useEffect(() => {
-        client.subscribe("online", "online", handlePresenceChange)
+        client.subscribe(null, "online", handlePresenceChange)
     }, []);
 
-    const handlePresenceChange = (data: any) => {        
-        
+    const handlePresenceChange = (data: any) => {                
         if (Array.isArray(data)) {
             document.querySelectorAll(".wy-presence").forEach(function (item) {
                 item.classList.remove("wy-presence-active");

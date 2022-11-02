@@ -199,7 +199,7 @@ const ConversationForm = ({ conversationId, handleInsert }: Props) => {
                     <textarea rows={1} ref={textInput} className="wy-message-editor-textfield wy-message-editor-textcontent"  value={text} onChange={handleChange} onKeyDown={handleInsertMessage} onKeyPress={useThrottle(handleKeyPress, 4000)}></textarea>
                 </div>
                 <div className="wy-message-editor-buttons">
-                    <Button.UI type="button" onClick={handleInsertMessage} ><Icon.UI name="send"/></Button.UI>
+                    <Button.UI type="button" onClick={handleInsertMessage} ><Icon.UI color="primary" name="send"/></Button.UI>
                 </div>
             </div>
         </form>

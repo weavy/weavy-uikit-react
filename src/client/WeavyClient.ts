@@ -83,27 +83,22 @@ export default class WeavyClient {
         return response;
     }
 
-    async getToken(refresh: boolean) {
-        console.log("Refresh, ", refresh)
-        if (!this.token || refresh) {
-            console.log("Getting new token...")
-            this.token = await this.tokenFactory(true);
-            //return await this.tokenFactory(refresh);
-        }
-        //this.tokenPromise = null;
-        console.log("Resolve new token...")
+    async getToken(refresh: boolean) {        
+        if (!this.token || refresh) {        
+            this.token = await this.tokenFactory(true);            
+        }        
         return this.token;
     }
 
     async tokenFactoryInternal(refresh: boolean = false, fromSR: boolean = false): Promise<string> {
-        //console.log("Get token with refresh: ", refresh, fromSR)
+        
         if(this.token && !refresh) return this.token;
 
         if(!this.tokenPromise){
-            //console.log("No ongoing promise, create new one. Refresh: ", refresh)
+        
             this.tokenPromise = this.tokenFactory(refresh);
             let token = await this.tokenPromise;
-            //console.log("Got token: ", token)
+            
             this.tokenPromise = null;
             this.token = token;
             return this.token;
@@ -118,11 +113,11 @@ export default class WeavyClient {
 
         try {
             var name = group ? group + ":" + event : event;
-            await this.connection.invoke("AddToGroup", name);
+            await this.connection.invoke("Subscribe", name);
             this.groups.push(name);
             this.connection.on(name, callback);
         } catch (err: any) {
-            console.warn("Error in AddToGroup:", err)
+            console.warn("Error in Subscribe:", err)
         }
 
     }
@@ -139,11 +134,11 @@ export default class WeavyClient {
             try {
                 // if no more groups, remove from server
                 if (!this.groups.find(e => e === name)) {
-                    await this.connection.invoke("RemoveFromGroup", name);
+                    await this.connection.invoke("Unsubscribe", name);
                 }
 
             } catch (err: any) {
-                console.warn("Error in RemoveFromGroup:", err)
+                console.warn("Error in Unsubscribe:", err)
             }
         }
 
@@ -169,7 +164,7 @@ export default class WeavyClient {
         if (name === this.EVENT_RECONNECTED + this.EVENT_NAMESPACE) {
             // re-add to signalr groups after reconnect
             for (var i = 0; i < this.groups.length; i++) {
-                this.connection.invoke("AddToGroup", this.groups[i]);
+                this.connection.invoke("Subscribe", this.groups[i]);
             }
         }
     }

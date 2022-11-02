@@ -1,4 +1,6 @@
-@use "config" as *;
+@use "base/vars";
+@use "base/colors";
+@use "base/breakpoints";
 
 .wy-viewport {
     position: fixed;
@@ -6,7 +8,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 2147483647; /* max possible z-index */;
+    z-index: vars.$zindex-max; /* max possible z-index */;
     pointer-events: none;
 }
 
@@ -30,7 +32,7 @@
     perspective-origin: center center;
 
     .wy-panel {
-        background-color: rgba(mix($white, #FFF), $opacity-backdrop);
+        background-color: colors.$background;
         //max-height: 100vh; // Causes height error in safari
 
         &:not(.wy-transition) {
@@ -42,10 +44,10 @@
             border-bottom: none;
             flex-direction: row;
             transition: opacity .1s .2s step-end;
-
+            //background: colors.$surface-1;
 
             .wy-icon {
-                color: $icon-color;
+                color: colors.$on-surface;
             }
         }
 
@@ -60,74 +62,9 @@
             background-color: transparent;
         }
 
-        &.wy-controls-light {
-            .wy-icon {
-                color: $icon-color;
-            }
-        }
-
-        &.wy-light {
-            background-color: rgba(mix($white, #FFF), $opacity-backdrop);
-
-            .wy-icon {
-                color: $icon-color;
-            }
-        }
-
-        &.wy-controls-dark {
-            .wy-icon {
-                color: $navbar-dark-color;
-
-                &:hover, &:focus {
-                    color: $navbar-dark-hover-color;
-                }
-
-                &:active {
-                    color: $navbar-dark-active-color;
-                }
-            }
-        }
-
-        &.wy-dark {
-            background-color: rgba(mix($dark, #000), $opacity-backdrop);
-
-            .wy-icon {
-                color: $navbar-dark-color;
-
-                &:hover, &:focus {
-                    color: $navbar-dark-hover-color;
-                }
-
-                &:active {
-                    color: $navbar-dark-active-color;
-                }
-            }
-
-            &.wy-open[data-title]::before {
-                background-color: rgba($dark, $opacity-backdrop);
-                color: $navbar-dark-color;
-                box-shadow: rgba($gray-800, $opacity-backdrop) 0px -1px 0px 0px inset
-            }
-        }
-
-        &.wy-floating {
-            @include media-breakpoint-up(md, $grid-breakpoints) {
-                left: 1rem;
-                top: 1rem;
-                right: 1rem;
-                bottom: 1rem;
-                border-radius: .1875rem;
-                box-shadow: $md-shadow-16dp;
-                &:not(.wy-scroll-y) {
-                    overflow: hidden;
-                }
-            }
-        }
-
         &.wy-modal {
-            background-color: rgba(mix($white, #FFF), $opacity-backdrop);
-
-            @include media-breakpoint-up(md, $grid-breakpoints) {
+            // TODO: REMOVE BREAKPOINTS
+            @include breakpoints.media-breakpoint-up(md) {
                 left: auto;
                 right: auto;
                 top: 2rem;
@@ -136,8 +73,8 @@
                 margin-top: auto;
                 margin-right: 4rem;
                 margin-bottom: auto;
-                border-radius: .25rem;
-                box-shadow: $md-shadow-16dp;
+                border-radius: vars.$border-radius; //.25rem;
+                box-shadow: vars.$shadow-level4;
                 width: 32rem;
                 max-height: 32rem;
                 &:not(.wy-scroll-y) {
@@ -146,10 +83,28 @@
             }
         }
 
+        &.wy-modal-full {
+            // TODO: REMOVE BREAKPOINTS
+            @include breakpoints.media-breakpoint-up(md) {
+                left: 1rem;
+                top: 1rem;
+                right: 1rem;
+                bottom: 1rem;
+                margin: 0;
+                border-radius: vars.$border-radius; //.1875rem;
+                box-shadow: vars.$shadow-level4;
+                width: auto;
+                max-height: none;
+                &:not(.wy-scroll-y) {
+                    overflow: hidden;
+                }
+            }
+        }
+
         &.wy-loading {
             .wy-controls {
-                transition: opacity $md-animation-duration $md-animation-curve-default;
-                //transition: opacity .2s .2s variables.$md-animation-curve-default;
+                transition: opacity vars.$transition;
+                //transition: opacity variables.$transition .2s;
                 opacity: 1;
             }
         }

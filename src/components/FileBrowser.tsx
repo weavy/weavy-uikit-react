@@ -1,9 +1,11 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState, useRef, useCallback } from "react";
 import { WeavyContext } from "../contexts/WeavyContext";
 import Button from '../ui/Button';
+import Spinner from '../ui/Spinner';
 import Icon from '../ui/Icon';
 import useMutateExternalBlobs from '../hooks/useMutateExternalBlobs';
-import { UserContext } from "../contexts/UserContext";
+import Overlay from '../ui/Overlay';
+import WeavyPostal from "../utils/postal-parent";
 
 type Props = {
     onFileAdded: Function
@@ -12,72 +14,73 @@ type Props = {
 const FileBrowser = ({ onFileAdded }: Props) => {
 
     const { options } = useContext(WeavyContext);
-    const { user } = useContext(UserContext);
-
+    const [modalOpen, setModalOpen] = useState(false);
+    const [visible, setVisible] = useState(false);
+    const [frameSrc, setFrameSrc] = useState("");
     const addExternalBlobs = useMutateExternalBlobs();
+    const fileBrowserUrl = options?.filebrowserUrl || "";
 
-    useEffect(() => {
-        window.addEventListener("message", handleFilebrowserMessage);
-
-
-        return () => {
-            window.removeEventListener("message", handleFilebrowserMessage);
+    const frameRef = useCallback((node: HTMLIFrameElement | null) => {
+        if (node !== null && node.contentWindow != null) {
+            WeavyPostal.registerContentWindow(node.contentWindow.self, "weavy-filebrowser", "wy-filebrowser", new URL(fileBrowserUrl).origin);
         }
     }, []);
 
-    const handleFilebrowserMessage = async (e: any) => {
-        const messageData = e.data;
+    useEffect(() => {
+        const origin = window.top?.document.location.origin;
 
-        switch (messageData.name) {
-            case "addExternalBlobs":
-                var result = await addExternalBlobs.mutateAsync({ blobs: messageData.blobs });
-                onFileAdded(result);
-                closeFilebrowser();
-                break;
-            case "file-browser-close":
-                closeFilebrowser();
-                break;
+        const filebrowserSrc = fileBrowserUrl + "?origin=" + origin + "&v=X&t=" + Date.now().toString() + "&weavyId=wy-filebrowser";
+
+        setFrameSrc(filebrowserSrc)
+
+        WeavyPostal.on("add-external-blobs", handleFiles);
+        WeavyPostal.on("request:file-browser-close", handleClose);
+
+        return () => {
+            WeavyPostal.off("add-external-blobs", handleFiles);
+            WeavyPostal.off("request:file-browser-close", handleClose);
         }
+    }, [onFileAdded]);
+
+    const toggleModal = (open: boolean) => {
+        setModalOpen(open);
+    }
+
+    const handleFiles = async (e: Event, message: any) => {
+        var result = await addExternalBlobs.mutateAsync({ blobs: message.blobs });
+        onFileAdded(result);
+        closeFilebrowser();
+    }
+
+    const handleClose = () => {
+        closeFilebrowser();
     }
 
     const closeFilebrowser = () => {
-        let fb = document.getElementById("weavy-filebrowser");
-        if (fb) {
-            fb.style.display = "none";
-        }
+        setModalOpen(false);
+        setVisible(false);
     }
 
-    const openFilebrowser = () => {
-        let fb = document.getElementById("weavy-filebrowser");
-
-        if (!fb) {
-            const origin = window.top?.document.location.origin;
-            const fileBrowserUrl = options?.filebrowserUrl;
-            const filebrowserSrc = fileBrowserUrl + "?origin=" + origin + "&v=X&t=" + Date.now().toString() + "&weavyId=-1";
-
-            let $filebrowserFrame = document.createElement("iframe");
-            $filebrowserFrame.id = "weavy-filebrowser";
-            $filebrowserFrame.name = "weavy-filebrowser";
-            $filebrowserFrame.src = filebrowserSrc;
-            $filebrowserFrame.className = "wy-filebrowser-frame";
-            $filebrowserFrame.style.cssText = "position: fixed; top: 0; left: 0; height: 100%; width: 100%; background: rgba(1,1,1,.4); z-index: 10000; display:none"
-
-            window.top?.document.body.appendChild($filebrowserFrame);
-
-            $filebrowserFrame.addEventListener('load', () => {
-                $filebrowserFrame.style.display = "block";
-            });
-
-        } else {
-            fb.style.display = "block";
-        }
+    const handleFrameLoad = () => {        
+        setVisible(true);
     }
 
     return (
         <>
-            {options?.enableCloudFiles && 
-                <Button.UI onClick={openFilebrowser} title="Add file from cloud"><Icon.UI name="cloud" /></Button.UI>
-            }            
+            {options?.enableCloudFiles &&
+                <>
+                    <Button.UI onClick={() => toggleModal(true)} title="Add file from cloud"><Icon.UI name="cloud" /></Button.UI>
+
+                    <Overlay.UI isOpen={modalOpen} className="wy-modal wy-panel wy-loaded">
+                        {!visible &&
+                            <Spinner.UI overlay={true} />
+                        }
+
+                        <iframe ref={frameRef} onLoad={handleFrameLoad} src={frameSrc} className="wy-panel-frame" id="weavy-filebrowser" name="weavy-filebrowser"></iframe>
+
+                    </Overlay.UI>
+                </>
+            }
         </>
     )
 }

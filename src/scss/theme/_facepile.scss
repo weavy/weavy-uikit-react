@@ -1,0 +1,11 @@
+.wy-facepile {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  flex-direction: row-reverse;
+  
+  .wy-avatar {
+    margin-left: -.25rem;
+    display: inline-flex;
+  }
+}

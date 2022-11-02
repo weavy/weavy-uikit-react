@@ -1,0 +1,83 @@
+@use "base/colors";
+@use "base/vars";
+
+.wy-post {
+  --wy-component-background-color: #{colors.$surface-1};
+  --wy-component-color: #{colors.$on-surface};
+  background-color: var(--wy-component-background-color);
+  color: var(--wy-component-color);
+  // REVIEW: box-shadow instead of border?
+  //box-shadow: vars.$md-shadow-2dp;
+
+  //border-color: #{colors.$outline-variant};
+  //border-style: solid;
+  //border-width: 1px 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 1rem .75rem;
+
+  --wy-component-border-radius: #{vars.$border-radius};
+  border-radius: var(--wy-component-border-radius);
+
+  .wy-image-grid {
+    border-radius: 0;
+    margin-bottom: 1rem;
+  }
+
+  .wy-embed {
+    margin-bottom: 1rem;
+  }
+
+  .wy-comments {
+    margin: .5rem .75rem;
+    border-top: 1px solid #{colors.$outline-variant};
+    padding: .75rem 0 0;
+  }
+  
+}
+
+.wy-post-body {
+  padding: 0 1rem;
+
+  &:empty {
+    display: none;
+  }
+
+  .wy-content {
+    margin-bottom: 1rem;
+  }
+
+  .wy-list {
+    margin-bottom: 1rem;
+  }
+
+  .wy-poll {
+    margin-bottom: 1rem;
+  }
+}
+
+.wy-post-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 .5rem .5rem;
+}
+
+.wy-post-dragging {
+  &::after {
+    content: "Drop files here to upload.";
+    background-color: rgba(255, 255, 255, .5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed colors.$primary;
+    font-weight: vars.$font-weight-bold;
+    z-index: 10000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}

@@ -1,0 +1,12 @@
+@use "base/vars";
+@use "base/colors";
+
+// A component for item metadata such as dates, times etc.
+.wy-meta {
+  color: colors.$outline;
+  font-size: vars.$font-size-sm;
+}
+
+.wy-meta-sm {
+  font-size: vars.$font-size-xs;
+}

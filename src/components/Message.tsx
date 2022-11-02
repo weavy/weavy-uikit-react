@@ -11,12 +11,12 @@ import MeetingCard from './MeetingCard';
 import usePreview from '../hooks/usePreview';
 import classNames from 'classnames';
 
-const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_at, attachments, meeting, parentId, reactions, seenBy }) => {
+const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_at, created_by, attachments, meeting, parentId, reactions, seenBy, chatRoom }) => {
 
     const { open, close } = usePreview(attachments);
 
-    var images = attachments?.filter((a: AttachmentType) => a.kind === "image" && a.thumbnail_url);
-    var files = attachments?.filter((a: AttachmentType) => a.kind !== "image" || !a.thumbnail_url);
+    let images = attachments?.filter((a: AttachmentType) => a.kind === "image" && a.thumbnail_url);
+    let files = attachments?.filter((a: AttachmentType) => a.kind !== "image" || !a.thumbnail_url);
 
     const date = dayjs.utc(created_at).tz(dayjs.tz.guess());
 
@@ -35,50 +35,50 @@ const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_a
                 )}
                 <div className="wy-message-content">
                     <div className="wy-message-meta">
+                        {chatRoom && !me &&
+                            <span>{created_by} · </span>                            
+                        }
                         <time dateTime={created_at} title={date.format('LLLL')}>{date.fromNow()}</time>
                     </div>
-                    <div className="wy-message-content-row">
-                        <div className="wy-message-bubble">
-                            {temp &&
-                                <div className="wy-message-text">{html}</div>
-                            }
-                            {!temp &&
-                                <>
-                                    {images && !!images.length && <ImageGrid>
-                                        {images.map((a: AttachmentType) =>
-                                            <Image onClick={(e) => handlePreviewClick(e, a.id)} key={a.id} src={a.download_url} previewSrc={a.preview_url} width={a.width} height={a.height} />
-                                        )}
-                                    </ImageGrid>}
 
-                                    {html && <div className="wy-message-text" dangerouslySetInnerHTML={{ __html: joypixels.shortnameToUnicode(html || "") }}></div>}
+                    <div className="wy-message-bubble">
+                        {temp &&
+                            <div className="wy-content">{html}</div>
+                        }
+                        {!temp &&
+                            <>
+                                {images && !!images.length && <ImageGrid>
+                                    {images.map((a: AttachmentType) =>
+                                        <Image onClick={(e) => handlePreviewClick(e, a.id)} key={a.id} src={a.download_url} previewSrc={a.preview_url} width={a.width} height={a.height} />
+                                    )}
+                                </ImageGrid>}
 
-                                    {meeting &&
-                                        <MeetingCard meeting={meeting} />
-                                    }
+                                {html && <div className="wy-content" dangerouslySetInnerHTML={{ __html: joypixels.shortnameToUnicode(html || "") }}></div>}
 
-                                    {files && !!files.length && <div className="wy-attachments">
-                                        {files.map((a: AttachmentType) =>
-                                            <Attachment key={a.id} onClick={(e) => handlePreviewClick(e, a.id)} name={a.name} previewFormat={a.kind} provider={a.provider} url={a.download_url} previewUrl={a.provider ? a.external_url : a.preview_url} mediaType={a.media_type} kind={a.kind} size={a.size} />
-                                        )}
-                                    </div>}
-                                </>
+                                {meeting &&
+                                    <MeetingCard meeting={meeting} />
+                                }
 
-                            }
-                        </div>
-                        <div className="wy-message-buttons">
-                            {!temp && <ReactionsMenu id={id} reactions={reactions} />}
-                        </div>
+                                {files && !!files.length && <div className="wy-list-items wy-attachments">
+                                    {files.map((a: AttachmentType) =>
+                                        <Attachment key={a.id} onClick={(e) => handlePreviewClick(e, a.id)} name={a.name} previewFormat={a.kind} provider={a.provider} url={a.download_url} previewUrl={a.provider ? a.external_url : a.preview_url} mediaType={a.media_type} kind={a.kind} size={a.size} />
+                                    )}
+                                </div>}
+                                <div className="wy-reactions-line">
+                                    <div className="wy-reactions">
+                                        <ReactionsList id={id} parentId={parentId} reactions={reactions} />
+                                    </div>
+                                    {!temp && <ReactionsMenu id={id} reactions={reactions} />}
+                                </div>
+                            </>
+                        }
                     </div>
 
-                    {!temp && (
-                        <div className="wy-reactions">
-                            <ReactionsList id={id} parentId={parentId} reactions={reactions} />
-                        </div>
-                    )}
-                    
+
+
                 </div>
 
-                
+
             </div>
             <SeenBy id={id} parentId={parentId} seenBy={seenBy} createdAt={created_at} />
         </>

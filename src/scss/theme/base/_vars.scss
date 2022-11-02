@@ -1,0 +1,203 @@
+@use "colors";
+@use "md";
+
+// Breakpoints for responsive layout
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;
+
+// Z-index master list
+$zindex-dropdown:                   1000 !default;
+$zindex-sticky:                     1020 !default;
+$zindex-fixed:                      1030 !default;
+//$zindex-offcanvas-backdrop:         1040 !default;
+//$zindex-offcanvas:                  1045 !default;
+$zindex-modal-backdrop:             1050 !default;
+$zindex-modal:                      1055 !default;
+$zindex-popover:                    1070 !default;
+$zindex-tooltip:                    1080 !default;
+$zindex-toast:                      1090 !default;
+
+$zindex-max: 2147483647 !default;
+
+$font-family-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+$font-weight-thin:          100;
+$font-weight-extralight:    200;
+$font-weight-light:         300;
+$font-weight-normal:        400;
+$font-weight-medium:        500;
+$font-weight-semibold:      600;
+$font-weight-bold:          700;
+$font-weight-extrabold:     800;
+$font-weight-black:         900;
+$font-weight-extrablack:    950;
+
+// Components
+$appbar-height: 3rem;
+$footerbar-height: 4rem;
+
+// VARIABLES
+
+:where(:root, :host > *) {
+    /* Typography */
+
+    // Font should be inherited/unset by default
+    --wy-font-family:               unset; // #{$font-family-sans-serif};
+    --wy-font-weight:               unset; // #{$font-weight-normal};
+
+    --wy-line-height:               1.5;
+
+    --wy-font-size-base:            1rem; // Assumes the browser default, typically 16px
+    --wy-font-size-xxs:             calc(.625 * var(--wy-font-size-base)); // .625rem 10px
+    --wy-font-size-xs:              calc(.75  * var(--wy-font-size-base)); //  .75rem 12px
+    --wy-font-size-sm:              calc(.875 * var(--wy-font-size-base)); // .875rem 14px
+    --wy-font-size-lg:              calc(1.25 * var(--wy-font-size-base)); // 1.25rem 20px
+
+    --wy-headings-font-style:       unset;
+    --wy-headings-font-family:      var(--wy-font-family);
+    --wy-headings-font-weight:      #{$font-weight-medium};
+    --wy-headings-line-height:      var(--wy-line-height);
+
+    /* Border */
+    --wy-border-radius:             .5rem;
+    --wy-border-radius-sm:          calc(.75 * var(--wy-border-radius)); // .375rem;
+    --wy-border-radius-lg:          calc(1.5 * var(--wy-border-radius)); // .75rem;
+    --wy-border-radius-xl:          calc(2   * var(--wy-border-radius)); //  1rem;
+    --wy-border-radius-pill:        50rem;
+
+    /* Links */
+    //--wy-link-color:                #{colors.$primary};  ---> --wy-link in colors
+    --wy-link-decoration:           none;
+    --wy-link-hover-decoration:     null;
+
+    /* Tables */
+    --wy-table-cell-padding-x:      .25rem;
+    --wy-table-cell-padding-y:      .25rem;
+
+    /* Inputs */
+    --wy-input-padding-y:           .4375rem;
+    --wy-input-padding-x:           .75rem;
+    --wy-input-font-family:         unset;
+    --wy-input-font-size:           var(--wy-font-size-base);
+    --wy-input-font-weight:         var(--wy-font-weight);
+    --wy-input-line-height:         var(--wy-line-height);
+    --wy-input-border-width:        1px;
+    --wy-input-border-radius:       var(--wy-border-radius);
+
+
+    /* Shadows */
+    --wy-shadow-level0:             none; // xxs
+    --wy-shadow-level1:             #{md.$shadow-2dp}; // xs
+    --wy-shadow-level2:             #{md.$shadow-4dp}; // sm
+    --wy-shadow-level3:             #{md.$shadow-8dp}; // 
+    --wy-shadow-level4:             #{md.$shadow-16dp}; // lg
+
+    /* Transitions */
+    --wy-transition-curve:          #{md.$animation-curve-default};
+    --wy-transition-duration:       #{md.$animation-duration};
+    --wy-transition-duration-fast:  #{md.$animation-duration-fast};
+    --wy-transition:                var(--wy-transition-duration) var(--wy-transition-curve);
+    --wy-transition-fast:           var(--wy-transition-duration-fast) var(--wy-transition-curve);
+
+    /* Opacity */
+    --wy-opacity-backdrop:          95%;
+    --wy-opacity-muted:             38%;
+    --wy-opacity-disabled:          38%;
+    /*
+    --wy-opacity-disabled:          12%;
+    --wy-opacity-on-disabled:       38%;
+    */
+
+    /* State layer */
+    --wy-opacity-state-hover:       8%;
+    --wy-opacity-state-focus:       12%;
+    --wy-opacity-state-active:      12%;
+    --wy-opacity-state-drag:        16%;
+
+    /* Surface elevation */
+    --wy-surface-1-mix:             5%;
+    --wy-surface-2-mix:             8%;
+    --wy-surface-3-mix:             11%;
+    --wy-surface-4-mix:             12%;
+    --wy-surface-5-mix:             14%;
+
+}
+  
+// Rounded corners
+$border-radius-sm: var(--wy-border-radius-sm);
+$border-radius: var(--wy-border-radius);
+$border-radius-lg: var(--wy-border-radius-lg);
+$border-radius-xl: var(--wy-border-radius-xl);
+$border-radius-pill: var(--wy-border-radius-pill);
+
+// Typography
+$font-family-base: var(--wy-font-family);
+$font-weight-base: var(--wy-font-weight);
+
+$line-height-base: var(--wy-line-height);
+
+$font-size-xxs: var(--wy-font-size-xxs);
+$font-size-xs:   var(--wy-font-size-xs);
+$font-size-sm:   var(--wy-font-size-sm);
+$font-size-base: var(--wy-font-size-base);
+$font-size-lg:   var(--wy-font-size-lg);
+
+$headings-font-style: var(--wy-headings-font-style);
+$headings-font-family: var(--wy-headings-font-family);
+$headings-font-weight: var(--wy-headings-font-weight);
+$headings-line-height: var(--wy-headings-line-height);
+
+// Links
+//$link-color: var(--wy-link-color); ---> colors.$link;
+$link-decoration: var(--wy-link-decoration);
+$link-hover-decoration: var(--wy-link-hover-decoration);
+
+// Tables
+$table-cell-padding-x: var(--wy-table-cell-padding-x);
+$table-cell-padding-y: var(--wy-table-cell-padding-y);
+
+// Forms, Inputs
+$input-padding-y: var(--wy-input-padding-y);
+$input-padding-x: var(--wy-input-padding-x);
+$input-font-family: var(--wy-input-font-family);
+$input-font-size: var(--wy-input-font-size);
+$input-font-weight: var(--wy-input-font-weight);
+$input-line-height: var(--wy-input-line-height);
+$input-border-width: var(--wy-input-border-width);
+$input-border-radius: var(--wy-input-border-radius);
+
+// Shadows
+$shadow-level0: var(--wy-shadow-level0);
+$shadow-level1: var(--wy-shadow-level1);
+$shadow-level2: var(--wy-shadow-level2);
+$shadow-level3: var(--wy-shadow-level3);
+$shadow-level4: var(--wy-shadow-level4);
+
+// Transitions
+$transition-curve: var(--wy-transition-curve);
+$transition-duration: var(--wy-transition-duration);
+$transition-duration-fast: var(--wy-transition-duration-fast);
+$transition: var(--wy-transition);
+$transition-fast: var(--wy-transition-fast);
+
+// Opacity
+$opacity-backdrop: var(--wy-opacity-backdrop);
+$opacity-muted: var(--wy-opacity-muted);
+$opacity-disabled: var(--wy-opacity-disabled);
+$opacity-on-disabled: var(--wy-opacity-on-disabled);
+
+// State layer
+$opacity-state-hover: var(--wy-opacity-state-hover);
+$opacity-state-focus: var(--wy-opacity-state-focus);
+$opacity-state-active: var(--wy-opacity-state-active);
+$opacity-state-drag: var(--wy-opacity-state-drag);
+
+// Surface elevation
+$surface-1-mix: var(--wy-surface-1-mix);
+$surface-2-mix: var(--wy-surface-2-mix);
+$surface-3-mix: var(--wy-surface-3-mix);
+$surface-4-mix: var(--wy-surface-4-mix);
+$surface-5-mix: var(--wy-surface-5-mix);

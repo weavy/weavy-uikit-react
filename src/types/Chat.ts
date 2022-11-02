@@ -1,3 +1,4 @@
 export interface ChatProps {
-  uid: string 
+  uid: string,
+  className?: string
 }

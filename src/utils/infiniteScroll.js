@@ -9,6 +9,12 @@
     console.log("creating regular scroller");
     var parent = getScrollParent(observeElement);
 
+    // Disable scroll anchoring https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-anchor/Guide_to_scroll_anchoring
+    parent.style.overflowAnchor = "none";
+
+    // Bug using scrollingElement in frames. See https://github.com/w3c/IntersectionObserver/issues/372
+    var intersectionParent = (parent === document.documentElement ? document : parent);
+
     whenNext ??= () => Promise.reject(new Error("No scroller handler function defined")); // default
 
     const nextObserver = new IntersectionObserver((entries, observer) => {
@@ -17,7 +23,7 @@
                 whenNext();
             }
         });
-    }, { root: parent, threshold: 0 });
+    }, { root: intersectionParent, threshold: 0, rootMargin: "500px" });
 
     nextObserver.observe(observeElement);
 
@@ -40,6 +46,9 @@ export function createReverseScroller(observeElement, whenNext) {
 
     // Disable scroll anchoring https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-anchor/Guide_to_scroll_anchoring
     parent.style.overflowAnchor = "none";
+
+    // Bug using scrollingElement in frames. See https://github.com/w3c/IntersectionObserver/issues/372
+    var intersectionParent = (parent === document.documentElement ? document : parent);
 
     whenNext ??= () => Promise.reject(new Error("No reverse scroller handler function defined")); // default
 
@@ -97,7 +106,7 @@ export function createReverseScroller(observeElement, whenNext) {
                 }
             }
         })
-    }, { root: parent, threshold: 0, rootMargin: "500px 0px 0px 0px" });
+    }, { root: intersectionParent, threshold: 0, rootMargin: "500px" });
 
     prevObserver.observe(observeElement);
 

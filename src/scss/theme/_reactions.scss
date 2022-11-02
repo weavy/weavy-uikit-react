@@ -1,17 +1,17 @@
-@use "config" as *;
-@use "bs/dropdown";
-@use "tables";
-
+@use "base/colors";
+@use "base/vars";
+@use "buttons"; // Ensures correct order, since buttons is needed by reactions
+@use "dropdown"; // Ensures correct order, since dropdown is needed by reactions
 
 .wy-reaction-count {
-  margin: 0 .25rem;
+  margin: 0 0.5rem 0 .125rem;
   line-height: 1;
-  color: $text-muted;
-  font-size: $font-size-sm;
+  //color: vars.$text-muted;
+  font-size: vars.$font-size-sm;
 }
 
 .wy-reaction-menu {
-  padding: .5rem;
+  padding: .25rem;
   font-size: 1.125rem;
   border-radius: 2.5rem;
 }
@@ -36,23 +36,54 @@
 }
 
 .wy-table-reactions {
-  @extend %table, %table-icons;
-
   // avatar
   td:first-child {
-    width: 2rem;
-    padding-left: 0;
+    width: 3rem;
   }
 
   // name
   td:nth-child(2) {
     width: 100%;
-    @include text-truncate();
   }
 
-  // reaction
-  td:last-child {
-    width: 2rem;
-    padding-right: 0;
+  tr:last-child td {
+    box-shadow: none;
+  }
+}
+
+
+
+.wy-reactions-line {  
+  display: flex;  
+  align-items: center;
+
+  /*> * {
+    position: relative;
+  }*/
+
+  .wy-reactions {
+    background: var(--wy-component-background-color);
+    color: currentColor;
+    border-radius: vars.$border-radius-pill;
+    display: flex;
+    width: auto;
+    background-clip: content-box;
+
+    > .wy-emoji {
+      &:first-child {
+        margin-left: .125rem;
+      }
+
+      &:last-child {
+        margin-right: .125rem;
+      }
+    }
+  }
+
+  .wy-reaction-menu-button {
+    background: var(--wy-component-background-color);
+    color: currentColor;
+    border-radius: vars.$border-radius-pill;
+    background-clip: content-box;
   }
 }

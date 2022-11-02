@@ -1,5 +1,8 @@
-@use "config" as *;
-@use "mixins/backdrop";
+@use "sass:color";
+@use "base/vars";
+@use "base/colors";
+@use "base/backdrop";
+@use "base/svg";
 
 .wy-panels {
     position: absolute;
@@ -20,14 +23,14 @@
     left: 0;
     pointer-events: none;
     overflow: hidden;
-    background-color: rgba(mix($white, #FFF), $opacity-backdrop);
+    background-color: colors.$background;
     display: flex;
     flex-direction: column;
 
     .wy-controls {
-        top: .75rem;
-        left: .75rem;
-        min-width: 2rem;
+        top: .25rem;
+        left: .25rem;
+        min-width: 2.5rem;
         width: auto;
         display: flex;
         z-index: 10000;
@@ -39,20 +42,22 @@
         }
 
         .wy-icon {
-            color: $icon-color;
+            color: colors.$on-background;
         }
 
-        border-bottom: 1px solid $border-color;
+        border-bottom: 1px solid colors.$outline-variant;
     }
 
     .wy-panel-frame {
-        transition: opacity .1s .2s $md-animation-curve-default;
+        transition: opacity vars.$transition-fast;
+        transition-delay: .2s;
         opacity: 1;
     }
 
     &:not(.wy-loaded) .wy-panel-frame {
         opacity: 0;
-        transition: opacity .2s .1s step-start;
+        transition: opacity .2s step-start;
+        transition-delay: .1s;
     }
 
     &.wy-open {
@@ -65,23 +70,22 @@
             top: 0;
             left: 0;
             right: 0;
-            height: $appbar-height;
-            padding: $navbar-padding-y $navbar-padding-x;
+            height: vars.$appbar-height;
+            padding: .25rem;
             opacity: 0;
             pointer-events: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity .1s .2s step-end;
-            font-family: var(--#{$prefix}font-sans-serif, #{$font-family-sans-serif});
-            line-height: $line-height-base;
-            font-weight: $font-weight-base;
+            transition: opacity .1s step-end;
+            transition-delay: .2s;
+            font-family: inherit;
+            line-height: vars.$line-height-base;
+            font-weight: vars.$font-weight-base;
 
-            background-color: rgba($gray-50, $opacity-backdrop);
-            color: $navbar-light-color;
-            //border-bottom: $border-width solid rgba($gray-200, $opacity-backdrop);
-            box-shadow: rgba($gray-200, $opacity-backdrop) 0px -1px 0px 0px inset;
-
+            background-color: colors.$surface-1;
+            color: colors.$on-surface;
+            box-shadow: #{colors.$outline-variant} 0px -1px 0px 0px inset;
 
             @include backdrop.filter;
         }
@@ -95,20 +99,21 @@
             right: 0;
             pointer-events: none;
             opacity: 0;
-            transition: opacity $md-animation-duration $md-animation-curve-default 0s;
+            transition: opacity vars.$transition;
+            transition-duration: 0s;
         }
 
         &.wy-loading {
             &[data-title]::before {
-                transition: opacity $md-animation-duration $md-animation-curve-default;
+                //transition: opacity vars.$transition;
                 opacity: 1;
             }
 
             &::after {
-                transition: opacity $md-animation-duration $md-animation-curve-default .5s;
+                transition: opacity vars.$transition;
+                transition-duration: .5s;
                 opacity: 1;
-                // spinner.svg encoded with https://codepen.io/jakob-e/pen/doMoML
-                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' width='24' height='24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cstyle type='text/css'%3Eg%7Banimation:rotate 2s linear infinite;transform-origin:center center%7Dcircle%7Bstroke-dasharray:1,100;stroke-dashoffset:0;animation:dash 1.5s ease-in-out infinite,color 6s ease-in-out infinite%7D@keyframes rotate%7B100%25%7Btransform:rotate(360deg)%7D%7D@keyframes dash%7B0%25%7Bstroke-dasharray:1,100;stroke-dashoffset:0%7D50%25%7Bstroke-dasharray:44.5,100;stroke-dashoffset:-17.5px%7D100%25%7Bstroke-dasharray:44.5,100;stroke-dashoffset:-62px%7D%7D@keyframes color%7B0%25,100%25%7Bstroke:%23216eb4%7D40%25%7Bstroke:%2328b7cf%7D66%25%7Bstroke:%23216eb4%7D80%25,90%25%7Bstroke:%2328b7cf%7D%7D%3C/style%3E%3Cg%3E%3Ccircle fill='none' cx='12' cy='12' r='11' stroke-linecap='butt' stroke-width='2' /%3E%3C/g%3E%3C/svg%3E");
+                background-image: svg.$spinner;
                 background-repeat: no-repeat;
                 background-position: 50%;
                 background-size: rem(2);
@@ -122,10 +127,10 @@
 .wy-panel {
     opacity: 0;
     visibility: hidden;
-    transition: opacity $md-animation-duration-fast $md-animation-curve-default .01s, transform $md-animation-duration-fast $md-animation-curve-default .01s, visibility .01s step-end $md-animation-duration-fast;
+    transition: opacity vars.$transition-fast .01s, transform vars.$transition-fast .01s, visibility .01s step-end vars.$transition-duration-fast;
 
     &.wy-open {
-        transition: opacity $md-animation-duration $md-animation-curve-default, transform $md-animation-duration $md-animation-curve-default, visibility $md-animation-duration step-start;
+        transition: opacity vars.$transition, transform vars.$transition, visibility vars.$transition-duration step-start;
         visibility: visible;
 
         &.wy-transition {

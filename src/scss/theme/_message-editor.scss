@@ -1,12 +1,43 @@
-@use "config" as *;
-@use "mixins/backdrop";
-@use "mixins/position";
+@use "base/vars";
+@use "base/colors";
+@use "base/backdrop";
+@use "base/position";
+
 
 .wy-message-editor {
-  @include position.sticky-bottom;
-  @include backdrop.filter;
+  //background-color: colors.$surface-1;
+}
 
-  background-color: rgba($light, $opacity-backdrop);
+.wy-message-editor-top {
+  @include position.sticky-top;
+
+  background-color: var(--wy-component-background-color);
+  color: var(--wy-component-color);
+}
+
+.wy-message-editor-bottom {
+  @include position.sticky-bottom;
+
+  background-color: var(--wy-component-background-color);
+  color: var(--wy-component-color);
+}
+
+.wy-message-editor-dragging {
+  &::after {
+    content: "Drop files here to upload.";
+    background-color: rgba(255, 255, 255, .5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed colors.$primary;
+    font-weight: vars.$font-weight-bold;
+    z-index: 10000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
 }
 
 .wy-message-form {
@@ -25,7 +56,7 @@
   }
 
   .wy-picker-list:not(:empty) {
-    border-top: $border-width solid $border-color;
+    border-top: 1px solid #{colors.$outline-variant};
   }
 }
 
@@ -33,12 +64,12 @@
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  border-top: $border-width solid rgba($gray-200, $opacity-backdrop);
-  padding: .5rem;
-  min-height: 3rem;
+  //border-top: 1px solid #{colors.$outline-variant};
+  padding: .5rem .25rem;
+  min-height: 3.5rem;
 
   > :not(:last-child) {
-    margin-right: .5rem;
+    margin-right: .25rem;
   }
 }
 
@@ -51,25 +82,40 @@
   display: flex;
   flex-direction: column;
 }
+
+.wy-message-editor-mention {
+    background: blue;
+    color: white;
+}
+
+.wy-message-editor-link {
+  background: blue;
+  color: white;
+}
+
 %message-editor-textfield,
 .wy-message-editor-textfield {
   flex: 1 1 100%;
-  outline: $light solid 1px;
-  max-height: 10.2rem;
-  background-color: $input-bg;
-  border-radius: $border-radius-xl;
-  border: none;
+  max-height: 11.25rem;
+  background-color: colors.$background;
+  color: colors.$on-background;
+  border-radius: 1.25rem;
+  border: vars.$input-border-width solid #{colors.$background};
+
+  &:focus {
+    border-color: #{colors.$outline-variant};
+  }
 }
 
 %message-editor-textcontent,
 .wy-message-editor-textcontent {
-  font-family: $font-family-base;
-  font-size: $font-size-base;
-  padding: $input-padding-y $input-padding-x;
+  font-family: vars.$font-family-base;
+  font-size: vars.$font-size-base;
+  padding: vars.$input-padding-y vars.$input-padding-x;
 }
 
 %message-editor-grow,
-.#{wy}-message-editor-grow {
+.wy-message-editor-grow {
     display: grid;
 
     &::after, > textarea {

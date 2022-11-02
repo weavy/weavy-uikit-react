@@ -200,14 +200,14 @@ export const PreviewText = ({ src, html = false, code = false }: TextProps) => {
                 code ?
                     <div className="wy-content-code wy-code" dangerouslySetInnerHTML={{ __html: textContent }}></div>
                     :
-                    <div className="wy-document">
+                    <div className="wy-document wy-light">
                         <div className="wy-content-html" dangerouslySetInnerHTML={{ __html: textContent }}></div>
                     </div>
                 :
                 code ?
                     <div className="wy-content-code">{textContent}</div>
                     :
-                    <div className="wy-document">
+                    <div className="wy-document wy-light">
                         <pre className="wy-content-text">{textContent}</pre>
                     </div>
             }

@@ -6,8 +6,9 @@ import Messages from './Messages';
 import useMembers from '../hooks/useMembers';
 import Typing from './Typing';
 import useConversation from '../hooks/useConversation';
+import classNames from 'classnames';
 
-const Chat = ({ uid }: ChatProps) => {
+const Chat = ({ uid, className }: ChatProps) => {
     const { client } = useContext(WeavyContext);
     const [selectedId, setSelectedId] = useState<number | null>(null)
 
@@ -36,8 +37,8 @@ const Chat = ({ uid }: ChatProps) => {
     }, [dataChat]);
 
     return (
-        <div className="wy-messenger-conversation wy-scroll-y">
-            <header className="wy-appbars">
+        <div className={classNames("wy-messenger-conversation wy-scroll-y", className)}>
+            <header className="wy-appbars" data-adjust-scrollbar-top>
                 <nav className="wy-appbar">
                     <div></div>
                     {selectedId && dataConversation &&
@@ -54,8 +55,8 @@ const Chat = ({ uid }: ChatProps) => {
                 <div>No chat with the contextual id <strong>{uid}</strong></div>
             }
 
-            {selectedId && dataMembers &&
-                <Messages id={selectedId} members={dataMembers} />
+            {selectedId && dataMembers && dataChat &&
+                <Messages id={selectedId} chatRoom={true} members={dataMembers} lastMessageId={dataChat.last_message?.id} />
             }
         </div>
     )

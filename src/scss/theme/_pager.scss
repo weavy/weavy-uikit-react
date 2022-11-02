@@ -2,7 +2,7 @@
   pointer-events: none;
 }
 
-a.wy-pager {
+:not(tr).wy-pager {
   display: block;
   text-align: center;
   margin: 1rem auto;
@@ -16,4 +16,8 @@ tr.wy-pager td {
     display: inline;
     margin: 1rem auto;
   }
+}
+
+.wy-grid .wy-pager {
+    display: flex;
 }

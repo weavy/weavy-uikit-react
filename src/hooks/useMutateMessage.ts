@@ -34,22 +34,18 @@ export default function useMutateMessage() {
     };
 
     return useMutation(mutateMessage, {
-        onSuccess: (data: any, variables: any, context: any) => {
+        onSuccess: (data: MessageType, variables: any, context: any) => {
 
             const previousData = queryClient.getQueryData<any>(['messages', variables.id]);
             if (previousData && previousData.pages) {
                 // update cache
                 const newPagesArray = previousData.pages.map((page: any, i: number) => {
-
-
-
                     // remove temp message                    
                     if (i === 0) {
                         page.data = [
                             ...page.data.filter((message: MessageType) => message.id !== context.tempId),
                             data
                         ]
-
                     }
 
                     return page;

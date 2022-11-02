@@ -1,0 +1,11 @@
+@use "base/colors";
+@use "base/vars";
+
+.wy-meeting {
+  flex: 1 1 100%;
+  align-items: flex-start;
+}
+
+.wy-meeting-actions {
+    margin-top: .5rem;
+}

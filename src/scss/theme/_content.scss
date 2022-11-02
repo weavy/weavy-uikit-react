@@ -1,15 +1,43 @@
-@use "config" as *;
 
-// user content. e.g. text in comments, messages etc.
+@use "base/vars";
+@use "base/colors";
+
+// user generated content. e.g. text in comments, messages etc.
+.wy-content {
+  overflow-wrap: break-word;
+  min-width: 0;
+  // inline code
+  :not(pre) > code {
+    overflow-wrap: inherit;
+  }
+  // code block
+  pre, pre > code[class*=language-] {
+    white-space: pre-wrap;
+  }
+
+  :last-child {
+    margin-bottom: 0;
+  }
+
+  &:empty {
+    display: none;
+  }
+
+  :not(.wy-dark) &, &:not(.wy-dark) {
+    @import "code-vscode-light";
+  }
+
+  .wy-dark &, &.wy-dark {
+    @import "code-vscode-dark";
+  }
+}
 
 // hashtags
 .wy-hashtag {
-  color: $text-muted;
+  color: #{colors.$primary};
 }
 
 // mentions
 .wy-mention {
   font-weight: 500;
 }
-
-

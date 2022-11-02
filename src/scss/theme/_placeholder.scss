@@ -1,0 +1,19 @@
+@use "base/colors";
+
+$placeholder-opacity-max: .5;
+$placeholder-opacity-min: .2;
+
+.wy-placeholder {
+  cursor: wait;
+  color: var(--wy-outline);
+  background-color: var(--wy-outline);
+  opacity: $placeholder-opacity-max;
+  animation: wy-placeholder-glow 2s ease-in-out infinite;
+}
+
+@keyframes wy-placeholder-glow {
+  50% {
+    opacity: $placeholder-opacity-min;
+  }
+}
+

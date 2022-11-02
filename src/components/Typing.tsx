@@ -27,11 +27,11 @@ const Typing = ({ children, id, context }: Props) => {
         setActiveTypers([]);
         
         client?.subscribe(`a${id}`, "typing", handleTyping);        
-        client?.subscribe(`a${id}`, "message-inserted", handleStopTyping);
+        client?.subscribe(`a${id}`, "message_created", handleStopTyping);
 
         return () => {
             client?.unsubscribe(`a${id}`, "typing", handleTyping);            
-            client?.unsubscribe(`a${id}`, "message-inserted", handleStopTyping);
+            client?.unsubscribe(`a${id}`, "message_created", handleStopTyping);
         }
     }, [id])
 
@@ -87,29 +87,28 @@ const Typing = ({ children, id, context }: Props) => {
         }
     }
 
-    const setTypers = (data: any) => {
+    const setTypers = (actor: MemberTypingType) => {
         
         // remove existing typing events by this user (can only type in one conversation at a time)
         activeTypers.forEach(function (item: any, index: number) {
-            if (item.member.id === data.member.id) {
+            if (item.member.id === actor.id) {
                 setActiveTypers(activeTypers.splice(index, 1));
             }
         });
 
         // track time when we received this event
-        data.member.time = Date.now();
-        setActiveTypers([...activeTypers, data.member]);
+        actor.time = Date.now();
+        setActiveTypers([...activeTypers, actor]);
     }
 
-    const handleTyping = useCallback((data: any) => {               
-        if (data.conversation.id === id && data.member.id !== user.id) {            
-            setTypers(data);
+    const handleTyping = useCallback((realtimeEvent: RealtimeTyping) => {        
+        if (realtimeEvent.conversation.id === id && realtimeEvent.actor.id !== user.id) {            
+            setTypers(realtimeEvent.actor);
         }
-
     }, [id, context, activeTypers]);
 
-    const handleStopTyping = useCallback((data: any) => {        
-        if (data.app_id === id) {
+    const handleStopTyping = useCallback((realtimeEvent: RealtimeMessage) => {        
+        if (realtimeEvent.message.app_id === id) {
             setActiveTypers([]);
         }
     }, [id, context, activeTypers]);

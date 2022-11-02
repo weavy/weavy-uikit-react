@@ -1,4 +1,4 @@
-@use "variables" as *;
+@use "base/vars";
 
 .wy-content-image {
   min-width: 0;
@@ -9,38 +9,20 @@
   margin: auto;
   max-height: 100%;
   max-width: 100%;
-
-  &.wy-intrinsic-image {
+  /*&.wy-intrinsic-image {
     object-fit: scale-down;
-  }
+  }*/
 
-  &:not(.wy-intrinsic-image) {
-    height: 100%;
-    width: 100%;
-    // Similar to object-fit: contain; but works for divs. Must subtract margins.
-    --max-width: #{'min(calc((100vh - 3rem) * (var(--width) / var(--height))), calc(var(--width) * 1px), 100%)'};
-    --max-height: #{'min(calc(100vw * (var(--height) / var(--width))), calc(var(--height) * 1px), 100%)'};
-/*     // With sidebar
-    body.controller-content & {
-      --max-width: #{'min(calc((100vh - 6rem) * (var(--width) / var(--height))), calc(var(--width) * 1px), 100%)'};
-      --max-height: #{'min(calc(100vw * (var(--height) / var(--width))), calc(var(--height) * 1px), 100%)'};
-
-      @include bs.media-breakpoint-up(lg) {
-        --max-width: #{'min(calc((100vh - 3rem) * (var(--width) / var(--height))), calc(var(--width) * 1px), 100%)'};
-        --max-height: #{'min(calc((100vw - 20rem) * (var(--height) / var(--width))), calc(var(--height) * 1px), 100%)'};
-      }
-    } */
-
-    max-width: var(--max-width);
-    max-height: var(--max-height);
-    transition: transform $md-animation-duration $md-animation-curve-default, transform-origin $md-animation-duration step-end;
+  /*&:not(.wy-intrinsic-image) {
+    transition: transform vars.$transition, transform-origin vars.$transition-duration step-end;
     //cursor: zoom-in;
-  }
+  }*/
+  transition: transform vars.$transition, transform-origin vars.$transition-duration step-end;
 
 
   &.wy-zoom {
     cursor: zoom-out;
-    transition: transform $md-animation-duration $md-animation-curve-default, transform-origin $md-animation-duration step-start;
+    transition: transform vars.$transition, transform-origin vars.$transition-duration step-start;
   }
 
   img {

@@ -9,7 +9,7 @@ export default function useReactions(id: number, reactions: ReactableType[]) {
 
     const groupReactions = useCallback((data: ReactableType[]) => {
         var group = [...new Map<string, ReactableType>(data.map((item: ReactableType) => [item.content, item])).values()];
-        
+
         return group.map((item: ReactableType): ReactionGroup => {
             return {
                 content: item.content,
@@ -19,17 +19,17 @@ export default function useReactions(id: number, reactions: ReactableType[]) {
         });
     }, [reactionsList]);
 
-    const handleRealtimeReactionInserted = useCallback((reaction: ReactionType) => {
-        if (reaction.parent.id === id) {
+    const handleRealtimeReactionInserted = useCallback((reaction: RealtimeReaction) => {        
+        if (reaction.entity.id === id) {            
             setReactionsList((oldList) => {
-                return [...oldList || [], { content: reaction.content, created_by_id: reaction.created_by.id }];
+                return [...oldList || [], { content: reaction.reaction, created_by_id: reaction.actor.id }];
             });
         }
     }, [id, reactionsList]);
 
-    const handleRealtimeReactionDeleted = useCallback((reaction: ReactionType) => {
-        if (reaction.parent.id === id) {
-            setReactionsList(oldList => oldList.filter(item => item.created_by_id !== reaction.created_by.id));
+    const handleRealtimeReactionDeleted = useCallback((reaction: RealtimeReaction) => {        
+        if (reaction.entity.id === id) {
+            setReactionsList(oldList => oldList.filter(item => item.created_by_id !== reaction.actor.id));
         }
     }, [id, reactionsList]);
 
@@ -38,13 +38,12 @@ export default function useReactions(id: number, reactions: ReactableType[]) {
     }, [reactions]);
 
     useEffect(() => {
-
-        on('reaction-inserted', handleRealtimeReactionInserted);
-        on('reaction-deleted', handleRealtimeReactionDeleted);
+        on('reaction_added_' + id, handleRealtimeReactionInserted);
+        on('reaction_deleted_' + id, handleRealtimeReactionDeleted);
 
         return () => {
-            off('reaction-inserted', handleRealtimeReactionInserted);
-            off('reaction-deleted', handleRealtimeReactionDeleted);
+            off('reaction_added_' + id, handleRealtimeReactionInserted);
+            off('reaction_deleted_' + id, handleRealtimeReactionDeleted);
         }
     }, [id]);
 

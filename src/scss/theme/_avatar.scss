@@ -1,5 +1,9 @@
-@use "config" as *;
-@use "bs/forms";
+@use "base/vars";
+@use "base/colors";
+
+:where(:root, :host > *) {
+  --wy-presence-active: #{colors.$green};
+}
 
 .wy-avatar {
   border-radius: 50%;
@@ -12,43 +16,34 @@
   text-align: center;
 }
 
-.wy-avatar-input {
-  @extend %form-control, %form-control-sm;
-  background: $light;
-  border-color: transparent;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 1.5rem;
-}
-
 .wy-avatar-presence {
   position: relative;
+  display: inline-flex;
 }
-
-.wy-avatar-display-name {
-  font-size: $h4-font-size;
-  font-weight: $display-font-weight;
-  line-height: $display-line-height;
-  text-align: center;
-}
-
 
 // presence indicator
 .wy-presence {
-  display: none; // initially hidden
-  background-color: $gray-100;
+  &:not(.wy-presence-active) {
+    display: none; // initially hidden
+  }
+
+  background-color: var(--wy-component-background-color, transparent);
   width: .75rem;
   height: .75rem;
   border-radius: 50%;
-  outline: .125rem solid $white;
+  //outline: .125rem solid ;
   position: absolute;
   bottom: 0;
   right: -5%;
-}
 
-// online
-.wy-presence-active {
-  background-color: $green-400;
-  display: block;
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background-color: var(--wy-presence-active);
+    background-clip: content-box;
+    padding: .125rem;
+  }
 }

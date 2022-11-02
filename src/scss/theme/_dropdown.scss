@@ -1,5 +1,16 @@
-@use "config" as *;
-@use "bs/dropdown";
+@use "base/vars";
+@use "base/colors";
+
+$dropdown-spacer: .25rem;
+$dropdown-min-width: 10rem;
+$dropdown-padding-y: 0;
+$dropdown-padding-x: 0;
+$dropdown-font-size: vars.$font-size-base;
+$dropdown-border-radius: vars.$border-radius;
+$dropdown-box-shadow: vars.$shadow-level1;
+
+$dropdown-item-padding-y: .75rem;
+$dropdown-item-padding-x: 1rem;
 
 .wy-dropdown,
 .wy-dropup {
@@ -21,7 +32,31 @@
 }
 
 .wy-dropdown-menu {
-  @extend %dropdown-menu;
+  --wy-component-background-color: #{colors.$surface-2};
+  --wy-component-color: #{colors.$on-surface};
+  
+  background-color: var(--wy-component-background-color);
+  color: var(--wy-component-color);
+
+  position: absolute;
+  z-index: vars.$zindex-dropdown;
+  //display: none; // none by default, but block on "open" of the menu
+  min-width: $dropdown-min-width;
+  padding: $dropdown-padding-y $dropdown-padding-x;
+  margin: 0; // Override default margin of ul
+  font-size: $dropdown-font-size;
+  text-align: left; // Ensures proper alignment if parent has it changed (e.g., modal footer)
+  list-style: none;
+  background-clip: padding-box;
+  border-radius: $dropdown-border-radius;
+  box-shadow: $dropdown-box-shadow;
+  overflow: hidden;
+
+  &[data-bs-popper] {
+    top: 100%;
+    left: 0;
+    margin-top: $dropdown-spacer;
+  }
 
   display: block;
 
@@ -44,34 +79,81 @@
   }
 }
 
-.#{wy}-dropdown-menu-end {
+.wy-dropdown-menu-end {
   right: 0;
 }
 
-.#{wy}-dropdown-item {
-  @extend %dropdown-item;
+.wy-dropdown-item {
+  background-color: transparent; // For `<button>`s
+  color: var(--wy-component-color, #{colors.$on-surface});
+
+  display: block;
+  width: 100%; // For `<button>`s
+  padding: $dropdown-item-padding-y $dropdown-item-padding-x;
+  clear: both;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: vars.$font-weight-normal;
+  line-height: 1;
+  text-align: inherit; // For `<button>`s
+  text-decoration: none;
+  white-space: nowrap; // prevent links from randomly breaking onto new lines
+  border: 0; // For `<button>`s
+  gap: .25rem;
+
+  &:hover,
+  &:focus {
+    --wy-component-color: #{colors.$on-surface-variant};
+    --wy-component-background-color: #{colors.$surface-variant};
+
+    color: var(--wy-component-color);
+    background-color: var(--wy-component-background-color);
+    text-decoration: none;
+  }
+
+  &.wy-active,
+  &:active {
+    --wy-component-color: #{colors.$on-primary-container};
+    --wy-component-background-color: #{colors.$primary-container};
+
+    color: var(--wy-component-color);
+    background-color: var(--wy-component-background-color);
+    text-decoration: none;
+  }
+
+  &.wy-disabled,
+  &:disabled {
+    //--wy-component-color: #{colors.$on-surface};
+    //--wy-component-background-color: #{colors.$surface-3};
+
+    color: var(--wy-component-color);
+    background-color: var(--wy-component-background-color);
+    pointer-events: none;
+    opacity: vars.$opacity-disabled;
+  }
+
+
   cursor: pointer;
   display: flex;
   align-items: center;
 
-  > img, .#{wy}-icon {
+  > img, .wy-icon {
     margin-right: .5rem;
-    color: $icon-color;
+    color: inherit;
   }
 
   &:active {
-    > .#{wy}-icon {
-      $c: color-contrast($component-active-bg);
-      color: if($c == $color-contrast-light, $icon-light-color!important, $icon-color);
+    > .wy-icon {
+      color: inherit;
     }
   }
 
   // dropdown item with icon for marking selection option
-  &.#{wy}-option {
+  &.wy-option {
     .wy-icon {
       visibility: hidden;
     }
-    &.#{wy}-selected {
+    &.wy-selected {
       .wy-icon {
         visibility: visible;
       } 
@@ -80,7 +162,12 @@
 
 }
 
-.#{wy}-dropdown-divider {
-  @extend %dropdown-divider;
+
+.wy-dropdown-divider {
+  height: 0;
+  margin: 0;
+  overflow: hidden;
+  border: none;
+  border-top: 1px solid colors.$outline-variant;
 }
 

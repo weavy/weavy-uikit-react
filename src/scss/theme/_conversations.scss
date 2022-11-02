@@ -1,91 +1,32 @@
-@use "config" as *;
-@use "bs/list-group";
-@use "avatar";
-@use "search";
-@use "typing";
+@use "base/vars";
+@use "base/colors";
+@use "base/text";
 
 .wy-conversation {
   display: flex;
   position: relative;
-}
 
-.wy-conversation-link {
-  @extend 
-    %list-group-item, 
-    %list-group-item-action;
-  display: flex;
-  padding: .5rem;
-  border: none;
-  z-index: unset !important;
+  .wy-item-title {
+    font-weight: vars.$font-weight-normal;
+  }
 
-  
-  &.wy-active {
-    background-color: $list-group-hover-bg;
+  &.wy-unread {
+    .wy-item-title {
+      font-weight: vars.$font-weight-bold;
+    }
+
+    .wy-item-text, .wy-meta {
+      color: colors.$on-background;
+      font-weight: vars.$font-weight-semibold;
+    }
+  }
+
+  .wy-item-text {
+    .wy-typing-show {
+      @include text.truncate;
+      font-weight: vars.$font-weight-normal;
+    }
   }
 }
 
-.wy-conversation-body {
-  flex-grow: 1;
-  min-width: 0;
-  margin-left: 1rem;
-}
 
-.wy-conversation-header {
-  display: flex;
-  align-items: center;
-}
-
-.wy-conversation-title {
-  @include text-truncate();
-  margin-right: auto;
-
-  .wy-conversation.wy-unread & {
-    font-weight: $font-weight-bold;
-  }
-}
-
-.wy-conversation-time {
-  color: $text-muted;
-  font-size: $font-size-xs;
-  margin-left: .5rem;
-  margin-right: .25rem;
-  flex-shrink: 0;
-}
-
-.wy-conversation-summary {
-  @include text-truncate();
-
-  color: $text-muted;
-  font-size: $font-size-sm;
-  margin-right: 4rem; // room for icons
-
-  // vertically align text and icons
-  height: 1.5rem;
-  line-height: 1.5rem;
-
-  .wy-emoji {
-    vertical-align: -.3125rem;
-  }
-
-  .wy-icon {
-    vertical-align: -.4375rem;
-  }
-
-  .wy-conversation.wy-unread & {
-    font-weight: $font-weight-medium;
-    color: $body-color;
-  }
-
-  .wy-typing-show {
-    @include text-truncate();
-    font-weight: $font-weight-normal;
-  }
-}
-
-.wy-conversation-actions {
-  display: flex;
-  align-items: center;
-  position: absolute;
-  right: .5rem;
-  bottom: .25rem;
-}

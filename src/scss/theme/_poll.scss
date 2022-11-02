@@ -1,0 +1,49 @@
+@use "base/colors";
+@use "base/vars";
+
+.wy-poll {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+.wy-poll-form {
+  background: var(--wy-component-background-color);
+  color: var(--wy-component-color);
+  padding: .5rem;
+
+  &:empty {
+    display: none;
+  }
+
+  input:not(:first-child) {
+    margin-top: .5rem;
+  }
+}
+
+.wy-poll-option {
+  position: relative;
+  background-color: #{colors.$background};
+  border: 1px solid #{colors.$outline-variant};
+  border-radius: vars.$border-radius-sm;
+  margin-bottom: .25rem;
+  padding: 0.25rem 1rem;
+  min-height: 2.5rem;
+  cursor: pointer;
+
+  .wy-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background-color: #{colors.$primary-container};
+  }
+
+  > :not(.wy-progress) {
+    z-index: 1;
+  }
+
+  .wy-facepile {
+    margin-right: -.5rem;
+  }
+}
+

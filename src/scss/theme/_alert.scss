@@ -1,73 +1,71 @@
-@use "config" as *;
+@use "sass:map";
+@use "base/vars";
+@use "base/colors";
 
-// Global alerts
+.wy-alerts {
+  position: fixed;
+  left: 0;
+  top: 4rem;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: vars.$zindex-fixed;
+  gap: 1rem;
+}
 
-.wy-alert-message {
-    padding: .25rem .5rem;
-    background-color: $client-alert-background;
-    text-align: center;
-    width: $client-panel-width;
-    color: $client-alert-color;
-    border-radius: .1875rem;
-    margin: 0 auto;
-    margin-top: 1rem;
-    font-family: $font-family-base;
-    position: relative;
-    z-index: 10;
-    box-shadow: $md-shadow-8dp;
-    max-width: calc(100% - 3rem);
-    pointer-events: none;
-    user-select: none;
+.wy-alert {
+  background: colors.$surface-1;
+  color: colors.$on-surface;
+  margin: 0 0 1rem;
+  //max-width: calc(100% - 3rem);
+  gap: .5rem;
+  display: flex;
+  flex-direction:row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  cursor: pointer;
+  border-radius: vars.$border-radius;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1rem;
+  padding: .5rem 1rem;
+  user-select: none;
+  //box-shadow: vars.$shadow-level2;
+  position: relative;
+  overflow: hidden;
+  height: auto;
+  gap: .5rem;
 
-    a {
-        color: darken($client-alert-color, 10%);
-        text-decoration: $link-decoration;
-        font-weight: $alert-link-font-weight;
-        pointer-events: auto;
+  &.wy-fade {
+    transition: all vars.$transition;
+    
+    &:not(.wy-show) {
+      opacity: 0;
+      height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-top: 0;
+      margin-bottom: 0;
     }
+  }
 
-    &.wy-fade {
-        transition: all $md-animation-duration $md-animation-curve-default;
-        opacity: 0;
-        height: 0;
-        padding-top: 0;
-        padding-bottom: 0;
-        margin-top: 0;
+  .wy-text {
+    line-height: 1.5;
+    padding: .5rem;
+  }
 
-        &.wy-in {
-            transition: opacity $md-animation-duration $md-animation-curve-default;
-            opacity: 1;
-            height: auto;
-            padding-top: .5rem;
-            padding-bottom: .5rem;
-            margin-top: 1rem;
-        }
-    }
+  .wy-button {
+    margin-left: auto;
+    pointer-events: auto;
+  }
+}
 
-    .wy-button {
-        cursor: pointer;
-        display: inline-flex;
-        flex-shrink: 0;
-        flex-grow: 0;
 
-        > * {
-            display: inline-flex;
-        }
 
-        font-weight: 400;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: middle;
-        user-select: none;
-        border: 1px solid transparent;
-        padding: .3125rem .75rem;
-        font-size: 1rem;
-        line-height: 1.5;
-        border-radius: .1875rem;
-        color: $white;
-        background-color: $primary;
-        border-color: $primary;
-        box-shadow: $btn-box-shadow;
-        margin-top: .5rem;
-    }
+.wy-alert-primary {
+  background: colors.$primary-container;
+  color: colors.$on-primary-container;
 }

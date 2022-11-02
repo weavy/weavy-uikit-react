@@ -17,11 +17,13 @@ type Props = {
     id: number,
     members: MembersResult | undefined,
     displayName?: string,
-    avatarUrl?: string 
+    avatarUrl?: string,
+    lastMessageId: number | null,
+    chatRoom: boolean
 }
 
-const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
-    var reverseScroller:IntersectionObserver | null;
+const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom }: Props) => {
+    var reverseScroller: IntersectionObserver | null;
 
     const { user } = useContext(UserContext);
 
@@ -31,7 +33,7 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
     const readMoreRef = useRef<any>();
     const messagesEndRef = useRef<any>();
     const [resolveScrollerFetch, setResolveScrollerFetch] = useState<Function | null>()
-   
+
     const { dispatch, on, events } = useEvents();
 
     const { isLoading, isError, data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useMessages(id, {});
@@ -44,7 +46,6 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
     useLayoutEffect(() => {
         //if (id && !isLoading && !isLoadingMembers && !isLoadingConversation) {
         if (id && !isLoading) {
-            //console.log("useLayoutEffect scroller", id)
             // scroll to bottom when selecting a conversation
             scrollParentToBottom(messagesEndRef.current);
 
@@ -63,7 +64,7 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
                     })
                 }
             })
-            
+
         } else {
             reverseScroller?.disconnect();
             reverseScroller = null;
@@ -85,60 +86,63 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
     }, [data]);
 
     useEffect(() => {
+        // mark conversation as read
+        if (id && lastMessageId) {
+            readMessageMutation.mutate({ id: id, read: true, messageId: lastMessageId })
+        }
+    }, [id, lastMessageId])
 
+    useEffect(() => {
         if (id) {
-
-            window.addEventListener('focus', handleFocus, false)
-
-            // mark conversation as read
-            readMessageMutation.mutate({ id: id, read: true })
-
-            client?.subscribe(`a${id}`, "message-inserted", handleRealtimeMessage);
-            client?.subscribe(`a${id}`, "conversation-read", handleRealtimeSeenBy);            
-            client?.subscribe(`a${id}`, "reaction-inserted", handleRealtimeReactionInserted);
-            client?.subscribe(`a${id}`, "reaction-deleted", handleRealtimeReactionDeleted);
+            client?.subscribe(`a${id}`, "message_created", handleRealtimeMessage);
+            client?.subscribe(`a${id}`, "conversation_marked", handleRealtimeSeenBy);
+            client?.subscribe(`a${id}`, "reaction_added", handleRealtimeReactionInserted);
+            client?.subscribe(`a${id}`, "reaction_removed", handleRealtimeReactionDeleted);
         }
 
         return () => {
-            window.removeEventListener('focus', handleFocus, false)
+
+            //window.removeEventListener('focus', handleFocus, false);
 
             if (id) {
                 // remove additional pages in cache. Only get first page
                 let qd = queryClient.getQueryData(["messages", id]);
-                
+
                 if (qd) {
-                    
+
                     queryClient.setQueryData(["messages", id], (data: any) => ({
-                        pages: data?.pages.slice(0,1),
-                        pageParams: [undefined]                        
-                    }));                    
+                        pages: data?.pages.slice(0, 1),
+                        pageParams: [undefined]
+                    }));
                 }
 
-                client?.unsubscribe(`a${id}`, "message-inserted", handleRealtimeMessage);
-                client?.unsubscribe(`a${id}`, "conversation-read", handleRealtimeSeenBy);                
-                client?.unsubscribe(`a${id}`, "reaction-inserted", handleRealtimeReactionInserted);
-                client?.unsubscribe(`a${id}`, "reaction-deleted", handleRealtimeReactionDeleted);
+                client?.unsubscribe(`a${id}`, "message_created", handleRealtimeMessage);
+                client?.unsubscribe(`a${id}`, "conversation_marked", handleRealtimeSeenBy);
+                client?.unsubscribe(`a${id}`, "reaction_added", handleRealtimeReactionInserted);
+                client?.unsubscribe(`a${id}`, "reaction_removed", handleRealtimeReactionDeleted);
             }
         }
     }, [id]);
 
-    const handleRealtimeReactionInserted = useCallback((data: ReactionType) => {                
-        dispatch("reaction-inserted", data);
+
+    const handleRealtimeReactionInserted = useCallback((realtimeEvent: RealtimeReaction) => {
+        dispatch("reaction_added_" + realtimeEvent.entity.id, realtimeEvent);
     }, [id]);
 
-    const handleRealtimeReactionDeleted = useCallback((data: ReactionType) => {                
-        dispatch("reaction-deleted", data);
+    const handleRealtimeReactionDeleted = useCallback((realtimeEvent: RealtimeReaction) => {
+        dispatch("reaction_deleted_" + realtimeEvent.entity.id, realtimeEvent);
     }, [id]);
 
     // handle new message from post form
     const handleNewMessage = (text: string, attachments: [], meetings: []) => {
         addMessageMutation.mutate({ id: id, text: text, userId: user.id, attachments: attachments, meetings: meetings }, {
-            onSuccess: () => { requestAnimationFrame(() => scrollParentToBottom(messagesEndRef.current, true))}
+            onSuccess: (data: MessageType) => {
+                // mark conversation as read
+                readMessageMutation.mutate({ id: id, read: true, messageId: data.id });
+
+                requestAnimationFrame(() => scrollParentToBottom(messagesEndRef.current, true))
+            }
         });
-
-        // mark conversation as read
-        setTimeout(() => { readMessageMutation.mutate({ id: id, read: true }) }, 1000);
-
 
         requestAnimationFrame(() => scrollParentToBottom(readMoreRef.current, true));
     }
@@ -146,7 +150,7 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
     const handleRealtimeSeenBy = async (data: any) => {
         let isAtBottom = isParentAtBottom(readMoreRef.current);
         // how to do this better?                
-        queryClient.invalidateQueries(["members", id])
+        queryClient.invalidateQueries(["members", id]);
 
         if (isAtBottom) {
             requestAnimationFrame(() => scrollParentToBottom(readMoreRef.current, true));
@@ -154,11 +158,14 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
     }
 
     // real time insert-message handler
-    const handleRealtimeMessage = useCallback((message: MessageType) => {
-        if (message.app_id !== id || message.created_by.id === user.id) return;
+    const handleRealtimeMessage = useCallback((realtimeEvent: RealtimeMessage) => {
+        if (realtimeEvent.message.app_id !== id || realtimeEvent.message.created_by_id === user.id) return;
+
+        // set created_by
+        realtimeEvent.message.created_by = realtimeEvent.actor;
 
         // mark conversation as read
-        readMessageMutation.mutate({ id: id, read: true })
+        readMessageMutation.mutate({ id: id, read: true, messageId: realtimeEvent.message.id })
 
         const previousData = queryClient.getQueryData<any>(['messages', id]);
 
@@ -166,13 +173,13 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
             let isAtBottom = isParentAtBottom(readMoreRef.current);
 
             const newPagesArray = previousData.pages.map((page: any, i: number) => {
-                // remove temp message                    
+                // add realtime message                    
+
                 if (i === 0) {
                     page.data = [
                         ...page.data,
-                        message
+                        realtimeEvent.message
                     ]
-
                 }
                 return page;
 
@@ -191,15 +198,9 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
 
     }, [id]);
 
-    const handleFocus = useCallback(() => {
-        if (!id) return;
-
-        readMessageMutation.mutate({ id: id, read: true })
-    }, [id]);
-
     let messageHeader = <div className="wy-avatar-header">
         {avatarUrl && displayName && <Avatar src={avatarUrl} name={displayName} id={id} size={128} /> || ''}
-        {displayName && <div className="wy-avatar-display-name">{displayName}</div> || ''}
+        {displayName && <div className="wy-headline">{displayName}</div> || ''}
     </div>;
 
     let loadMoreButton = <Button.UI onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage} className="wy-message-readmore">Load more</Button.UI>;
@@ -207,19 +208,19 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
     let messages = (
         <>
             <div className="wy-message-readmore" ref={readMoreRef}>
-            {isFetchingNextPage
-                        ? 'Loading more...'
-                        : hasNextPage
-                            ? loadMoreButton
-                            : messageHeader}
-                
+                {isFetchingNextPage
+                    ? 'Loading more...'
+                    : hasNextPage
+                        ? loadMoreButton
+                        : messageHeader}
+
             </div>
             {data && members && data.pages && data.pages.map((group, i) => {
                 // Reverse key since page loading is reversed
                 return <React.Fragment key={data.pages.length - i}>
                     {
                         group.data?.map((item: MessageType) => {
-                            
+
                             return <Message
                                 key={item.id}
                                 id={item.id}
@@ -229,15 +230,15 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
                                 avatar={item.created_by.avatar_url}
                                 name={item.created_by.display_name}
                                 created_at={item.created_at}
+                                created_by={item.created_by.display_name}
                                 attachments={item.attachments}
                                 meeting={item.meeting}
                                 parentId={id}
                                 reactions={item.reactions}
+                                chatRoom={chatRoom}
                                 //reactions_count={item.reactions_count}
                                 seenBy={(members.data && members.data.length > 0) ? members.data.filter((member) => {
-                                    const hasRead = member.read_at >= item.created_at;
-                                    const nothingLaterRead = !data.pages.map((p) => p.data).flat().find((message: MessageType) => { return message.id > item.id && member.read_at >= message.created_at });
-                                    return hasRead && nothingLaterRead && member.id !== user.id;
+                                    return member.marked_id === item.id && member.id !== user.id;
                                 }) : []}
                             />
                         })
@@ -260,7 +261,7 @@ const Messages = ({ id, members, displayName, avatarUrl }: Props) => {
             <div id="container" className="wy-messages">
                 {messages}
             </div>
-            <div className="wy-message-editor">
+            <div className="wy-footerbar wy-footerbar-sticky wy-message-editor wy-message-editor-bottom">
                 <ConversationForm key={id} conversationId={id} handleInsert={handleNewMessage} />
             </div>
         </>

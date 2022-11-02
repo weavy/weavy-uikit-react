@@ -50,7 +50,7 @@ export const ReactionsMenu = ({ id, reactions }: ReactionMenuProps) => {
     }
 
     const handleReaction = async (e: any) => {
-        // check if the reaction already exists for the user
+        // check if the reaction already exists for the user        
         const existing = reactionsList.find((r) => r.has_reacted)
         const emoji = e.target.dataset.emoji;
 
@@ -69,7 +69,7 @@ export const ReactionsMenu = ({ id, reactions }: ReactionMenuProps) => {
 
     return (
         <div className={classNames({ "wy-active": visible })} style={{ position: 'relative' }}>
-            <Button.UI onClick={toggleReactionMenu}><Icon.UI name="emoticon-plus" size={1} /></Button.UI>
+            <Button.UI className="wy-reaction-menu-button" onClick={toggleReactionMenu}><Icon.UI name="emoticon-plus" size={1.25/1.5} /></Button.UI>
             <div className="wy-reaction-menu wy-dropdown-menu" style={{ display: visible ? 'block' : 'none', position: 'absolute', top: '-3.25rem' }}>
                 <div className="wy-reaction-picker">
                     {emojis?.map((r: string, i: number) => {
@@ -83,13 +83,19 @@ export const ReactionsMenu = ({ id, reactions }: ReactionMenuProps) => {
 }
 
 export const ReactionsList = ({ id, reactions }: ReactionsProps) => {
-    const { reactionsList } = useReactions(id, reactions);
-
+    const { reactionsList } = useReactions(id, reactions);  
+    
+    let reactionCount = reactionsList.reduce(
+        (previousValue, currentItem) => previousValue + currentItem.count,
+        0,
+    );
+    
     return (
         <>
-            {reactionsList && reactionsList.map((r: ReactionGroup, i: number) => {
+            {!!reactionsList && reactionsList.map((r: ReactionGroup, i: number) => {
                 return <span key={i} className="wy-reaction" title={r.count.toString()}>{r.content}</span> //r.has_reacted
             })}
+            {reactionCount > 1 && <span className="wy-reaction-count">{reactionCount}</span>}
         </>
     )
 }

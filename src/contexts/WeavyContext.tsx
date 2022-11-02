@@ -7,7 +7,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import PreviewProvider from "./PreviewContext";
-import detectScrollbars from '../utils/scrollbarDetection';
+import { detectScrollbars, detectScrollbarAdjustments } from '../utils/scrollbarDetection';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -41,14 +41,14 @@ const WeavyProvider = ({ children, client, options }: WeavyProviderProperties) =
     teamsAuthenticationUrl: undefined,
     enableCloudFiles: true,
     enableScrollbarDetection: true,
-    filebrowserUrl: "https://filebrowser.weavycloud.com/index10.html",
+    filebrowserUrl: "https://filebrowser.weavy.io/v14/",
     reactions: ['😍', '😎', '😉', '😜', '👍']
   };
 
   let opts = { ...defaultOptions, ...options }
 
   if (opts.enableScrollbarDetection) {
-    detectScrollbars();
+    detectScrollbars().then(() => detectScrollbarAdjustments());
   }
 
   if(!client){

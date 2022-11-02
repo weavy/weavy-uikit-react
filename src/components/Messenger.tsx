@@ -4,8 +4,13 @@ import Conversation from './Conversation';
 import ConversationList from './ConversationList';
 import { Messenger } from '../types/Messenger';
 import { WeavyContext } from '../contexts/WeavyContext';
+import classNames from 'classnames';
 
-const Messenger: FC<Messenger> = () => {
+type Props = {
+    className?: string,
+}
+
+const Messenger: FC<Messenger> = ({ className }: Props) => {
 
     const { client } = useContext(WeavyContext);
 
@@ -15,7 +20,7 @@ const Messenger: FC<Messenger> = () => {
     
     return (
         <MessengerProvider>
-            <div className="wy-messenger-provider">
+            <div className={classNames("wy-messenger-provider", className)}>
 
                 <div className="wy-messenger-sidebar wy-scroll-y">
                     <ConversationList />

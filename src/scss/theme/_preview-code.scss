@@ -1,5 +1,14 @@
+@use "base/colors";
+
 .wy-content-code {
+  /*--wy-component-background-color: #{colors.$surface-1};
+  --wy-component-color: #{colors.$on-surface};
+
+  background-color: var(--wy-component-background-color);
+  color: var(--wy-component-color);
+  */
+
   align-self: flex-start;
   width: 100%;
-  padding: 1rem 3rem;
+  padding: 2rem 3.5rem;
 }

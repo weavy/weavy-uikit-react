@@ -1,20 +1,24 @@
-@use "colors" as *;
+@use "base/colors";
 
 $spinner-offset: 187 !default;
 $spinner-duration: 1.4s !default;
 
-svg.wy-spinner {
+.wy-spinner, .wy-icon[data-icon=spinner] {
+  align-self: center;
+  justify-self: center;
+  margin: auto;
 
   circle {
     stroke-dasharray: 1, 100;
     stroke-dashoffset: 0;
     transform-origin: center;
+    fill:none !important;
   }
 
   &.wy-spin {
     // add class .wy-spin to animate the spinner (otherwise it will not be visible)
     animation: wy-rotate $spinner-duration linear infinite;
-  
+
     circle {
       animation: wy-dash $spinner-duration ease-in-out infinite, wy-color ($spinner-duration*2) ease-in-out infinite;
     }
@@ -46,18 +50,18 @@ svg.wy-spinner {
 
 @keyframes wy-color {
   0%, 100% {
-    stroke: $blue;
+    stroke: colors.$primary;
   }
 
   25% {
-    stroke: $red;
+    stroke: colors.$primary;
   }
 
   50% {
-    stroke: $yellow;
+    stroke: transparent;
   }
 
   75% {
-    stroke: $green;
+    stroke: colors.$primary;
   }
 }

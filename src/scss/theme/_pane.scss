@@ -1,8 +1,12 @@
+@use "base/colors";
+
 .wy-pane {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   position: relative;
+  min-height: 0;
+  height: 100%;
+  flex: 1 1 auto;
 }
 
 .wy-pane-body {
@@ -12,5 +16,12 @@
 }
 
 .wy-pane-group {
-  padding: .5rem;
+  padding: .75rem;
+}
+
+.wy-pane-background {
+  --wy-component-background-color: #{colors.$background};
+  --wy-component-color: #{colors.$on-background};
+  background-color: var(--wy-component-background-color);
+  color: var(--wy-component-color);
 }

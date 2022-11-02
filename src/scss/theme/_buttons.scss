@@ -1,90 +1,145 @@
-@use "config" as *;
-@use "bs/buttons";
+@use "base/vars";
+@use "base/colors";
+@use "base/svg";
+
+:where(:root, :host > *) {
+  --wy-btn-padding-x: 1.5rem;
+  --wy-btn-padding-y: .5rem;
+  --wy-btn-font-family: var(--wy-font-family);
+  --wy-btn-font-size: #{vars.$font-size-base};
+  --wy-btn-font-weight: #{vars.$font-weight-normal};
+  --wy-btn-line-height: #{vars.$line-height-base};
+  --wy-btn-border-width: 0;
+  --wy-btn-border-color: transparent;
+  --wy-btn-border-radius: 1.25rem;
+}
 
 // basic unstyled button with support for icon and text
 .wy-button {
-  @extend %btn;
+  --wy-component-color: #{colors.$primary};
+  //--wy-component-background-color: var(--wy-component-background-color, transparent); // #{colors.$surface-3};
+
+  color: var(--wy-component-color);
+  background: var(--wy-component-background-color, transparent);
+
+  padding: var(--wy-btn-padding-y) var(--wy-btn-padding-x);
+  font-family: var(--wy-btn-font-family);
+  font-size: var(--wy-btn-font-size);
+  font-weight: var(--wy-btn-font-weight);
+  line-height: var(--wy-btn-line-height);
+  text-align: center;
+  text-decoration: none;
+  white-space: null; // Set to `nowrap` to prevent text wrapping;
+  vertical-align: middle;
   
+  cursor: pointer;
+  user-select: none;
+  border: var(--wy-btn-border-width) solid var(--wy-btn-border-color);
+  border-radius: var(--wy-btn-border-radius);
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: .25rem;
+  position: relative;
+
+  // State layer
+  &:not(.wy-button-link, :disabled){
+    
+    > * {
+      z-index: 3;
+    }
+    
+    &::before {
+      content: "";
+      z-index: 2;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--wy-component-color);
+      opacity: 0%;
+    }
+
+    &:hover {
+      &::before {
+        opacity: 8%;
+      }
+    }
+
+    &:focus, &:active, &.wy-active {
+      &::before {
+        opacity: 12%;
+      }
+    }
+  }
 
   // align icons
   &:not(.wy-button-icon) {
     .wy-icon {
       &:first-child {
-        margin-left: -.25rem;
+        margin-left: -.5rem;
       }
 
       &:last-child {
-        margin-right: -.25rem;
+        margin-right: -.5rem;
       }
     }
   }
  
-}
-
-// default button
-.wy-button:not(.wy-button-link, .wy-button-primary) {
-    --#{$prefix}btn-hover-border-color: transparent;
-    --#{$prefix}btn-active-border-color: transparent;
-    --#{$prefix}btn-hover-color: var(--#{$prefix}btn-color);
-    --#{$prefix}btn-hover-bg: #{$btn-hover-bg};
-    --#{$prefix}btn-focus-bg: #{$btn-hover-bg};
-    --#{$prefix}btn-active-color: var(--#{$prefix}btn-color);
-    --#{$prefix}btn-active-bg: #{$btn-active-bg};
-
-     // dark mode
-    .wy-dark & {
-      color: var(--#{$prefix}white);
-    }
+  &:disabled {
+    opacity: vars.$opacity-disabled;
+    cursor: unset;
+    pointer-events: none;
+  }
 }
 
 // button with only icon (no text)
-.wy-button-icon {  
-  width: 2rem;
-  height: 2rem;
-  padding: .25rem;
+.wy-button-icon {
+  --wy-component-color: #{colors.$on-surface-variant};
+  //--wy-component-background-color: var(--wy-component-background-color, transparent);
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: .5rem;
   line-height: 1;
-  border-radius: 50%;
+  border-radius: #{vars.$border-radius-pill};
   border-width: 0;
-}
 
-// default icon button
-.wy-button-icon:not(.wy-button-primary) {
-  color: $icon-color;
-
-  &:hover {
-    .wy-icon {
-      color: $icon-hover-color;
-    }
-  }
-  
-  // dark mode
-  .wy-dark & {
-    color: $icon-light-color;
-    .wy-icon {
-      color: $icon-light-color;
-    }
-
-    &:hover {
-      color: $icon-light-hover-color;
-      .wy-icon {
-        color: $icon-light-hover-color;
-      }
-    }
+  &.wy-active {
+    --wy-component-color: #{colors.$primary};
   }
 }
 
 // primary button
 .wy-button-primary {
-    @extend %btn-primary;
+  --wy-component-background-color: #{colors.$primary};
+  --wy-component-color: #{colors.$on-primary};
+}
+
+.wy-button-variant {
+  --wy-component-background-color: #{colors.$surface-variant};
+  --wy-component-color: #{colors.$on-surface-variant};
+}
+
+// primary button (text only)
+.wy-button-primary-text {
+  --wy-component-color: #{colors.$primary};
 }
 
 // button that looks and behaves like a link
 .wy-button-link {
-  @extend %btn-link;
+  //--wy-component-background-color: transparent;
+  padding: 0;
+  color: var(--wy-link-color, #{colors.$primary});
+
+  text-decoration: var(--wy-link-decoration, #{vars.$link-decoration});
+  
+  &:hover,
+  &:focus {
+    text-decoration: var(--wy-link-hover-decoration, #{vars.$link-hover-decoration});
+  }
 }
 
 // container for proper spacing and alignment of buttons

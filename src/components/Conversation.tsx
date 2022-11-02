@@ -27,8 +27,10 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
     const [modalAddOpen, setModalAddOpen] = useState(false);
     const [modalDetailsOpen, setModalDetailsOpen] = useState(false);
     const [title, setTitle] = useState<string>("");
+    const [isRoomOrChat, setIsRoomOrChat] = useState<boolean>(false);
 
     const ChatRoom = "edb400ac-839b-45a7-b2a8-6a01820d1c44";
+    const Chat = "d65dd4bc-418e-403c-9f56-f9cf4da931ed";
 
     if (!client) {
         throw new Error('Weavy Conversation component must be used within an WeavyProvider');
@@ -50,8 +52,8 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
     const updateNameMutation = useMutateConversationName();
     const removeMembers = useMutateRemoveMembers();
 
-    const handleRealtimeAppUpdated = useCallback((data: ConversationType) => {
-        if (data.id !== selectedConversationId) return;
+    const handleRealtimeAppUpdated = useCallback((realtimeEvent: RealtimeApp) => {        
+        if (realtimeEvent.app.id !== selectedConversationId) return;
         queryClient.invalidateQueries(['conversation', selectedConversationId]);
     }, [selectedConversationId]);
 
@@ -93,14 +95,14 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
     useEffect(() => {
 
         if (selectedConversationId) {
-            client.subscribe(`a${selectedConversationId}`, "app-updated", handleRealtimeAppUpdated);
+            client.subscribe(`a${selectedConversationId}`, "app_updated", handleRealtimeAppUpdated);
         }
 
         return () => {
 
             if (selectedConversationId) {
 
-                client.unsubscribe(`a${selectedConversationId}`, "app-updated", handleRealtimeAppUpdated);
+                client.unsubscribe(`a${selectedConversationId}`, "app_updated", handleRealtimeAppUpdated);
             }
         }
     }, [selectedConversationId]);
@@ -109,11 +111,14 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
         if (dataConversation && dataConversation.type === ChatRoom) {
             setTitle(dataConversation?.display_name);
         }
+        if(dataConversation && (dataConversation.type === ChatRoom || dataConversation.type === Chat)){
+            setIsRoomOrChat(true)
+        }
     }, [dataConversation]);
 
     return (
         <>
-            <header className="wy-appbars">
+            <header className="wy-appbars" data-adjust-scrollbar-top>
                 <nav className="wy-appbar">
                     <div>
                         {showBackButton &&
@@ -146,17 +151,17 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
 
             {!selectedConversationId &&
                 <div className="wy-avatar-header">
-                    <Avatar src={user.avatar_url} name={user.title} presence={user.presence} id={user.id} size={256} />
-                    <h2>Welcome {user.name}!</h2>
+                    <Avatar src={user.avatar_url} name={user.display_name} presence={user.presence} id={user.id} size={256} />
+                    <h2 className='wy-title'>Welcome {user.name}!</h2>
                     Create or select a conversation to get started
                 </div>
             }
-            {selectedConversationId && dataMembers &&
-                <Messages id={selectedConversationId} members={dataMembers} displayName={dataConversation?.display_name} avatarUrl={dataConversation?.avatar_url} />
+            {selectedConversationId && dataMembers && dataConversation &&
+                <Messages id={selectedConversationId} chatRoom={isRoomOrChat} members={dataMembers} displayName={dataConversation?.display_name} avatarUrl={dataConversation?.avatar_url} lastMessageId={dataConversation?.last_message?.id}/>
             }
 
             <Overlay.UI isOpen={modalAddOpen} className="wy-modal">
-                <header className="wy-appbars">
+                <header className="wy-appbars" data-adjust-scrollbar-top>
                     <nav className="wy-appbar">
                         <Button.UI onClick={() => toggleAddModal(false)}><Icon.UI name='close' /></Button.UI>
                         <div className="wy-appbar-text">Add people</div>
@@ -172,11 +177,13 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
                         <div className="wy-appbar-text">Conversation details</div>
                     </nav>
                 </header>
-                <div>
-                    {dataConversation && <div className="wy-avatar-header"><Avatar src={dataConversation?.avatar_url} name={title} size={128} /></div>}
-                    {dataConversation?.type !== ChatRoom &&
-                        <h4 className="wy-avatar-display-name">{dataConversation?.display_name}</h4>
-                    }
+                <div className='wy-scroll-y'>
+                    {dataConversation && <div className="wy-avatar-header">                        
+                        <Avatar src={dataConversation?.avatar_url} name={title} size={128} />
+                        {dataConversation?.type !== ChatRoom &&                        
+                        <h3 className="wy-headline">{dataConversation?.display_name}</h3>                    
+                        }
+                    </div>}
 
                     {dataConversation?.type === ChatRoom && (
                         <>
@@ -184,14 +191,13 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
                                 <input className="wy-input" value={title} onChange={(e) => handleUpdateTitle(e)} />
                             </div>
                             <div className="wy-pane-group">
-                                <table className="wy-search-result-table">
+                                <table className="wy-table wy-search-result-table">
                                     <tbody>
                                         {dataMembers && dataMembers.data && dataMembers.data.map((m: MemberType) => {
                                             return (
-                                                <tr key={m.id} className="wy-search-result-table-checkbox">
-                                                    <td className="wy-search-result-table-icon"><Avatar src={m.avatar_url} name={m.display_name} id={m.id} size={24} presence={m.presence} /></td>
-                                                    <td>{m.display_name}</td>
-                                                    <td></td>
+                                                <tr key={m.id}>
+                                                    <td className="wy-table-cell-icon wy-search-result-table-icon"><Avatar src={m.avatar_url} name={m.display_name} id={m.id} size={24} presence={m.presence} /></td>
+                                                    <td className='wy-table-cell-text'>{m.display_name}</td>
                                                 </tr>
                                             )
                                         })}

@@ -1,8 +1,5 @@
-@use "variables";
-
-$body-bg: variables.$body-bg !default;
-$border-radius: variables.$border-radius !default;
-$border-width: variables.$border-width !default;
+@use "base/vars";
+@use "base/colors";
 
 // images in posts, messages and comments
 .wy-image-grid {
@@ -10,11 +7,11 @@ $border-width: variables.$border-width !default;
   flex-wrap: wrap;
   justify-content: space-evenly;
   position: relative;
-  border-radius: $border-radius;
+  border-radius: vars.$border-radius;
   overflow: hidden;
   //background-color: $body-bg;
-  column-gap: $border-width;
-  row-gap: $border-width;
+  column-gap: 1px;
+  row-gap: 1px;
 
   .wy-image {
     padding: 0;
@@ -49,8 +46,7 @@ $border-width: variables.$border-width !default;
   .wy-more {
     position: absolute;
     line-height: 100%;
-    color: #fff;
-    background: rgba(0,0,0,0.5);
+    color: colors.$white;
     top: 0;
     left: 0;
     bottom: 0;
@@ -59,5 +55,6 @@ $border-width: variables.$border-width !default;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
+    background: rgba(0, 0, 0, vars.$opacity-disabled);
   }
 }

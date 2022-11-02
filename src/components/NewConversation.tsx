@@ -29,7 +29,7 @@ const NewConversation = () => {
             <Button.UI onClick={handleOpen}><Icon.UI name="plus" /></Button.UI>
 
             <Overlay.UI isOpen={modalOpen} className="wy-modal">
-                <header className="wy-appbars">
+                <header className="wy-appbars" data-adjust-scrollbar-top>
                     <nav className="wy-appbar">
                         <Button.UI onClick={handleClose}><Icon.UI name='close' /></Button.UI>
                         <div className="wy-appbar-text">Create conversation</div>

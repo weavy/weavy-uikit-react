@@ -1,0 +1,57 @@
+@use "base/vars";
+@use "base/colors";
+@use "base/text";
+
+// A list of items with rounded corners and spacing to visually group them together
+.wy-list {
+  border-radius: vars.$border-radius-sm;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+
+  .wy-item {
+
+    &:not(.wy-item-hover) {
+      --wy-component-background-color: #{colors.$background};
+      --wy-component-color: #{colors.$on-background};
+      background-color: var(--wy-component-background-color);
+      color: var(--wy-component-color);
+    }
+
+    &:first-child {
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: inherit;
+      border-bottom-right-radius: inherit;
+    }
+  }
+}
+
+// A list of items with rounded corners and borders to visually group them together
+.wy-list-bordered {
+  border: 1px solid #{colors.$outline-variant};  
+  gap:0;
+
+  .wy-item {
+    border-top: 1px solid #{colors.$outline-variant};
+    border-left: none;
+    border-right: none;
+
+    &:first-child {
+      border-top: none;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    & + & {
+      // No top-border on following items
+      border-top-width: 0;
+    }
+  }
+}

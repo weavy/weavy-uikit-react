@@ -1,0 +1,127 @@
+@use "base/vars";
+@use "base/colors";
+@use "base/backdrop";
+@use "base/position";
+
+.wy-post-editor {
+  padding: .75rem;
+
+  &.wy-uploading {
+    .wy-icon-active-stack {
+      > :first-child {
+        opacity: 0;
+      }
+
+      > :last-child {
+        opacity: 1;
+      }
+    }
+  }
+
+  .wy-picker-list:not(:empty) {
+    margin-top: .75rem;
+    border-top: 1px solid #{colors.$outline-variant};
+  }
+}
+
+
+.wy-post-editor-dragging {
+  &::after {
+    content: "Drop files here to upload.";
+    background-color: rgba(255, 255, 255, .5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed colors.$primary;
+    font-weight: vars.$font-weight-bold;
+    z-index: 10000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+
+.wy-post-editor-inputs {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  //border-top: 1px solid #{colors.$outline-variant};
+  //padding: .5rem .25rem;
+  min-height: 3.5rem;
+  flex-wrap: wrap;
+
+  > :not(:last-child) {
+    margin-right: .25rem;
+  }
+
+  > :last-child {
+    margin-left: auto;
+  }
+}
+
+.wy-post-editor-buttons {
+  flex: 1 0 auto;
+}
+
+.wy-post-editor-text {
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.wy-post-editor-mention {
+    background: blue;
+    color: white;
+}
+
+.wy-post-editor-link {
+  background: blue;
+  color: white;
+}
+
+%post-editor-textfield,
+.wy-post-editor-textfield {
+  flex: 1 1 100%;
+  max-height: 11.25rem;
+  min-height: 4rem;
+  background-color: colors.$background;
+  color: colors.$on-background;
+  border-radius: vars.$border-radius;
+  border: vars.$input-border-width solid #{colors.$outline-variant};
+  caret-color: #{colors.$primary};
+
+  &:focus {
+    border-color: #{colors.$primary};
+  }
+}
+
+%post-editor-textcontent,
+.wy-post-editor-textcontent {
+  font-family: vars.$font-family-base;
+  font-size: vars.$font-size-base;
+  padding: vars.$input-padding-y vars.$input-padding-x;
+}
+
+%post-editor-grow,
+.wy-post-editor-grow {
+    display: grid;
+
+    &::after, > textarea {
+        @extend %post-editor-textfield;
+        grid-area: 1 / 1 / 2 / 2;
+    }
+
+    &::after {
+        content: attr(data-replicated-value) " ";
+        white-space: pre-wrap;
+        visibility: hidden;
+    }
+
+    > textarea {
+        resize: none;
+        overflow: hidden;
+    }
+}

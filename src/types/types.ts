@@ -92,9 +92,16 @@ type MemberType = {
     name: string,
     display_name: string,
     avatar_url: string,    
-    delivered_at: string,
-    read_at: string,
-    presence: string
+    delivered_at?: string,
+    read_at?: string,
+    presence: string,
+    marked_id?: number,
+    marked_at?: string
+
+}
+
+type MemberTypingType =  MemberType & {
+    time: number
 }
 
 type MessageType = {
@@ -105,6 +112,7 @@ type MessageType = {
     temp?: boolean,
     created_at: string,
     created_by: MemberType,    
+    created_by_id: number,
     attachments: AttachmentType[],
     attachment_ids: number[],
     meeting: MeetingCardType,
@@ -114,10 +122,11 @@ type MessageType = {
  
 type UserType = {
     id: number,
+    uid: string,
+    name: string,
     username: string, 
     email: string,
-    name: string,
-    title: string,
+    display_name: string,    
     avatar_url: string,
     presence: string
 }
@@ -188,4 +197,46 @@ type BadgeType = {
     private: number,
     rooms: number,
     chat: number
+}
+
+type EntityType = {
+    id: number,
+    type: string
+}
+
+type RealtimeMessage = {
+    action: string,
+    id: number,
+    actor: UserType,
+    message: MessageType
+}
+
+type RealtimeReaction = {
+    action: string,
+    id: number,
+    actor: UserType,
+    entity: EntityType,
+    reaction: string
+}
+
+type RealtimeApp = {
+    action: string,
+    id: number,
+    actor: UserType,
+    app: ConversationType    
+}
+
+type RealtimeMember = {
+    action: string,
+    id: number,
+    actor: UserType,
+    app: ConversationType,
+    member: MemberType    
+}
+
+type RealtimeTyping = {
+    action: string,
+    id: number,
+    actor: MemberTypingType,
+    conversation: ConversationType    
 }

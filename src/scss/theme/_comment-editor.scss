@@ -1,0 +1,129 @@
+@use "base/vars";
+@use "base/colors";
+@use "base/backdrop";
+@use "base/position";
+
+
+.wy-comment-editor {
+  .wy-spinner {
+    display: none;
+  }
+
+  &.wy-uploading {
+    .wy-spinner {
+      display: block;
+    }
+
+    [data-icon=plus] {
+      display: none;
+    }
+  }
+
+  .wy-picker-list:not(:empty) {
+    border-top: 1px solid #{colors.$outline-variant};
+  }
+}
+
+
+.wy-comment-editor-bottom {
+  // we need the editor to appear below dropdowns
+  position: sticky;
+  bottom: 0;
+  z-index: #{vars.$zindex-dropdown - 1};
+  background-color: var(--wy-component-background-color);
+  color: var(--wy-component-color);
+}
+
+.wy-comment-editor-dragging {
+  &::after {
+    content: "Drop files here to upload.";
+    background-color: rgba(255, 255, 255, .5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed colors.$primary;
+    font-weight: vars.$font-weight-bold;
+    z-index: 10000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.wy-comment-editor-inputs {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  //border-top: 1px solid #{colors.$outline-variant};
+  padding: .5rem .25rem;
+  min-height: 3.5rem;
+
+  > :not(:last-child) {
+    margin-right: .25rem;
+  }
+}
+
+.wy-comment-editor-buttons {
+  flex: 1 0 auto;
+}
+
+.wy-comment-editor-text {
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.wy-comment-editor-mention {
+    background: blue;
+    color: white;
+}
+
+.wy-comment-editor-link {
+  background: blue;
+  color: white;
+}
+
+%comment-editor-textfield,
+.wy-comment-editor-textfield {
+  flex: 1 1 100%;
+  max-height: 11.25rem;
+  background-color: colors.$background;
+  color: colors.$on-background;
+  border-radius: 1.25rem;
+  border: vars.$input-border-width solid #{colors.$outline-variant};
+  
+  &:focus {
+    border-color: #{colors.$primary};
+  }
+  
+}
+
+%comment-editor-textcontent,
+.wy-comment-editor-textcontent {
+  font-family: vars.$font-family-base;
+  font-size: vars.$font-size-base;
+  padding: vars.$input-padding-y vars.$input-padding-x;
+}
+
+%comment-editor-grow,
+.wy-comment-editor-grow {
+    display: grid;
+
+    &::after, > textarea {
+        @extend %comment-editor-textfield;
+        grid-area: 1 / 1 / 2 / 2;
+    }
+
+    &::after {
+        content: attr(data-replicated-value) " ";
+        white-space: pre-wrap;
+        visibility: hidden;
+    }
+
+    > textarea {
+        resize: none;
+        overflow: hidden;
+    }
+}

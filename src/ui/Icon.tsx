@@ -103,7 +103,7 @@ const Icon = ({ name, color = "", size, ...props }: Props) => {
     let overlayPath = getIconOverlay(name);
 
     return (
-        <span className={'wy-icon ' + color} style={{width: size && (size * 1.5 + "rem"), height: size && (size * 1.5 + "rem")}} { ...props }>
+        <span className={'wy-icon' + (color ? ' wy-icon-' + color : '')} style={{width: size && (size * 1.5 + "rem"), height: size && (size * 1.5 + "rem")}} { ...props }>
             {iconPath ? <MdiIcon.Icon color={color} path={iconPath} size={size} /> : name }
             {overlayPath && <MdiIcon.Icon color={color} path={overlayPath} className="wy-icon-overlay" size={(size || 1) / 2} /> }
         </span>
