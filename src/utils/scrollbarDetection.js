@@ -64,7 +64,7 @@ export function checkScrollbarAdjust(entries) {
   for (var entry in entries) {
     let target = entries[entry].target;
     let targetStyle = getComputedStyle(target);
-    console.log("checking scrollbar adjust", target)
+    //console.log("checking scrollbar adjust", target)
     if (target.dataset.adjustScrollbarTop !== undefined) {
       scrollbarClassnameTarget.style.setProperty('--wy-scrollbar-adjust-top', targetStyle.height);
     }
@@ -78,11 +78,11 @@ export function checkScrollbarAdjust(entries) {
  * Creates a scrollbar adjustment observer.
  */
 export function detectScrollbarAdjustments() {
-  console.log("detect scrollbar adjust");
+  //console.log("detect scrollbar adjust");
   var adjustRO = new ResizeObserver(checkScrollbarAdjust);
   
   const registerAdjustmentElements = () => {
-    console.log("register scrollbar adjust");
+    //console.log("register scrollbar adjust");
 
     scrollbarClassnameTarget.style.removeProperty('--wy-scrollbar-adjust-top');
     scrollbarClassnameTarget.style.removeProperty('--wy-scrollbar-adjust-bottom');
@@ -102,6 +102,9 @@ export function detectScrollbarAdjustments() {
   requestAnimationFrame(registerAdjustmentElements);
   setTimeout(registerAdjustmentElements, 5000);
 
-  var adjustMO = new MutationObserver(throttle(registerAdjustmentElements, 1));
-  adjustMO.observe(scrollbarClassnameTarget);
+  var adjustMO = new MutationObserver(throttle(registerAdjustmentElements, 100));
+  adjustMO.observe(scrollbarClassnameTarget, {
+    childList: true,
+    subtree: true
+  });
 }

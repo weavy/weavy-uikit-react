@@ -20,8 +20,6 @@
     flex: auto;
     background-color: inherit;
     background-clip: content-box;
-    min-width: max(25%, 4rem);
-    min-height: 4rem;
 
     // 1 of not 2
     &:first-of-type:not(:nth-last-of-type(2)) {

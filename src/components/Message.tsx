@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import { MessageProps } from "../types/Message"
 import Attachment from './Attachment';
 import { ReactionsMenu, ReactionsList } from './Reactions';
-import joypixels from 'emoji-toolkit';
 import { Image, ImageGrid } from "./Image"
 import SeenBy from './SeenBy';
 import Avatar from "./Avatar";
@@ -53,7 +52,7 @@ const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_a
                                     )}
                                 </ImageGrid>}
 
-                                {html && <div className="wy-content" dangerouslySetInnerHTML={{ __html: joypixels.shortnameToUnicode(html || "") }}></div>}
+                                {html && <div className="wy-content" dangerouslySetInnerHTML={{ __html: html || "" }}></div>}
 
                                 {meeting &&
                                     <MeetingCard meeting={meeting} />

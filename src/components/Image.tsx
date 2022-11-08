@@ -84,8 +84,9 @@ export const ImageGrid = ({ children, limit = 3}: ImageGridProps) => {
     let lastChild = firstImages[firstImages.length - 1];
 
     if (React.isValidElement(lastChild)) {
+        let lastChildProps: { more: number } = { more };
         // Set more property on last image    
-        firstImages[firstImages.length - 1] = React.cloneElement(lastChild, { more });
+        firstImages[firstImages.length - 1] = React.cloneElement(lastChild, lastChildProps);
     }
 
     return (        

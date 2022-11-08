@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect } from 'react';
-import joypixels from 'emoji-toolkit';
 import dayjs from 'dayjs';
 import { MessengerContext } from '../contexts/MessengerContext';
 import { WeavyContext } from '../contexts/WeavyContext';
@@ -24,6 +23,26 @@ const ConversationListItem = ({ item, refetchConversations }: ConversationListIt
     const pinMutation = useMutatePinned();
     const removeMembers = useMutateRemoveMembers();
     const date = dayjs.utc(item.last_message?.created_at).tz(dayjs.tz.guess());
+
+    
+    // extract and keep all emojis
+    const emojiHtml = item.last_message?.html || '';
+    const emojiRegexp = /<img[^>]+wy-emoji.+>/g;
+    const emojiShortcodeRegexp = /title=\"(:[^:\s]+:)\"/;
+    const messageEmojis: { [index: string]: string } = {};
+
+    emojiHtml.match(emojiRegexp)?.forEach((imgEmoji) => {
+        let shortCode = imgEmoji.match(emojiShortcodeRegexp)![1];
+
+        if (shortCode) {
+            messageEmojis[shortCode] = imgEmoji;
+        }
+    });
+
+    // replace text shortcodes with extracted emojis
+    const shortCodeRegexp = /:[^:\s]*(?:::[^:\s]*)*:/gi;
+    const itemSnippet = (item.last_message?.text || '').replace(shortCodeRegexp, (shortCode) => messageEmojis[shortCode]);
+    
 
     const ChatRoom = "edb400ac-839b-45a7-b2a8-6a01820d1c44";
 
@@ -110,10 +129,10 @@ const ConversationListItem = ({ item, refetchConversations }: ConversationListIt
                     <div className="wy-item-text">
                         <Typing id={item.id} context="listitem">
 
-                            {item.last_message?.html &&
-                                <span className="wy-typing-hide" dangerouslySetInnerHTML={{ __html: joypixels.shortnameToUnicode(item.last_message?.text) }}></span>
+                            {itemSnippet &&
+                                <span className="wy-typing-hide" dangerouslySetInnerHTML={{ __html: itemSnippet }}></span>
                             }
-                            {!item.last_message?.html &&
+                            {!itemSnippet &&
                                 <span className="wy-typing-hide">
                                     {item.last_message?.attachment_ids?.length > 0 &&
                                         <Icon.UI name="attachment" size={1} />

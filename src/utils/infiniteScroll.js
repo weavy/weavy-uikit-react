@@ -6,7 +6,7 @@
  * @returns IntersectionObserver
  */
  export function createScroller(observeElement, whenNext) {
-    console.log("creating regular scroller");
+    //console.log("creating regular scroller");
     var parent = getScrollParent(observeElement);
 
     // Disable scroll anchoring https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-anchor/Guide_to_scroll_anchoring

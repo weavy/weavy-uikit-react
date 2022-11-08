@@ -362,7 +362,7 @@ function WeavyPostal(options) {
 
     function setLeader() {
         if (_whenLeader.state() === "pending") {
-            console.debug("Is leader");
+            //console.debug("Is leader");
             _isLeader = true;
             _whenLeader.resolve(_isLeader);
         }
