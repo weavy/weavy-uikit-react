@@ -249,7 +249,7 @@ const PdfViewer = ({ src, pdfCMapsUrl, pdfWorkerUrl }: Props) => {
     return (
         <div className="wy-content-pdf" data-controller="pdf" data-pdf-url-value="">
             <div className="wy-toolbars-bottom">
-                <nav className="wy-toolbar">
+                <nav className="wy-toolbar wy-toolbar-center">
                     <div className="wy-toolbar-buttons">
                         <input type="text" className="wy-input" ref={pageNumberRef} onChange={updatePage} onClick={select} data-pdf-target="pageNumber"/>
                         <span>/</span>

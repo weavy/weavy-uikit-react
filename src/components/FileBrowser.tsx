@@ -27,7 +27,26 @@ const FileBrowser = ({ onFileAdded }: Props) => {
     }, []);
 
     useEffect(() => {
-        const origin = window.top?.document.location.origin;
+        var origin = "";
+
+        // Get top origin
+        try {
+            if (window.location.ancestorOrigins && 0 < window.location.ancestorOrigins.length) {
+                // Not available in FF, but Google APIs use this
+                origin = window.location.ancestorOrigins[window.location.ancestorOrigins.length - 1];
+            } else if (window.top) {
+                // This may fail due to cors
+                origin = window.top.document.location.origin;
+            } 
+        } catch(e) { /* No worries */}
+        
+        if (!origin) {
+            try {
+                origin = window.self.document.location.origin;
+            } catch(e) {
+                console.error("Filebrowser: Could not read current origin.");
+            }
+        }
 
         const filebrowserSrc = fileBrowserUrl + "?origin=" + origin + "&v=X&t=" + Date.now().toString() + "&weavyId=wy-filebrowser";
 
