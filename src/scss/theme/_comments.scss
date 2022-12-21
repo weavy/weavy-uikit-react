@@ -15,7 +15,6 @@
   @include text.truncate;
 }
 
-
 .wy-comment {
   --wy-component-background-color: #{colors.$surface-3};
   --wy-component-color: #{colors.$on-surface};
@@ -45,15 +44,18 @@
   }
 }
 
-/*.wy-comment-header {
-  //padding-right: .25rem;
-}*/
-
 .wy-comment-body {
-
   flex: 1 0 auto;
   z-index: 1;
-    
+
+  .wy-image-grid, .wy-embed, .wy-content, .wy-list, .wy-poll {
+    // spacing between content
+    margin-bottom: 1rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 .wy-comment-content {
@@ -61,6 +63,5 @@
   display: flex;
   flex-direction: column;
 }
-
 
 

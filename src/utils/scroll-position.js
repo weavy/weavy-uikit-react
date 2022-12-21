@@ -1,3 +1,19 @@
+
+/**
+ * Gets the next positioned child relative to the element.
+ * 
+ * @param {Element} el - Reference element in the scrollable area
+ * @returns Element
+ */
+export function getNextPositionedChild(el) {
+    while (el) {
+        el = el.nextElementSibling;
+        if (/absolute|sticky|fixed/.test(getComputedStyle(el).position) === false) {
+            return el;
+        }
+    }
+}
+  
 /**
  * Finds the nearest scrollable area. Defaults to document.scrollingElement.
  * 
@@ -41,9 +57,9 @@ export function isParentAtBottom(element, bottomThreshold) {
         bottomThreshold ??= 32; // Minimum 1 to catch float errors
 
         let area = getScrollParent(element);
-        //console.log("isParentAtBottom", area.scrollTop, area.clientHeight, area.scrollHeight, Math.abs((area.scrollTop + area.clientHeight) - area.scrollHeight) <= bottomThreshold)
+        
         // We need to account for scrollTop being a float
-        return Math.abs((area.scrollTop + area.clientHeight) - area.scrollHeight) <= bottomThreshold;
+        return Math.abs((area.scrollTop + area.clientHeight) - area.scrollHeight) < bottomThreshold;
     }
     return false;
 }
@@ -54,22 +70,47 @@ export function isParentAtBottom(element, bottomThreshold) {
  * @param {Element?} element - Element in the scroll area
  * @param {boolean} [smooth] - Use smooth scrolling instead of instant scrolling
  */
-export function scrollParentToBottom(element, smooth) {
+export async function scrollParentToBottom(element, smooth) {
     if (element) {
         let area = getScrollParent(element);
-        //console.log("scrolling to bottom", area.scrollHeight);
+        //console.log("scrolling to bottom", {scrollTop: area.scrollTop, clientHeight: area.clientHeight, scrollHeight: area.scrollHeight}, (area.scrollTop + area.clientHeight) - area.scrollHeight);
 
         // Don't bother if the scroll already is correct
-        if (area.scrollTop + area.clientHeight !== area.scrollHeight) {
+        // We need to account for scrollTop being a float by using 1px diff
+        if (Math.abs((area.scrollTop + area.clientHeight) - area.scrollHeight) > 1) {
             if (smooth) {
                 area.scrollTo({
-                    top: area.scrollHeight,
-                    left: 0,
-                    behavior: 'smooth'
+                top: area.scrollHeight,
+                left: 0,
+                behavior: 'smooth'
                 });
             } else {
                 area.scrollTop = area.scrollHeight;
             }
         }
+
+        // Check when the scroll is done
+        await new Promise((resolve) => {
+            let lastScrollTop = area.scrollTop;
+            let scrollCheck = () => {
+                if (smooth && area.scrollTop === lastScrollTop) {
+                    //console.log("smooth scroll interrupted, performing unsmooth scroll instead");
+                    area.scrollTop = area.scrollHeight;
+                }
+
+                lastScrollTop = area.scrollTop;
+
+                // We need to account for scrollTop being a float by using 1px diff
+                if (Math.abs((area.scrollTop + area.clientHeight) - area.scrollHeight) > 1) {
+                    requestAnimationFrame(scrollCheck);
+                } else {
+                    resolve();
+                }
+            }
+
+            requestAnimationFrame(scrollCheck);
+        })
+        //console.log("scrolltoBottom done")
     }
 }
+  

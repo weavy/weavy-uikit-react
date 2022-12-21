@@ -4,7 +4,7 @@ import { WeavyContext } from "../contexts/WeavyContext";
 
 /// GET users by search query
 export default function useSearchUsers(text: string, options: any) {
-    const PAGE_SIZE = 10;
+    const PAGE_SIZE = 25;
     const { client } = useContext(WeavyContext);
 
     if (!client) {
@@ -12,7 +12,7 @@ export default function useSearchUsers(text: string, options: any) {
     }
 
     const getUsers = async () => {
-        const response = await client.get("/api/users?q=" + text + "&skip=0&top=" + PAGE_SIZE);        
+        const response = await client.get(`/api/users/autocomplete?q=${text}&skip=0&top=${PAGE_SIZE}`);        
         const data = await response.json();
         return data;
     };

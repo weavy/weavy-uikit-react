@@ -67,6 +67,8 @@
   position: absolute;
   top: min(.25rem, calc(100% - 2.5rem)); // Account for small heights
   right: .25rem;
+  align-items: center;
+  display: flex;
   
   > .wy-button-icon, > .wy-dropdown > .wy-button-icon {
     background-clip: content-box;

@@ -97,10 +97,9 @@
   }
 }
 
-.wy-is-invalid {
-  &, &:focus {
-    border-color: colors.$error;
-  }
+.wy-input-label {
+  display: block;
+  margin-bottom: .5rem;
 }
 
 .wy-description {
@@ -108,9 +107,16 @@
   font-size: vars.$font-size-sm;
 }
 
-.wy-input-label {
-  display: block;
-  margin-bottom: .5rem;
+.wy-is-invalid {
+  &, &:focus {
+    border-color: colors.$error;
+  }
+}
+
+.wy-invalid-feedback {
+  margin-top: 0.25rem;
+  font-size: vars.$font-size-sm;
+  color: #{colors.$error};
 }
 
 .wy-input-group {

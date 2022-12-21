@@ -12,7 +12,7 @@
   text-decoration: none;
   min-height: 3rem;
   // Adjust position of icon/avatar (makes padding/margin look ok for all combinations of item content)
-  > .wy-avatar, > .wy-icon, > .wy-icon-stack {
+  > .wy-avatar, > .wy-icon, > .wy-icon[data-icon=spinner], > .wy-icon-stack {
     margin-left: -.25rem;
   }
 }
@@ -33,7 +33,14 @@
     margin-right: .125rem;
   }
 
+  // admin shield for users/members
+  > .wy-icon[data-icon=shield-star] {
+      vertical-align: -.125rem;
+  }
+
 }
+
+
 
 .wy-item-title {
   color: colors.$on-background;
@@ -88,6 +95,12 @@
       margin-right: 2rem;
   }
 }
+
+.wy-action-label {
+  margin-right: .5rem;
+  font-style: italic;
+}
+
 
 .wy-item-row {
   display: flex;
@@ -153,6 +166,15 @@
     background-color: var(--wy-component-background-color);
     color: var(--wy-component-color);
     border-color: var(--wy-component-background-color);
+  }
+}
+
+.wy-item-trashed {
+  text-decoration: line-through;
+  opacity: vars.$opacity-disabled;
+
+  &.wy-item-hover:hover {
+    opacity: 1;
   }
 }
 

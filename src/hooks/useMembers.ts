@@ -10,12 +10,12 @@ export default function useMembers(id: number | null, options: any) {
         throw new Error('useMembers must be used within an WeavyProvider');
     }
 
-    const getConversationMembers = async () => {
-        const response = await client.get("/api/apps/" + id + "/members");
+    const getMembers = async () => {
+        const response = await client.get(`/api/apps/${id}/members?top=1000`);
         const data = await response.json();                
         return data;
     };
 
 
-    return useQuery<MembersResult>(["members", id], getConversationMembers, options);
+    return useQuery<MembersResult>(["members", id], getMembers, options);
 }

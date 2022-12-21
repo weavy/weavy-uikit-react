@@ -252,8 +252,8 @@ const PdfViewer = ({ src, pdfCMapsUrl, pdfWorkerUrl }: Props) => {
                 <nav className="wy-toolbar wy-toolbar-center">
                     <div className="wy-toolbar-buttons">
                         <input type="text" className="wy-input" ref={pageNumberRef} onChange={updatePage} onClick={select} data-pdf-target="pageNumber"/>
-                        <span>/</span>
-                        <span ref={totalPagesRef}>1</span>
+                        <span className="wy-toolbar-text">/</span>
+                        <span className="wy-toolbar-text" ref={totalPagesRef}>1</span>
                     </div>
                     <div className="wy-toolbar-buttons">
                         <button className="wy-button wy-button-icon btn-zoom-out" onClick={zoomOut} title="Zoom out"><Icon.UI name="minus" /></button>

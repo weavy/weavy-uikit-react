@@ -1,30 +1,36 @@
-import React, { useContext, useEffect, useState, useRef, useCallback } from "react";
-import { WeavyContext } from "../contexts/WeavyContext";
-import Button from '../ui/Button';
-import Spinner from '../ui/Spinner';
-import Icon from '../ui/Icon';
-import useMutateExternalBlobs from '../hooks/useMutateExternalBlobs';
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import useMutateExternalBlobs from "../hooks/useMutateExternalBlobs";
 import Overlay from '../ui/Overlay';
+import Spinner from '../ui/Spinner';
 import WeavyPostal from "../utils/postal-parent";
 
+export const CloudFilesContext = createContext<CloudFilesContextProps>({
+    open: Function    
+});
+
 type Props = {
-    onFileAdded: Function
+    client: any,
+    options: WeavyContextOptions, // pass client here to avoid circular references from WeavyContext
+    children: React.ReactNode
 }
 
-const FileBrowser = ({ onFileAdded }: Props) => {
+let addFunc = ([]:any) => {};
 
-    const { options } = useContext(WeavyContext);
+const CloudFilesProvider = ({ children, options, client }: Props) => {    
     const [modalOpen, setModalOpen] = useState(false);
     const [visible, setVisible] = useState(false);
     const [frameSrc, setFrameSrc] = useState("");
-    const addExternalBlobs = useMutateExternalBlobs();
+    
     const fileBrowserUrl = options?.filebrowserUrl || "";
+    const addExternalBlobs = useMutateExternalBlobs(client);
 
     const frameRef = useCallback((node: HTMLIFrameElement | null) => {
         if (node !== null && node.contentWindow != null) {
             WeavyPostal.registerContentWindow(node.contentWindow.self, "weavy-filebrowser", "wy-filebrowser", new URL(fileBrowserUrl).origin);
         }
     }, []);
+
+    
 
     useEffect(() => {
         var origin = "";
@@ -59,16 +65,25 @@ const FileBrowser = ({ onFileAdded }: Props) => {
             WeavyPostal.off("add-external-blobs", handleFiles);
             WeavyPostal.off("request:file-browser-close", handleClose);
         }
-    }, [onFileAdded]);
-
-    const toggleModal = (open: boolean) => {
-        setModalOpen(open);
-    }
+    }, []);
 
     const handleFiles = async (e: Event, message: any) => {
-        var result = await addExternalBlobs.mutateAsync({ blobs: message.blobs });
-        onFileAdded(result);
+        let result:any[] = [];
+        for(let i = 0; i < message.blobs.length; i++){
+            let uploadResult = await addExternalBlobs.mutateAsync({blob: message.blobs[i]});
+            if(uploadResult.errors){
+                console.error(uploadResult.errors)
+            } else{
+                result.push(uploadResult);
+            }                        
+        }                
+        addFunc(result);                
         closeFilebrowser();
+    }
+
+    const handleOpen = (callback: ([]:any) => {}) => {        
+        addFunc = callback        
+        setModalOpen(true);
     }
 
     const handleClose = () => {
@@ -86,22 +101,23 @@ const FileBrowser = ({ onFileAdded }: Props) => {
 
     return (
         <>
-            {options?.enableCloudFiles &&
-                <>
-                    <Button.UI onClick={() => toggleModal(true)} title="Add file from cloud"><Icon.UI name="cloud" /></Button.UI>
+            <CloudFilesContext.Provider value={{open: handleOpen}}>
+                {children}
+            </CloudFilesContext.Provider>
 
-                    <Overlay.UI isOpen={modalOpen} className="wy-modal wy-panel wy-loaded">
-                        {!visible &&
-                            <Spinner.UI overlay={true} />
-                        }
+            <Overlay.UI isOpen={modalOpen} className="wy-modal wy-panel wy-loaded">
+                {!visible &&
+                    <Spinner.UI overlay={true} />
+                }
 
-                        <iframe ref={frameRef} onLoad={handleFrameLoad} src={frameSrc} className="wy-panel-frame" id="weavy-filebrowser" name="weavy-filebrowser"></iframe>
+                <iframe ref={frameRef} onLoad={handleFrameLoad} src={frameSrc} className="wy-panel-frame" id="weavy-filebrowser" name="weavy-filebrowser"></iframe>
 
-                    </Overlay.UI>
-                </>
-            }
+            </Overlay.UI>
         </>
-    )
-}
 
-export default FileBrowser;
+
+    )
+};
+
+export default CloudFilesProvider;
+

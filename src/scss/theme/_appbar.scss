@@ -81,6 +81,10 @@
     }
   }
 }
+.wy-appbar-text-trashed {
+  text-decoration: line-through;
+}
+
 
 // floating toolbars (mainly for pdf preview, but can be also be used for other things)
 .wy-toolbars-bottom {
@@ -115,10 +119,6 @@
   background-color: var(--wy-component-background-color);
   color: var(--wy-component-color);
   box-shadow: #{colors.$outline-variant} 0px -1px 0px 0px inset;
-
-  span {
-    margin-left: .25rem;
-  }
 }
 
 .wy-toolbar-center {
@@ -129,6 +129,10 @@
     text-align: center;
     //border-color: transparent;
   }
+}
+
+.wy-toolbar-text {
+  margin-left: .25rem;
 }
 
 .wy-footerbars {

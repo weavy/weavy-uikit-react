@@ -3,7 +3,7 @@ import Button from '../ui/Button';
 import Icon from '../ui/Icon';
 import dayjs from 'dayjs';
 type Props = {
-    meeting: MeetingCardType
+    meeting: MeetingType
 
 }
 const MeetingCard = ({ meeting }: Props) => {

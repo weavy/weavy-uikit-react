@@ -8,6 +8,8 @@ import ConversationBadge from './components/ConversationBadge';
 import ConversationList from './components/ConversationList';
 import Conversation from './components/Conversation';
 import Chat from './components/Chat';
+import Posts from './components/Posts'
+import Files from './components/Files'
 import Button from './ui/Button';
 import Dropdown from './ui/Dropdown';
 import Icon from './ui/Icon';
@@ -23,8 +25,10 @@ export {
     Messenger,
     ConversationList,
     Conversation,
-    Chat,
+    Chat,    
     ConversationBadge,
+    Posts,
+    Files,
     Button,
     Dropdown,
     Icon,

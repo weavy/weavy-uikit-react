@@ -1,48 +1,65 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import useMutateReaction from "../hooks/useMutateReaction";
 import Icon from "../ui/Icon";
 import Button from "../ui/Button";
-import { MessengerContext } from "../contexts/MessengerContext";
 import classNames from "classnames";
+import useEvents from "../hooks/useEvents";
 
-import useReactions from "../hooks/useReactions";
 import useMutateDeleteReaction from "../hooks/useMutateDeleteReaction";
 import { WeavyContext } from "../contexts/WeavyContext";
+import Sheet from "../ui/Sheet";
+import Avatar from "./Avatar";
+import Spinner from "../ui/Spinner";
+import useReactionList from "../hooks/useReactionList";
+import { UserContext } from "../contexts/UserContext";
+import useMutateReplaceReaction from "../hooks/useMutateReplaceReaction";
+
+import { usePopper } from 'react-popper';
 
 type ReactionMenuProps = {
     id: number,
+    parentId: number | null,
+    type: "messages" | "posts" | "comments",
+    placement?: "top" | "top-start" | "top-end",
     reactions: ReactableType[]
 }
 
 type ReactionsProps = {
     id: number,
+    type: "messages" | "posts" | "comments",
     parentId: number | null,
     reactions: ReactableType[]
 }
 
-export const ReactionsMenu = ({ id, reactions }: ReactionMenuProps) => {
-    const { reactionsList } = useReactions(id, reactions);
-    const reactionMutation = useMutateReaction();
-    const reactionDeleteMutation = useMutateDeleteReaction();
-    const [visible, setVisible] = useState<boolean>(false);
+export const ReactionsMenu = ({ id, parentId, type, placement = "top", reactions }: ReactionMenuProps) => {
+    const { user } = useContext(UserContext);
     const { options } = useContext(WeavyContext);
+    
+    const [visible, setVisible] = useState<boolean>(false);
     const [reactedEmoji, setReactedEmoji] = useState<string>('');
-
     const emojis = options?.reactions;
+    const react = useMutateReaction();
+    const unreact = useMutateDeleteReaction();
+    const replaceReact = useMutateReplaceReaction();
+
+    const [referenceElement, setReferenceElement] = useState<HTMLButtonElement|null>(null);
+    const [popperElement, setPopperElement] = useState<HTMLDivElement|null>(null);
+    const { styles, attributes, update } = usePopper(referenceElement, popperElement, { placement: placement });
 
     useEffect(() => {
-        var filtered = reactionsList.find((e) => e.has_reacted);
-        setReactedEmoji(filtered ? filtered.content : '')
-    }, [reactionsList]);
+        update?.();
 
-    useEffect(() => {
         if (visible) {
             document.addEventListener("click", () => { setVisible(false) });
         } else {
             document.removeEventListener("click", () => { setVisible(false) });
         }
-
     }, [visible]);
+
+    useEffect(() => {
+        var filtered = reactions?.find((e) => e.created_by_id === user.id);
+        setReactedEmoji(filtered ? filtered.content : '')
+    }, [reactions]);
 
     const toggleReactionMenu = (e: any) => {
         e.stopPropagation();
@@ -50,27 +67,29 @@ export const ReactionsMenu = ({ id, reactions }: ReactionMenuProps) => {
     }
 
     const handleReaction = async (e: any) => {
-        // check if the reaction already exists for the user        
-        const existing = reactionsList.find((r) => r.has_reacted)
         const emoji = e.target.dataset.emoji;
+        const existing = reactions?.find((r) => r.created_by_id === user.id)
 
-        if (existing) {
-            // delete existing reaction
-            await reactionDeleteMutation.mutateAsync({ id: id, reaction: emoji });
+
+        if (existing && existing.content !== emoji) {
+            // replace
+            await replaceReact.mutateAsync({ parentId: parentId, id: id, type: type, reaction: emoji })
+        } else if (existing) {
+            // remove
+            await unreact.mutateAsync({ parentId: parentId, id: id, type: type, reaction: emoji });
+        } else {
+            // add
+            await react.mutateAsync({ parentId: parentId, id: id, type: type, reaction: emoji });
         }
-
-        // add if not same reaction as before
-        if (!existing || existing.content !== emoji) {
-            await reactionMutation.mutateAsync({ id: id, reaction: emoji });
-        }
-
+        
+        
         setVisible(false);
     }
 
     return (
         <div className={classNames({ "wy-active": visible })} style={{ position: 'relative' }}>
-            <Button.UI className="wy-reaction-menu-button" onClick={toggleReactionMenu}><Icon.UI name="emoticon-plus" size={1.25/1.5} /></Button.UI>
-            <div className="wy-reaction-menu wy-dropdown-menu" style={{ display: visible ? 'block' : 'none', position: 'absolute', top: '-3.25rem' }}>
+            <Button.UI ref={setReferenceElement} className="wy-reaction-menu-button" onClick={toggleReactionMenu}><Icon.UI name="emoticon-plus" size={1.25 / 1.5} /></Button.UI>
+            <div ref={setPopperElement} className="wy-reaction-menu wy-dropdown-menu" hidden={!visible} style={styles.popper} {...attributes.popper}>
                 <div className="wy-reaction-picker">
                     {emojis?.map((r: string, i: number) => {
                         return <Button.UI key={i} onClick={handleReaction} className={classNames("wy-button-icon wy-reaction-button", { "wy-active": reactedEmoji === r })} data-emoji={r}>{r}</Button.UI> //reactedEmoji
@@ -79,23 +98,108 @@ export const ReactionsMenu = ({ id, reactions }: ReactionMenuProps) => {
             </div>
         </div>
     )
-
 }
 
-export const ReactionsList = ({ id, reactions }: ReactionsProps) => {
-    const { reactionsList } = useReactions(id, reactions);  
+export const ReactionsList = ({ id, type, reactions }: ReactionsProps) => {
+    const { user } = useContext(UserContext);
+    const [reactionsList, setReactionsList] = useState<ReactableType[]>();
+    const [list, setList] = useState<ReactionGroup[]>([]);
+    const [count, setCount] = useState<number>(0)
+    const { data, isLoading, refetch } = useReactionList(id, type, { enabled: false });
+    const { on, off } = useEvents();
+
+    const [isOpen, setIsOpen] = useState(false);
     
-    let reactionCount = reactionsList.reduce(
-        (previousValue, currentItem) => previousValue + currentItem.count,
-        0,
-    );
-    
+    useEffect(() => {
+        on('reaction_added_' + id, handleRealtimeReactionInserted);
+        on('reaction_deleted_' + id, handleRealtimeReactionDeleted);
+
+        return () => {
+            off('reaction_added_' + id, handleRealtimeReactionInserted);
+            off('reaction_deleted_' + id, handleRealtimeReactionDeleted);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        setReactionsList(reactions);
+    }, [reactions])
+
+    useEffect(() => {
+
+        if (reactionsList) {
+            let group = [...new Map<string, ReactableType>(reactionsList?.map((item: ReactableType) => [item.content, item])).values()];
+
+            let list = group.map((item: ReactableType): ReactionGroup => {
+                return {
+                    content: item.content,
+                    count: reactionsList.filter((r) => r.content === item.content).length,
+                    has_reacted: reactionsList.filter((r) => r.content === item.content && r.created_by_id === user.id).length > 0
+                }
+            });
+
+            let reactionCount = list.reduce(
+                (previousValue, currentItem) => previousValue + currentItem.count,
+                0,
+            );
+            setList(list);
+            setCount(reactionCount);
+
+            if(isOpen){            
+                setTimeout(() => refetch(), 200) ;
+            }
+        }
+
+    }, [reactionsList, id, type]);
+
+    const handleRealtimeReactionInserted = useCallback((reaction: RealtimeReaction) => {
+        if (reaction.entity.id === id && reaction.actor.id !== user.id) {
+            setReactionsList((oldList) => {
+                return [...oldList || [], { content: reaction.reaction, created_by_id: reaction.actor.id }];
+            });
+        }
+    }, [id, reactionsList]);
+
+    const handleRealtimeReactionDeleted = useCallback((reaction: RealtimeReaction) => {
+        if (reaction.entity.id === id && reaction.actor.id !== user.id) {
+            setReactionsList(oldList => oldList?.filter(item => item.created_by_id !== reaction.actor.id));
+        }
+    }, [id, reactionsList]);
+
+
+    const handleOpen = () => {
+        refetch();
+        setIsOpen(true);
+    }
+
+
     return (
         <>
-            {!!reactionsList && reactionsList.map((r: ReactionGroup, i: number) => {
-                return <span key={i} className="wy-reaction" title={r.count.toString()}>{r.content}</span> //r.has_reacted
-            })}
-            {reactionCount > 1 && <span className="wy-reaction-count">{reactionCount}</span>}
+            {count > 0 && <>
+                <Button.UI className="wy-reactions wy-button-icon" onClick={handleOpen}>
+                    {!!list && list.map((r: ReactionGroup, i: number) => {
+                        return <span key={i} className="wy-reaction" title={r.count.toString()}>{r.content}</span>
+                    })}
+                    {count > 1 && <span className="wy-reaction-count">{count}</span>}
+                </Button.UI>
+
+                {<Sheet.UI title="Reactions" isOpen={isOpen} onClose={() => {setIsOpen(false);}}>
+                    {isOpen && <>
+                        {isLoading &&
+                            <Spinner.UI overlay={true}/>
+                        }
+                        {!isLoading && data && data.data?.map((reaction: ReactionType, index: number) => {
+                            return (
+                                <div className="wy-item" key={'r' + index}>
+                                    <Avatar size={32} src={reaction.created_by.avatar_url} name={reaction.created_by.display_name} />
+                                    <div className="wy-item-body">{reaction.created_by.display_name}</div>
+                                    <div>{reaction.content}</div>
+                                </div>
+                            )
+                        })}
+                    </>}
+                </Sheet.UI>}
+            </>}
+
         </>
     )
 }

@@ -6,6 +6,7 @@
 .wy-filename {
   font-size: vars.$font-size-sm;
   @include text.truncate;
+  text-align: center;
 }
 
 .wy-files-dragging {
@@ -24,87 +25,7 @@
     bottom: 0;
     right: 0;
   }
-}
-
-
-
-.wy-upload-progress-item {
-  flex-direction: column;
-  padding: 0.75rem .25rem;
-
-  .wy-upload-progress-item-content {
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    line-height: 1.25rem;
-  }
-
-  .wy-upload-progress-success {
-    display: flex;
-    align-items: center;
-  }
-
-  .wy-upload-progress {
-    display: flex;
-    width: 100%;
-
-    progress {
-      flex: 1;
-      height: 0.5rem;
-      accent-color: colors.$primary;
-    }
-  }
-}
-
-.wy-upload-error {
-  align-items: flex-start;  
-  flex-direction: column;
-  white-space: normal;
-
-  .wy-upload-error-title {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    line-height: 1.25rem;
-  }
-
-  .wy-upload-error-text {
-    color: colors.$error;
-  }
-
-  .wy-upload-error-actions {
-    white-space: nowrap;
-  }
-}
-
-.wy-file-upload-errors {
-  display: flex;
-  flex-direction: column;
-
-  .wy-upload-error-row {
-    display: flex;
-    margin-bottom: 0.5rem;
-    align-items: center;
-    column-gap: 1rem;
-
-    .wy-upload-error-row-title {
-      flex: 1;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    .wy-upload-error-row-conflict {
-      background-color: colors.$error-container;
-      color: colors.$on-error-container;
-    }
-
-    .wy-upload-error-row-error {
-      color: colors.$error;
-    }
-  }
-}
+} 
 
 .wy-table-files {
   thead {

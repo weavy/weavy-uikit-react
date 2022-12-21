@@ -85,7 +85,7 @@ function mediaLoaded(event: any) {
     var src = event.target;
     if (src.tagName === 'VIDEO' || src.tagName === 'AUDIO') {
         if (src.classList.contains("wy-loading")) {
-            console.log("loaded")
+            //console.log("loaded")
             src.classList.add("wy-loaded");
         }
     }
@@ -158,17 +158,15 @@ export const PreviewMedia = ({ format, src, name, mediaType }: MediaProps) => {
         <>
             <video ref={mediaRef} className="wy-content-video" controls crossOrigin="use-credentials" autoPlay>
                 <source src={src} type={mediaType} />
-                <PreviewIcon src={src} name={name} icon="file-video" download />
+                <PreviewIcon src={src} icon="file-video" />
             </video>
             <Spinner.UI />
         </>
-    :
+        :
         <>
-            <PreviewIcon src={src} name={name} icon="file-music" download>
-                <audio ref={mediaRef} className="wy-content-audio" controls crossOrigin="use-credentials" autoPlay>
-                    <source src={src} type={mediaType} />
-                </audio>
-            </PreviewIcon>
+            <audio ref={mediaRef} className="wy-content-audio" controls crossOrigin="use-credentials" autoPlay>
+                <source src={src} type={mediaType} />
+            </audio>
         </>
     );
 }
@@ -235,14 +233,14 @@ export const PreviewEmbed = ({ src, name, icon, provider }: EmbedProps) => {
     useEffect(() => {
         if (embedElement) {
             let embedFallbackTimeout = setTimeout(function () {
-                console.log("fallback");
+                //console.log("fallback");
                 embedElement.classList.add("wy-fallback");
               }, 2500)
 
             let embedLoaded = (event: any) => {
                 var obj = event.target;
                 if (obj.tagName === 'OBJECT' && obj.classList.contains("wy-loading") && !obj.classList.contains("wy-loaded")) {
-                  console.log("loaded");
+                  //console.log("loaded");
                   obj.classList.add("wy-loaded");
                   clearTimeout(embedFallbackTimeout);
                 }
@@ -266,7 +264,7 @@ export const PreviewEmbed = ({ src, name, icon, provider }: EmbedProps) => {
 
             <Spinner.UI />
 
-            <PreviewIcon src={src} name={name} icon={icon} provider={provider} className="wy-content-iframe-fallback" />
+            <PreviewIcon src={src} icon={icon} provider={provider} className="wy-content-iframe-fallback" />
         </>
     );
 }
@@ -275,13 +273,11 @@ type IconProps = {
     children?: React.ReactNode,
     src: string,
     icon: string,
-    name: string,
     provider?: string,
-    download?: boolean,
     className?: string
 }
 
-export const PreviewIcon = ({ children, src, icon, name, provider, download = false, className }: IconProps) => {
+export const PreviewIcon = ({ children, src, icon, provider, className }: IconProps) => {
     return (
         <div className={classNames("wy-content-icon", className)}>
             <div className="wy-content-icon">
@@ -291,12 +287,9 @@ export const PreviewIcon = ({ children, src, icon, name, provider, download = fa
                 {provider ?
                     <>
                         <span>No preview available. </span> 
-                        <a href={src} target="_blank" title={name}>{`Open in ${provider}?`}</a>
-                    </>
-                    : download ?
-                        <a href={src} target="_top" download>{name}</a>
-                        :
-                        <a href={src} target="_blank">{name} <Icon.UI name="open-in-new" size={1} /></a>
+                        <a href={src} target="_blank">{`Open in ${provider}?`}</a>
+                    </>                    
+                    : <span>No preview available :(</span> 
                 }
             </div>
             {children}
@@ -334,7 +327,7 @@ export const Preview = ({ client, src, link, format, name, icon, width, height, 
                 <PreviewText key={src} src={src} />
             }
             {format === "code" &&
-                <PreviewText key={src} src={src} html code />
+                <PreviewText key={src} src={src} html={!/^(?:blob:|data:)/.test(src)} code />
             }
             {format === "html" &&
                 <PreviewText key={src} src={src} html />
@@ -344,9 +337,9 @@ export const Preview = ({ client, src, link, format, name, icon, width, height, 
             }
             {format === "none" && (
                 link ?
-                    <PreviewIcon src={src} name={name} icon={icon} provider={provider} />
+                    <PreviewIcon src={link} icon={icon} provider={provider} />
                 :
-                    <PreviewIcon src={src} name={name} icon={icon} download />
+                    <PreviewIcon src={src} icon={icon} />
             )}
         </>
     )

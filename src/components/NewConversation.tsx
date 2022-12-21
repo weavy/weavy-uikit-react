@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import useMutateConversation from '../hooks/useMutateConversation';
 import Icon from '../ui/Icon';
 import Overlay from '../ui/Overlay';
 import Button from '../ui/Button';
 import SearchUsers from './SearchUsers';
+import { MessengerContext } from '../contexts/MessengerContext';
 
 const NewConversation = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const addConversationMutation = useMutateConversation();
-    
-    const handleCreate = async (selected: UserType[]) => {
-        
+    const { setSelectedConversationId } = useContext(MessengerContext);
+    const handleCreate = async (selected: MemberType[]) => {
         const membersList = selected.map((m) => m.id);
-        await addConversationMutation.mutateAsync({ members: membersList });
+        const conversation = await addConversationMutation.mutateAsync({ members: membersList });
+        
+        setSelectedConversationId(conversation.id);
         setModalOpen(false);
     }
 
@@ -32,7 +34,7 @@ const NewConversation = () => {
                 <header className="wy-appbars" data-adjust-scrollbar-top>
                     <nav className="wy-appbar">
                         <Button.UI onClick={handleClose}><Icon.UI name='close' /></Button.UI>
-                        <div className="wy-appbar-text">Create conversation</div>
+                        <div className="wy-appbar-text">New message</div>
                     </nav>
                 </header>
 

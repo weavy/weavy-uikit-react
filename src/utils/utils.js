@@ -237,7 +237,7 @@ export function sanitizeJSON(key, value) {
 }
 
 /**
- * Changes a string to snake_case from camelCase, PascalCase and spinal-case.
+ * Changes a string to snake_case from camelCase, PascalCase and spinal-case/kebab-case.
  * 
  * @param {string} str - The string to change to snake case
  * @returns {string} The processed string as snake_case
@@ -245,6 +245,20 @@ export function sanitizeJSON(key, value) {
 export function toSnakeCase(str) {
   if (str.length > 0) {
     return str.replace(/([a-z\d])([A-Z]+)/g, '$1_$2').replace(/-|\s+/g, '_').toLowerCase();
+  } else {
+    return str;
+  }
+}
+
+/**
+ * Changes a string to kebab-case/spinal-case from camelCase, PascalCase and snake_case.
+ * 
+ * @param {string} str - The string to change to kebab case
+ * @returns {string} The processed string as kebab-case
+ */
+ export function toKebabCase(str) {
+  if (str.length > 0) {
+    return str.replace(/([a-z\d])([A-Z]+)/g, '$1-$2').replace(/_|\s+/g, '-').toLowerCase();
   } else {
     return str;
   }

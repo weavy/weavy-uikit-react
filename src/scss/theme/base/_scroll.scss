@@ -133,6 +133,9 @@
     overflow-x: hidden;
     touch-action: pan-y;
   }
+
+  scroll-padding-top: var(--wy-scrollbar-adjust-top, 0);
+  scroll-padding-bottom: var(--wy-scrollbar-adjust-bottom, 0);
 }
 
 .wy-scroll-x {

@@ -2,16 +2,18 @@ import React, { useCallback, useContext, useEffect, useLayoutEffect, useRef, use
 import { UserContext } from '../contexts/UserContext';
 import useMessages from '../hooks/useMessages';
 import Button from '../ui/Button';
+import Spinner from '../ui/Spinner';
 import Message from './Message';
-import { createReverseScroller } from "../utils/infiniteScroll";
-import { scrollParentToBottom, isParentAtBottom } from "../utils/scrollToBottom";
-import ConversationForm from './ConversationForm';
+import { scrollParentToBottom, isParentAtBottom } from "../utils/scroll-position";
+import { useReverseInfiniteScroll } from '../hooks/useInfiniteScroll';
+
 import useEvents from '../hooks/useEvents';
 import useMutateRead from '../hooks/useMutateRead';
 import useMutateMessage from '../hooks/useMutateMessage';
 import { useQueryClient } from 'react-query';
 import { WeavyContext } from '../contexts/WeavyContext';
 import Avatar from './Avatar';
+import Editor from './Editor';
 
 type Props = {
     id: number,
@@ -23,25 +25,22 @@ type Props = {
 }
 
 const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom }: Props) => {
-    var reverseScroller: IntersectionObserver | null;
+    const [, onNextRender] = useState<any>();
 
     const { user } = useContext(UserContext);
 
     const queryClient = useQueryClient();
-    const { client } = useContext(WeavyContext);
-
-    const readMoreRef = useRef<any>();
+    const { client } = useContext(WeavyContext);    
     const messagesEndRef = useRef<any>();
-    const [resolveScrollerFetch, setResolveScrollerFetch] = useState<Function | null>()
-
+    
     const { dispatch, on, events } = useEvents();
-
-    const { isLoading, isError, data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useMessages(id, {});
-
-
+    
+    const infiniteMessages = useMessages(id, {});
+    const { isLoading, isError, data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = infiniteMessages;
+    
     const readMessageMutation = useMutateRead();
     const addMessageMutation = useMutateMessage();
-
+    
     // scroll to bottom when data changes
     useLayoutEffect(() => {
         //if (id && !isLoading && !isLoadingMembers && !isLoadingConversation) {
@@ -50,40 +49,11 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
             scrollParentToBottom(messagesEndRef.current);
 
             // Scroll to bottom again two frames later, because the height is changing
-            requestAnimationFrame(() => requestAnimationFrame(() => scrollParentToBottom(messagesEndRef.current)));
-
-            // register infinite scroll
-
-            reverseScroller?.disconnect();
-
-            reverseScroller = createReverseScroller(readMoreRef.current, () => {
-                if (hasNextPage) {
-                    return fetchNextPage().then(() => {
-                        // Wait for useLayoutEffect before resolving
-                        return new Promise((resolve: Function) => setResolveScrollerFetch(resolve))
-                    })
-                }
-            })
-
-        } else {
-            reverseScroller?.disconnect();
-            reverseScroller = null;
-        }
-
-        return () => {
-            reverseScroller?.disconnect();
-            reverseScroller = null;
+            onNextRender(() => requestAnimationFrame(() => scrollParentToBottom(messagesEndRef.current)));
         }
     }, [id, isLoading]);
 
-
-    useLayoutEffect(() => {
-        // Resolve fetchNextPage after layout has been painted
-        if (!isFetchingNextPage && resolveScrollerFetch) {
-            resolveScrollerFetch()
-            setResolveScrollerFetch(null);
-        }
-    }, [data]);
+    const readMoreRef = useReverseInfiniteScroll(infiniteMessages, [id]);
 
     useEffect(() => {
         // mark conversation as read
@@ -98,6 +68,8 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
             client?.subscribe(`a${id}`, "conversation_marked", handleRealtimeSeenBy);
             client?.subscribe(`a${id}`, "reaction_added", handleRealtimeReactionInserted);
             client?.subscribe(`a${id}`, "reaction_removed", handleRealtimeReactionDeleted);
+
+           
         }
 
         return () => {
@@ -132,19 +104,21 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
     const handleRealtimeReactionDeleted = useCallback((realtimeEvent: RealtimeReaction) => {
         dispatch("reaction_deleted_" + realtimeEvent.entity.id, realtimeEvent);
     }, [id]);
+  
+    const handleCreate = async (text: string, blobs: BlobType[], attachments: FileType[], meeting: number | null, embed: number | null, options: PollOptionType[]) => {
+        if (id) {
+            
+            await addMessageMutation.mutateAsync({ id: id, text: text, blobs: blobs, meeting: meeting, userId: user.id }, {
+                onSuccess: (data: MessageType) => {
+                    // mark conversation as read
+                    readMessageMutation.mutate({ id: id, read: true, messageId: data.id }, {
+                        onSettled: () => onNextRender(() => requestAnimationFrame(() => requestAnimationFrame(() => scrollParentToBottom(messagesEndRef.current, true))))
+                    });
+                    
+                }
+            });
+        }
 
-    // handle new message from post form
-    const handleNewMessage = (text: string, attachments: [], meetings: []) => {
-        addMessageMutation.mutate({ id: id, text: text, userId: user.id, attachments: attachments, meetings: meetings }, {
-            onSuccess: (data: MessageType) => {
-                // mark conversation as read
-                readMessageMutation.mutate({ id: id, read: true, messageId: data.id });
-
-                requestAnimationFrame(() => scrollParentToBottom(messagesEndRef.current, true))
-            }
-        });
-
-        requestAnimationFrame(() => scrollParentToBottom(readMoreRef.current, true));
     }
 
     const handleRealtimeSeenBy = async (data: any) => {
@@ -153,7 +127,7 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
         queryClient.invalidateQueries(["members", id]);
 
         if (isAtBottom) {
-            requestAnimationFrame(() => scrollParentToBottom(readMoreRef.current, true));
+            onNextRender(() => requestAnimationFrame(() => scrollParentToBottom(readMoreRef.current, true)));
         }
     }
 
@@ -191,7 +165,7 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
             }));
 
             if (isAtBottom) {
-                requestAnimationFrame(() => requestAnimationFrame(() => scrollParentToBottom(readMoreRef.current, true)));
+                onNextRender(() => requestAnimationFrame(() => scrollParentToBottom(readMoreRef.current, true)));
             }
         }
 
@@ -207,7 +181,7 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
 
     let messages = (
         <>
-            <div className="wy-message-readmore" ref={readMoreRef}>
+            <div className="wy-pager" ref={readMoreRef}>
                 {isFetchingNextPage
                     ? 'Loading more...'
                     : hasNextPage
@@ -251,18 +225,18 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
 
     if (isLoading) {
         messages = (
-            <div>Loading messages...</div>
+            <Spinner.UI overlay={true}/>
         )
     }
 
 
     return (
         <>
-            <div id="container" className="wy-messages">
+            <div id="container" className="wy-messages" >
                 {messages}
             </div>
-            <div className="wy-footerbar wy-footerbar-sticky wy-message-editor wy-message-editor-bottom">
-                <ConversationForm key={id} conversationId={id} handleInsert={handleNewMessage} />
+            <div className="wy-footerbar wy-footerbar-sticky">
+                <Editor key={id} appId={id} placeholder="Type a message" buttonText="" editorType="messages" editorLocation='apps' onSubmit={handleCreate} showAttachments={true} showCloudFiles={true} showMeetings={true} showTyping={true} useDraft={true}/>                
             </div>
         </>
 

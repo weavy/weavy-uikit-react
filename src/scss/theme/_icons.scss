@@ -71,7 +71,7 @@
 }
 
 // icons normally inherit the text color of its parent
-.wy-icon:not([class*="wy-icon-"]):not([class*="wy-kind-"]) * {
+.wy-icon:not([class*="wy-icon-"]):not([class*="wy-kind-"]):not([data-icon=progress]) * {
   fill: currentColor;
 }
 
@@ -91,7 +91,6 @@
     height: 4rem;
   }
 }
-
 
 // theme icons
 .wy-icon-primary * {
@@ -147,7 +146,6 @@
   fill: #{colors.$gray};
 }
 
-
 // file type icons
 [class*="wy-kind-"] * {
   fill: colors.$gray;
@@ -196,3 +194,23 @@
 .wy-ext-pdf * {
   fill: colors.$red;
 }
+
+
+// progress icon
+[data-icon=progress] {
+
+  &.wy-icon-primary {
+    color: colors.$primary;
+  }
+
+  :first-child {
+    fill: none;
+    stroke: colors.$surface-variant;
+  }
+
+  :last-child {
+    fill: none;
+    stroke: currentColor;
+  }
+}
+

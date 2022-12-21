@@ -102,7 +102,7 @@ const Typing = ({ children, id, context }: Props) => {
     }
 
     const handleTyping = useCallback((realtimeEvent: RealtimeTyping) => {        
-        if (realtimeEvent.conversation.id === id && realtimeEvent.actor.id !== user.id) {            
+        if (realtimeEvent.entity.id === id && realtimeEvent.actor.id !== user.id) {            
             setTypers(realtimeEvent.actor);
         }
     }, [id, context, activeTypers]);

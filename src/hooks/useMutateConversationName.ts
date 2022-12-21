@@ -15,7 +15,7 @@ export default function useMutateConversationName() {
 
     type MutateProps = {
         id: number | null,
-        name: string
+        name: string | null
     }
 
     const mutateConversationName = async ({ id, name }: MutateProps) => {

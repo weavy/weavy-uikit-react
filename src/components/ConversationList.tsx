@@ -6,49 +6,22 @@ import NewConversation from './NewConversation';
 import Avatar from './Avatar';
 import { UserContext } from '../contexts/UserContext';
 import Button from '../ui/Button';
-import { createScroller } from "../utils/infiniteScroll";
+import Spinner from '../ui/Spinner';
+import useInfinteScroll from '../hooks/useInfiniteScroll';
 
 const ConversationList = () => {
     const { client } = useContext(WeavyContext);
     const { user } = useContext(UserContext);
-    const { data, isLoading, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } = useConversations({});
-    const loadMoreRef = useRef<any>();
-    const [resolveScrollerFetch, setResolveScrollerFetch] = useState<Function | null>()
-    let scroller: IntersectionObserver | null;
 
     if (!client) {
         throw new Error('Weavy ConversationList component must be used within an WeavyProvider');
     }
 
+    const infinteConversations = useConversations({});
+    const { data, isLoading, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } = infinteConversations;
 
-    useLayoutEffect(() => {
-        if(!isLoading){
-            scroller?.disconnect();
+    const loadMoreRef = useInfinteScroll(infinteConversations);
 
-            scroller = createScroller(loadMoreRef.current, () => {
-                if (hasNextPage) {
-                    return fetchNextPage().then(() => {
-                        // Wait for useLayoutEffect before resolving
-                        return new Promise((resolve: Function) => setResolveScrollerFetch(resolve))
-                    })
-                }
-            })
-        }
-
-        return () => {
-            scroller?.disconnect();
-            scroller = null;
-        }
-       
-    }, [isLoading]);
-
-    useLayoutEffect(() => {
-        // Resolve fetchNextPage after layout has been painted
-        if (!isFetchingNextPage && resolveScrollerFetch) {
-            resolveScrollerFetch()
-            setResolveScrollerFetch(null);
-        }
-    }, [data]);
 
     useEffect(() => {
 
@@ -66,12 +39,6 @@ const ConversationList = () => {
     }
 
 
-    if (isLoading) {
-        return (
-            <div>Loading Conversation list...</div>
-        )
-    }
-
     let loadMoreButton = <Button.UI onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage} className="wy-message-readmore">Load more</Button.UI>;
 
     return (
@@ -84,22 +51,26 @@ const ConversationList = () => {
                 </nav>
             </header>
             <div className="wy-conversations">
+                {isLoading &&
+                    <Spinner.UI overlay={true} />
+                }
+
                 {data && data.pages && data.pages.map((group, i) => {
                     return group.data?.map((item) => {
-                        return < ConversationListItem key={item.id} refetchConversations={refetch} item={item} />
+                        return <ConversationListItem key={item.id} refetchConversations={refetch} item={item} userId={user.id} />
                     })
 
                 }
 
                 )}
-                <div className="wy-message-readmore" ref={loadMoreRef}>
+                <div className="wy-pager" ref={loadMoreRef}>
                     {isFetchingNextPage
                         ? 'Loading more...'
                         : hasNextPage
                             ? loadMoreButton
                             : ""}
 
-                </div>                
+                </div>
             </div>
         </>
     )

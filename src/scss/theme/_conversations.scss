@@ -2,6 +2,10 @@
 @use "base/colors";
 @use "base/text";
 
+.wy-conversations{
+    position:relative;
+}
+
 .wy-conversation {
   display: flex;
   position: relative;

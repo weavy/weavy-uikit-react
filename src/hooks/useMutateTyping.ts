@@ -13,12 +13,14 @@ export default function useMutateTyping() {
 
 
     type MutateProps = {
-        id: number | null
+        id: number | null, 
+        type: "posts" | "comments" | "messages",
+        location: "apps" | "posts" | "messages" | "files"     
     }
 
-    const mutateTyping = async ({ id }: MutateProps) => {
+    const mutateTyping = async ({ id, type, location }: MutateProps) => {
 
-        const response = await client.post("/api/conversations/" + id + "/typing",
+        const response = await client.post(`/api/${location}/${id}/${type}/typing`,
             "PUT",
             JSON.stringify({}));
 

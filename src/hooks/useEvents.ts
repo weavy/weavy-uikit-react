@@ -36,7 +36,9 @@ export default function useEvents() {
     }
 
     const off = (event: string, cb: Function) => {
-        callbacks[event] = callbacks[event].filter((i: any) => i !== cb);
+        if (callbacks[event]) {
+            callbacks[event] = callbacks[event].filter((i: any) => i !== cb);
+        }
     }
 
     return { dispatch, on, off, events };

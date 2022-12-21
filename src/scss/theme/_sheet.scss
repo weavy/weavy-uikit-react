@@ -41,6 +41,8 @@
 .wy-sheet-body {
   overflow: hidden;
   padding: .5rem;
+  position: relative;
+  min-height: 3rem;
 }
 
 // Transitions
@@ -55,5 +57,6 @@
     transform: none;
     // transition show
     transition: transform vars.$transition, opacity vars.$transition;
+    pointer-events: auto;
   }
 }

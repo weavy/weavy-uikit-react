@@ -18,6 +18,10 @@
     color: #{colors.$outline};
   }
 
+  .ͼ2 .cm-content {
+    caret-color: #{colors.$on-background};
+  }
+
   .ͼ1.cm-editor {
     @extend %message-editor-textfield;
 
@@ -45,7 +49,7 @@
     }
   }
 
-  .wy-is-invalid + [data-editor-target] .cm-editor {
+  .wy-is-invalid + [data-editor-target] .cm-editor, .wy-is-invalid .cm-editor {
     border-color: colors.$error !important;
   }
   // autocomplete dropdown menu

@@ -43,16 +43,9 @@
   &:empty {
     display: none;
   }
-
-  .wy-content {
-    margin-bottom: 1rem;
-  }
-
-  .wy-list {
-    margin-bottom: 1rem;
-  }
-
-  .wy-poll {
+  
+  .wy-content, .wy-list, .wy-poll {
+    // spacing between content
     margin-bottom: 1rem;
   }
 }

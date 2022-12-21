@@ -12,8 +12,7 @@ const Meeting = ({ id, title, className }: Props) => {
         <>
             {/* <div className={className}>{title}</div> */}
             <Icon.UI name="zoom" />
-            <div className={className}>Zoom meeting</div>
-            <input type="hidden" value={id} name="meeting"/>
+            <div className={className}>Zoom meeting</div>            
         </>
     )
 }

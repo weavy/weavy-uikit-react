@@ -20,7 +20,7 @@
   }
 
   .ͼ2 .cm-content {
-    caret-color: #{colors.$primary};
+    caret-color: #{colors.$on-background};
   }
 
   .ͼ1.cm-editor {
@@ -50,7 +50,7 @@
     }
   }
 
-  .wy-is-invalid + [data-editor-target] .cm-editor {
+  .wy-is-invalid + [data-editor-target] .cm-editor, .wy-is-invalid .cm-editor {
     border-color: colors.$error !important;
   }
   // autocomplete dropdown menu

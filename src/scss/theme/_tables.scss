@@ -97,4 +97,6 @@
 .wy-table-sort-link {
   display: inline-flex;
   align-items: center;
+  color: colors.$link;
+  cursor: pointer;
 }

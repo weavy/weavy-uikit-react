@@ -2,9 +2,9 @@ import React, { useCallback } from "react";
 
 type ImageProps = {
     src: string,
-    previewSrc: string,
-    width: number
-    height: number,
+    previewSrc?: string,
+    width?: number
+    height?: number,
     more?: number,
     onClick: (e: any) => void
 }
@@ -13,18 +13,18 @@ export function checkImageLoad(img: HTMLImageElement) {
     var isLoaded = img.complete && img.naturalHeight !== 0;
     if (isLoaded) {
       if (!img.classList.contains("wy-loading")) {
-        console.debug("image is instantly loaded")
+        //console.debug("image is instantly loaded")
         img.classList.add("wy-loading", "wy-loaded");
       } else {
         img.decode().then(() => {
-          console.debug("image is loaded after delay")
+          //console.debug("image is loaded after delay")
           img.classList.add("wy-loaded");
         })
       }
 
       
     } else {
-      console.debug("image is loading")
+      //console.debug("image is loading")
       img.classList.add("wy-loading");
     }
   }
@@ -32,19 +32,20 @@ export function checkImageLoad(img: HTMLImageElement) {
 export function imageLoaded(event: any) {
     var img = event.target;
     if (img.tagName === 'IMG' && img.classList.contains("wy-loading") && !img.classList.contains("wy-loaded")) {
-      console.debug("load event"); img.classList.add("wy-loaded")
-      }
+      //console.debug("load event"); 
+      img.classList.add("wy-loaded")
+    }
   }
 
 export const Image = ({src, previewSrc, width, height, more, onClick}: ImageProps) => {
-    let ratio = width / height;
+    let ratio = width! / height! || 1;
     let baseSize = 64;
     let maxScale = 2;
     let flexRatio = ratio.toPrecision(5);
     let flexBasis = (ratio * baseSize).toPrecision(5) + "px";
     let padding = (100 / ratio).toPrecision(5) + "%"
     let intrinsicWidth = width + "px"
-    let maxWidth = (maxScale * width) + "px";
+    let maxWidth = width! > 0 ? (maxScale * width!) + "px" : "none";
 
     const imageRef = useCallback((element: HTMLImageElement) => {
         if (element) {

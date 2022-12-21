@@ -4,12 +4,14 @@ import { WeavyContext } from "../contexts/WeavyContext";
 import useMutateMeeting from "../hooks/useMutateMeeting";
 import Button from '../ui/Button';
 import Icon from '../ui/Icon';
+import Dropdown from '../ui/Dropdown';
 
 type Props = {
-    onMeetingAdded: Function
+    onMeetingAdded: Function,
+    dropdown?: boolean
 }
 
-const Meetings = ({ onMeetingAdded }: Props) => {
+const Meetings = ({ onMeetingAdded, dropdown = false }: Props) => {
 
     const { options } = useContext(WeavyContext);
     const { user } = useContext(UserContext);
@@ -28,7 +30,7 @@ const Meetings = ({ onMeetingAdded }: Props) => {
 
         switch (e.data.name) {
             case "zoom-signed-in":
-                var meeting = await addMeeting.mutateAsync({ provider: "zoom" });                
+                var meeting = await addMeeting.mutateAsync({ provider: "zoom" });
                 onMeetingAdded(meeting)
                 break;
 
@@ -47,8 +49,14 @@ const Meetings = ({ onMeetingAdded }: Props) => {
 
     return (
         <>
-            {options?.zoomAuthenticationUrl &&
-                <Button.UI onClick={handleZoom} title="Add Zoom meeting"><Icon.UI name="zoom" /></Button.UI>
+            {options?.zoomAuthenticationUrl && dropdown &&                
+                <Dropdown.Item onClick={handleZoom}>
+                    <Icon.UI name="zoom" /> Zoom meeting
+                </Dropdown.Item>
+            }
+
+            {options?.zoomAuthenticationUrl && !dropdown &&
+                <Button.UI onClick={handleZoom} title="Zoom meeting"><Icon.UI name="zoom" /></Button.UI>                
             }
         </>
 

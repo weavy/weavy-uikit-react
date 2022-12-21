@@ -77,10 +77,44 @@ export default class WeavyClient {
                 return await this.post(url, method, body, contentType, false);
             }
 
-            console.error(`Error calling endpoint ${url}`, response)
+            //console.error(`Error calling endpoint ${url}`, response)
         }
 
         return response;
+    };
+
+
+    async upload (url: string, method: "POST" | "PUT" | "PATCH", body: string | FormData, contentType: string = "application/json", onProgress?: (progress: number) => void, retry: boolean = true) {
+        const client = this as WeavyClient;
+        const token = await client.tokenFactoryInternal();
+
+        return await new Promise<Response>(function (resolve, reject) {
+            // XMLHttpRequest instead of fetch because we want to track progress
+            let xhr = new XMLHttpRequest();
+            xhr.open(method, client.url + url, true);
+            xhr.setRequestHeader("Authorization", "Bearer " + token)
+            if (contentType !== ""){
+                xhr.setRequestHeader("content-type", contentType);
+            }
+            if (onProgress) {
+                xhr.upload.addEventListener("progress", (e: ProgressEvent<EventTarget>) => {
+                    onProgress((e.loaded / e.total) * 100 || 100)
+                })
+            }
+        
+            xhr.onload = (evt: ProgressEvent<EventTarget>) => {
+                if (retry && (xhr.status === 401 || xhr.status === 401)) {
+                    client.tokenFactoryInternal(true)
+                        .then(() => client.upload(url, method, body, contentType, onProgress, false))
+                        .then(resolve)
+                        .catch(reject);
+                } else {
+                    resolve(new Response(xhr.response, { status: xhr.status, statusText: xhr.statusText })); 
+                }
+            };
+            xhr.onerror = reject;
+            xhr.send(body);
+        });
     }
 
     async getToken(refresh: boolean) {        

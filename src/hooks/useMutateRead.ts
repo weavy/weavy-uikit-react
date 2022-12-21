@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { updateCacheItem } from "../utils/cacheUtils";
 
 /// PUT or DELETE to update read state on a conversation
 export default function useMutateRead() {
@@ -14,13 +15,13 @@ export default function useMutateRead() {
 
 
     type MutateProps = {
-        id: number | null,
+        id: number | null,        
         read: boolean,
         messageId: number | null
     }
 
     const mutateRead = async ({ id, read, messageId }: MutateProps) => {
-        const url = read ? `/api/conversations/${id}/read?messageId=${messageId}`: `/api/conversations/${id}/read`;
+        const url = read ? `/api/conversations/${id}/mark?messageId=${messageId}`: `/api/conversations/${id}/mark`;
         const response = await client.post(url, !read ? "DELETE": "PUT", "")
         return response.json();
     };
@@ -28,6 +29,11 @@ export default function useMutateRead() {
     return useMutation(mutateRead, {
         onSuccess: () => {
             queryClient.invalidateQueries("conversations");
+        },
+        onMutate: async (variables: any) => {            
+            updateCacheItem(queryClient, 'conversations', variables.id, (item: ConversationType) => {                
+                item.is_unread = !variables.read;
+            });
         }
     });
 }

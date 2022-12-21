@@ -16,7 +16,6 @@
 @use "theme/item";
 @use "theme/list";
 @use "theme/messages";
-@use "theme/message-editor";
 @use "theme/meta";
 @use "theme/overlays";
 @use "theme/pager";
@@ -32,7 +31,10 @@
 @use "theme/preview-pdf";
 @use "theme/preview-text";
 @use "theme/reactions";
+@use "theme/sheet";
 @use "theme/spinner";
 @use "theme/type";
 @use "theme/typing";
 @use "theme/meeting";
+@use "theme/message-editor";
+@use "theme/message-editor-cm";

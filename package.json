@@ -1,6 +1,6 @@
 {
   "name": "@weavy/uikit-react",
-  "version": "14.0.4",
+  "version": "15.0.0",
   "author": "Weavy",
   "description": "React UI-kit for Weavy",
   "homepage": "https://github.com/weavy/weavy-uikit-react",
@@ -42,15 +42,21 @@
     "watch-js": "rollup -c --watch"
   },
   "dependencies": {
+    "@codemirror/autocomplete": "^6.3.0",
+    "@codemirror/lang-markdown": "^6.0.4",
     "@mdi/js": "^6.9.96",
     "@mdi/react": "^1.6.0",
     "@microsoft/signalr": "^6.0.3",
+    "@popperjs/core": "^2.11.6",
+    "@uiw/react-codemirror": "^4.12.4",
     "classnames": "^2.3.1",
     "dayjs": "^1.11.1",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
-    "pdfjs-dist": "^2.16.105",
+    "pdfjs-dist": "^3.0.279",
+    "react-dropzone": "^14.2.3",
     "react-modal": "^3.14.4",
+    "react-popper": "^2.3.0",
     "react-query": "^3.34.16"
   },
   "engines": {

@@ -6,7 +6,9 @@ type OverlayProps = {
     children: React.ReactNode,
     className?: string,
     isOpen: boolean,
-    style?: Styles
+    style?: Styles,
+    closeOnEsc?: boolean,
+    onClose?: () => void
 }
 
 const customStyles = {
@@ -16,7 +18,7 @@ const customStyles = {
   };
   
   
-  const OverlayImpl = ({ children, className = "", isOpen, style }: OverlayProps) => {
+  const OverlayImpl = ({ children, className = "", isOpen, style, closeOnEsc, onClose }: OverlayProps) => {
     const [modalShowing, setModalShowing] = useState(false);
 
     return (
@@ -25,10 +27,12 @@ const customStyles = {
             ariaHideApp={false}
             onAfterOpen={() => { setModalShowing(true)} }
             onRequestClose={() => { setModalShowing(false)}}
+            onAfterClose={() => onClose && onClose()}
             className={classNames("wy-panel wy-overlay wy-transition", className, {"wy-open": modalShowing})}
             overlayClassName="wy-overlays wy-viewport"
             contentLabel="Example Modal"
             style={style}
+            shouldCloseOnEsc={closeOnEsc}
         >
           {children}
         </Modal>

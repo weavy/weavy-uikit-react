@@ -17,6 +17,7 @@ import useMutateRemoveMembers from '../hooks/useMutateRemoveMembers';
 import Avatar from './Avatar';
 import { UserContext } from '../contexts/UserContext';
 import Messages from './Messages';
+import useMutateLeaveConversation from '../hooks/useMutateLeaveConversation';
 
 const Conversation = ({ id, showBackButton }: ConversationProps) => {
 
@@ -41,7 +42,7 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
         enabled: selectedConversationId != null
     });
 
-    const { isLoading: isLoadingMembers, data: dataMembers } = useMembers(selectedConversationId, {
+    const { isLoading: isLoadingMembers, data: dataMembers, refetch: refetchMembers } = useMembers(selectedConversationId, {
         // The query will not execute until the activeConversation exists
         enabled: selectedConversationId != null
     });
@@ -51,14 +52,14 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
     const addMembersMutation = useMutateMembers();
     const updateNameMutation = useMutateConversationName();
     const removeMembers = useMutateRemoveMembers();
+    const leaveConversation = useMutateLeaveConversation();
 
-    const handleRealtimeAppUpdated = useCallback((realtimeEvent: RealtimeApp) => {        
+    const handleRealtimeAppUpdated = useCallback((realtimeEvent: RealtimeApp) => {
         if (realtimeEvent.app.id !== selectedConversationId) return;
         queryClient.invalidateQueries(['conversation', selectedConversationId]);
     }, [selectedConversationId]);
 
-    const handleAdd = async (selected: UserType[]) => {
-
+    const handleAdd = async (selected: MemberType[]) => {
         const membersList = selected.map((m) => m.id);
         await addMembersMutation.mutateAsync({ id: selectedConversationId, members: membersList });
         setModalAddOpen(false);
@@ -74,11 +75,29 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
 
     const handleUpdateTitle = (e: any) => {
         setTitle(e.target.value);
-        updateNameMutation.mutate({ id: selectedConversationId, name: e.target.value });
+    }
+
+    const handleSaveTitle = () => {
+        updateNameMutation.mutate({ id: selectedConversationId, name: title || null });
     }
 
     const handleLeaveConversation = () => {
-        removeMembers.mutate({ id: selectedConversationId, members: [user.id] });
+        leaveConversation.mutate({ id: selectedConversationId, members: [user.id] });
+        setModalDetailsOpen(false);
+        setModalAddOpen(false);
+    }
+
+    const handleAddMembers = () => {
+        setModalDetailsOpen(false);
+        setModalAddOpen(true);
+    }
+
+    const handleRemoveMember = (id: number) => {
+        removeMembers.mutate({ id: selectedConversationId, members: [id] }, {
+            onSuccess: () => {
+                refetchMembers();
+            }
+        });
     }
 
     const handleBack = () => {
@@ -111,11 +130,11 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
         if (dataConversation && dataConversation.type === ChatRoom) {
             setTitle(dataConversation?.display_name);
         }
-        if(dataConversation && (dataConversation.type === ChatRoom || dataConversation.type === Chat)){
+        if (dataConversation && (dataConversation.type === ChatRoom || dataConversation.type === Chat)) {
             setIsRoomOrChat(true)
         }
     }, [dataConversation]);
-
+    
     return (
         <>
             <header className="wy-appbars" data-adjust-scrollbar-top>
@@ -134,12 +153,21 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
                             </div>
                             <Dropdown.UI directionX='left'>
 
-                                <Dropdown.Item onClick={() => toggleDetailsModal(true)}>Details</Dropdown.Item>
+                                <Dropdown.Item onClick={() => toggleDetailsModal(true)}>
+                                    <Icon.UI name="information"></Icon.UI>
+                                    Details
+                                </Dropdown.Item>
 
                                 {dataConversation.type === ChatRoom &&
                                     <>
-                                        <Dropdown.Item onClick={() => toggleAddModal(true)}>Add people</Dropdown.Item>
-                                        <Dropdown.Item onClick={handleLeaveConversation}>Leave conversation</Dropdown.Item>
+                                        <Dropdown.Item onClick={() => toggleAddModal(true)}>
+                                            <Icon.UI name="account-plus"></Icon.UI>
+                                            Add members
+                                        </Dropdown.Item>
+                                        <Dropdown.Item onClick={handleLeaveConversation}>
+                                            <Icon.UI name="account-minus"></Icon.UI>
+                                            Leave conversation
+                                        </Dropdown.Item>
                                     </>
                                 }
 
@@ -157,52 +185,78 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
                 </div>
             }
             {selectedConversationId && dataMembers && dataConversation &&
-                <Messages id={selectedConversationId} chatRoom={isRoomOrChat} members={dataMembers} displayName={dataConversation?.display_name} avatarUrl={dataConversation?.avatar_url} lastMessageId={dataConversation?.last_message?.id}/>
+                <Messages id={selectedConversationId} chatRoom={isRoomOrChat} members={dataMembers} displayName={dataConversation?.display_name} avatarUrl={dataConversation?.avatar_url} lastMessageId={dataConversation?.last_message?.id} />
             }
 
             <Overlay.UI isOpen={modalAddOpen} className="wy-modal">
                 <header className="wy-appbars" data-adjust-scrollbar-top>
                     <nav className="wy-appbar">
                         <Button.UI onClick={() => toggleAddModal(false)}><Icon.UI name='close' /></Button.UI>
-                        <div className="wy-appbar-text">Add people</div>
+                        <div className="wy-appbar-text">Add members</div>
                     </nav>
                 </header>
-                <SearchUsers handleSubmit={handleAdd} buttonTitle="Add selected" />
+                {dataMembers &&
+                    <SearchUsers existingMembers={dataMembers.data} handleSubmit={handleAdd} buttonTitle="Save" />
+                }
+
             </Overlay.UI>
 
             <Overlay.UI isOpen={modalDetailsOpen} className="wy-modal">
                 <header className="wy-appbars">
                     <nav className="wy-appbar">
                         <Button.UI onClick={() => toggleDetailsModal(false)}><Icon.UI name='close' /></Button.UI>
-                        <div className="wy-appbar-text">Conversation details</div>
+                        <div className="wy-appbar-text">Details</div>
                     </nav>
                 </header>
                 <div className='wy-scroll-y'>
-                    {dataConversation && <div className="wy-avatar-header">                        
+                    {dataConversation && <div className="wy-avatar-header">
                         <Avatar src={dataConversation?.avatar_url} name={title} size={128} />
-                        {dataConversation?.type !== ChatRoom &&                        
-                        <h3 className="wy-headline">{dataConversation?.display_name}</h3>                    
+                        {dataConversation?.type !== ChatRoom &&
+                            <h3 className="wy-headline">{dataConversation?.display_name}</h3>
                         }
                     </div>}
 
                     {dataConversation?.type === ChatRoom && (
                         <>
                             <div className="wy-pane-group">
-                                <input className="wy-input" value={title} onChange={(e) => handleUpdateTitle(e)} />
+                                <label className="wy-input-label">Conversation name</label>
+                                <div className="wy-input-group">
+
+                                    <input className="wy-input" value={title} onChange={(e) => handleUpdateTitle(e)} />
+                                    <Button.UI onClick={handleSaveTitle} className="wy-button-icon">
+                                        <Icon.Raw name="content-save" />
+                                    </Button.UI>
+                                </div>
+                                <div className="wy-description">Changing the name of a group chat changes it for everyone.</div>
+
                             </div>
                             <div className="wy-pane-group">
-                                <table className="wy-table wy-search-result-table">
-                                    <tbody>
-                                        {dataMembers && dataMembers.data && dataMembers.data.map((m: MemberType) => {
-                                            return (
-                                                <tr key={m.id}>
-                                                    <td className="wy-table-cell-icon wy-search-result-table-icon"><Avatar src={m.avatar_url} name={m.display_name} id={m.id} size={24} presence={m.presence} /></td>
-                                                    <td className='wy-table-cell-text'>{m.display_name}</td>
-                                                </tr>
-                                            )
-                                        })}
-                                    </tbody>
-                                </table>
+                                <label className="wy-input-label">Members</label>
+
+                                {dataConversation && dataMembers && dataMembers.data && dataMembers.data.map((m: MemberType) => {
+                                    return (
+                                        <div className='wy-item' key={m.id}>
+                                            <Avatar src={m.avatar_url} name={m.display_name} id={m.id} size={32} presence={m.presence} />
+                                            <div className="wy-item-body">
+                                                {m.display_name}
+                                            </div>
+                                            {dataConversation.created_by_id === user.id && m.id !== user.id &&
+                                                <Button.UI onClick={() => handleRemoveMember(m.id)} className="wy-button-icon" title="Remove member">
+                                                    <Icon.Raw name="account-minus" />
+                                                </Button.UI>
+                                            }
+                                            {m.id === user.id &&
+                                                <Button.UI onClick={() => handleLeaveConversation()} className="wy-button-icon" title="Leave conversation">
+                                                    <Icon.Raw name="account-minus" />
+                                                </Button.UI>
+                                            }
+                                        </div>
+                                    )
+                                })}
+                                <Button.UI onClick={handleAddMembers} title="Add members">
+                                    <Icon.UI name="account-plus"/> 
+                                    <div className="wy-item-body">Add members</div>
+                                </Button.UI>
                             </div>
                         </>
                     )}

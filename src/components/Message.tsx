@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import dayjs from 'dayjs';
 import { MessageProps } from "../types/Message"
 import Attachment from './Attachment';
@@ -7,21 +7,22 @@ import { Image, ImageGrid } from "./Image"
 import SeenBy from './SeenBy';
 import Avatar from "./Avatar";
 import MeetingCard from './MeetingCard';
-import usePreview from '../hooks/usePreview';
+import { PreviewContext } from "../contexts/PreviewContext";
 import classNames from 'classnames';
 
 const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_at, created_by, attachments, meeting, parentId, reactions, seenBy, chatRoom }) => {
 
-    const { open, close } = usePreview(attachments);
+    const { openPreview, setPreviewFiles } = useContext(PreviewContext);
 
-    let images = attachments?.filter((a: AttachmentType) => a.kind === "image" && a.thumbnail_url);
-    let files = attachments?.filter((a: AttachmentType) => a.kind !== "image" || !a.thumbnail_url);
+    let images = attachments?.filter((a: FileType) => a.kind === "image" && a.thumbnail_url);
+    let files = attachments?.filter((a: FileType) => a.kind !== "image" || !a.thumbnail_url);
 
     const date = dayjs.utc(created_at).tz(dayjs.tz.guess());
 
     const handlePreviewClick = (e: React.MouseEvent<HTMLInputElement>, attachmentId: number) => {
         e.preventDefault();
-        open(attachmentId);
+        setPreviewFiles(attachments);
+        openPreview(attachmentId);
     }
 
     return (
@@ -47,8 +48,9 @@ const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_a
                         {!temp &&
                             <>
                                 {images && !!images.length && <ImageGrid>
-                                    {images.map((a: AttachmentType) =>
-                                        <Image onClick={(e) => handlePreviewClick(e, a.id)} key={a.id} src={a.download_url} previewSrc={a.preview_url} width={a.width} height={a.height} />
+                                    {images.map((a: FileType) => 
+                                        a.download_url &&
+                                        <Image onClick={(e) => handlePreviewClick(e, a.id)} key={a.id} src={a.download_url} previewSrc={a.preview_url} width={a.width} height={a.height} /> || null
                                     )}
                                 </ImageGrid>}
 
@@ -58,26 +60,19 @@ const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_a
                                     <MeetingCard meeting={meeting} />
                                 }
 
-                                {files && !!files.length && <div className="wy-list-items wy-attachments">
-                                    {files.map((a: AttachmentType) =>
+                                {files && !!files.length && <div className="wy-list wy-list-bordered">
+                                    {files.map((a: FileType) =>
                                         <Attachment key={a.id} onClick={(e) => handlePreviewClick(e, a.id)} name={a.name} previewFormat={a.kind} provider={a.provider} url={a.download_url} previewUrl={a.provider ? a.external_url : a.preview_url} mediaType={a.media_type} kind={a.kind} size={a.size} />
                                     )}
                                 </div>}
                                 <div className="wy-reactions-line">
-                                    <div className="wy-reactions">
-                                        <ReactionsList id={id} parentId={parentId} reactions={reactions} />
-                                    </div>
-                                    {!temp && <ReactionsMenu id={id} reactions={reactions} />}
+                                    <ReactionsList id={id}  type="messages" parentId={parentId} reactions={reactions} />
+                                    {!temp && <ReactionsMenu  parentId={parentId}id={id} type="messages" reactions={reactions} placement={ me ? "top-end" : "top-start"} />}
                                 </div>
                             </>
                         }
                     </div>
-
-
-
                 </div>
-
-
             </div>
             <SeenBy id={id} parentId={parentId} seenBy={seenBy} createdAt={created_at} />
         </>

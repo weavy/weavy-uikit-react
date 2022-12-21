@@ -7,9 +7,7 @@ import { WeavyContext } from "../contexts/WeavyContext";
 export default function useMutateRemoveMembers() {
 
     const { client } = useContext(WeavyContext);
-    const { setSelectedConversationId } = useContext(MessengerContext);
-    const queryClient = useQueryClient();
-
+    
     if (!client) {
         throw new Error('useMutateRemoveMembers must be used within an WeavyProvider');
     }
@@ -29,10 +27,5 @@ export default function useMutateRemoveMembers() {
         return response;
     };
 
-    return useMutation(mutateRemove, {
-        onSuccess: () => {
-            queryClient.invalidateQueries("conversations");
-            setSelectedConversationId(null);
-        }
-    });
+    return useMutation(mutateRemove);
 }

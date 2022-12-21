@@ -13,36 +13,39 @@ import useMutateRemoveMembers from '../hooks/useMutateRemoveMembers';
 import Avatar from './Avatar';
 import { UserContext } from '../contexts/UserContext';
 import classNames from 'classnames';
+import useMutateStarred from '../hooks/useMutateStarred';
+import useMutateLeaveConversation from '../hooks/useMutateLeaveConversation';
 
-const ConversationListItem = ({ item, refetchConversations }: ConversationListItemProps) => {
+const ConversationListItem = ({ item, userId, refetchConversations }: ConversationListItemProps) => {
 
     const { client } = useContext(WeavyContext);
     const { setSelectedConversationId, selectedConversationId } = useContext(MessengerContext);
     const { user } = useContext(UserContext);
     const readMutation = useMutateRead();
     const pinMutation = useMutatePinned();
-    const removeMembers = useMutateRemoveMembers();
+    const starMutation = useMutateStarred();    
+    const leaveConversation = useMutateLeaveConversation();
     const date = dayjs.utc(item.last_message?.created_at).tz(dayjs.tz.guess());
 
-    
+
     // extract and keep all emojis
-    const emojiHtml = item.last_message?.html || '';
-    const emojiRegexp = /<img[^>]+wy-emoji.+>/g;
-    const emojiShortcodeRegexp = /title=\"(:[^:\s]+:)\"/;
-    const messageEmojis: { [index: string]: string } = {};
+    // const emojiHtml = item.last_message?.html || '';
+    // const emojiRegexp = /<img[^>]+wy-emoji.+\/>/g;
+    // const emojiShortcodeRegexp = /title=\"(:[^:\s]+:)\"/;
+    // const messageEmojis: { [index: string]: string } = {};
 
-    emojiHtml.match(emojiRegexp)?.forEach((imgEmoji) => {
-        let shortCode = imgEmoji.match(emojiShortcodeRegexp)![1];
+    // emojiHtml.match(emojiRegexp)?.forEach((imgEmoji) => {
+    //     let shortCode = imgEmoji.match(emojiShortcodeRegexp)![1];
 
-        if (shortCode) {
-            messageEmojis[shortCode] = imgEmoji;
-        }
-    });
-
-    // replace text shortcodes with extracted emojis
-    const shortCodeRegexp = /:[^:\s]*(?:::[^:\s]*)*:/gi;
-    const itemSnippet = (item.last_message?.text || '').replace(shortCodeRegexp, (shortCode) => messageEmojis[shortCode]);
+    //     if (shortCode) {
+    //         messageEmojis[shortCode] = imgEmoji;
+    //     }
+    // });
     
+    // replace text shortcodes with extracted emojis
+    //const shortCodeRegexp = /:[^:\s]*(?:::[^:\s]*)*:/gi;
+    //const itemSnippet = (item.last_message?.text || '').replace(shortCodeRegexp, (shortCode) => messageEmojis[shortCode]);
+
 
     const ChatRoom = "edb400ac-839b-45a7-b2a8-6a01820d1c44";
 
@@ -53,19 +56,19 @@ const ConversationListItem = ({ item, refetchConversations }: ConversationListIt
         }
     }
 
-    const handleAppUpdated = useCallback((realtimeEvent: RealtimeApp) => {   
+    const handleAppUpdated = useCallback((realtimeEvent: RealtimeApp) => {
         if (realtimeEvent.app.id !== item.id) return;
         refetchConversations();
 
     }, [item.id]);
 
-    const handleMessageCreated = useCallback((realtimeEvent: RealtimeMessage) => {   
+    const handleMessageCreated = useCallback((realtimeEvent: RealtimeMessage) => {
         if (realtimeEvent.message.app_id !== item.id) return;
         refetchConversations();
 
     }, [item.id]);
 
-    const handleMemberAdded = useCallback((realtimeEvent: RealtimeMember) => {   
+    const handleMemberAdded = useCallback((realtimeEvent: RealtimeMember) => {
         if (realtimeEvent.app.id !== item.id) return;
         refetchConversations();
 
@@ -81,9 +84,7 @@ const ConversationListItem = ({ item, refetchConversations }: ConversationListIt
             client?.unsubscribe(`a${item.id}`, "message_created", handleMessageCreated);
             client?.unsubscribe(`a${item.id}`, "member_added", handleMemberAdded);
         }
-    }, [item.id])
-
-    const otherId = item.type !== ChatRoom ? item.member_ids.find((i) => { return i != user.id }) : null;
+    }, [item.id]);
 
     const handleUnread = (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
@@ -106,17 +107,22 @@ const ConversationListItem = ({ item, refetchConversations }: ConversationListIt
     }
 
     const handleLeaveConversation = () => {
-        removeMembers.mutate({ id: item.id, members: [user.id] });
+        leaveConversation.mutate({ id: item.id, members: [user.id] });
     }
 
-    // const handleStar = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    //     e.preventDefault();
-    //     console.log("Star: ", item.id)
-    // }
+    const handleStar = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        starMutation.mutate({ id: item.id, star: true });
+    }
+
+    const handleUnstar = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        starMutation.mutate({ id: item.id, star: false });
+    }
 
     return (
-        <div className={classNames('wy-item wy-item-lg wy-item-hover wy-conversation', {"wy-unread": item.is_unread, "wy-active": selectedConversationId === item.id})} key={item.id} onClick={(e) => handleClick(e, item.id)}>
-            <Avatar src={item.avatar_url} id={otherId || -1} presence={item.type !== ChatRoom ? "away" : ""} name={item.display_name} />
+        <div className={classNames('wy-item wy-item-lg wy-item-hover wy-conversation', { "wy-unread": item.is_unread, "wy-active": selectedConversationId === item.id })} key={item.id} onClick={(e) => handleClick(e, item.id)}>
+            <Avatar src={item.avatar_url} id={item.user_id || -1} presence={item.type !== ChatRoom ? "away" : ""} name={item.display_name} />
 
             <div className="wy-item-body">
                 <div className="wy-item-row">
@@ -129,59 +135,104 @@ const ConversationListItem = ({ item, refetchConversations }: ConversationListIt
                     <div className="wy-item-text">
                         <Typing id={item.id} context="listitem">
 
-                            {itemSnippet &&
+                            {/* {itemSnippet &&
                                 <span className="wy-typing-hide" dangerouslySetInnerHTML={{ __html: itemSnippet }}></span>
-                            }
-                            {!itemSnippet &&
-                                <span className="wy-typing-hide">
-                                    {item.last_message?.attachment_ids?.length > 0 &&
-                                        <Icon.UI name="attachment" size={1} />
-                                    }
-                                    {item.last_message?.meeting_id &&
-                                        <Icon.UI name="zoom" size={1} />
-                                    }
-                                </span>
-                            }
+                            } */}
+                            {/* {!itemSnippet && */}
+                            <span className="wy-typing-hide">
+
+                                {item.last_message &&
+                                    <>
+                                        {userId === item.last_message?.created_by.id &&
+                                            <>You: </>
+                                        }
+                                        {(item.member_count || 0) > 2 && userId !== item.last_message?.created_by.id &&
+                                            <>{item.last_message?.created_by.display_name}: </>
+                                        }
+                                    </>
+                                }
+
+                                {item.last_message?.text &&
+                                    <>{item.last_message?.plain}</>
+                                }
+                                {!item.last_message?.text && (item.last_message?.attachment_count || 0) > 0 &&
+                                    <Icon.UI name="attachment" size={1} />
+                                }
+                                {!item.last_message?.text && item.last_message?.meeting_id &&
+                                    <Icon.UI name="zoom" size={1} />
+                                }
+                                {!item.last_message &&
+                                    <>&nbsp;</>
+                                }
+                            </span>
+                            {/* } */}
 
                         </Typing>
                     </div>
-                    
+
 
                 </div>
             </div>
             <div className="wy-item-actions wy-item-actions-bottom">
-                        {item.is_pinned &&
-                            <Button.UI onClick={handleUnpin}>
-                                <Icon.UI name="pin" size={1/1.5} />
-                            </Button.UI>
+                {item.is_starred &&
+                    <Button.UI onClick={handleUnstar}>
+                        <Icon.UI name="star" size={1} className='wy-icon-yellow'/>
+                    </Button.UI>
 
+                }
+
+                <Dropdown.UI directionX='left' icon={item.is_pinned ? "pin": undefined}>
+                    <>
+                        {item.is_unread &&
+                            <Dropdown.Item onClick={handleRead}>
+                                <Icon.UI name="unread"></Icon.UI>
+                                Mark as read
+                            </Dropdown.Item>
                         }
+                        {!item.is_unread &&
+                            <Dropdown.Item onClick={handleUnread}>
+                                <Icon.UI name="read"></Icon.UI>
+                                Mark as unread
+                            </Dropdown.Item>
+                        }
+                    </>
+                    <>
+                        {item.is_pinned &&
+                            <Dropdown.Item onClick={handleUnpin}>
+                                <Icon.UI name="unpin"></Icon.UI>
+                                Unpin
+                            </Dropdown.Item>
+                        }
+                        {!item.is_pinned &&
+                            <Dropdown.Item onClick={handlePin}>
+                                <Icon.UI name="pin"></Icon.UI>
+                                Pin
+                            </Dropdown.Item>
+                        }
+                    </>
+                    <>
+                        {item.is_starred &&
+                            <Dropdown.Item onClick={handleUnstar}>
+                                <Icon.UI name="unstar"></Icon.UI>
+                                Unstar
+                            </Dropdown.Item>
+                        }
+                        {!item.is_starred &&
+                            <Dropdown.Item onClick={handleStar}>
+                                <Icon.UI name="star"></Icon.UI>
+                                Star
+                            </Dropdown.Item>
+                        }
+                    </>
+                    {item.type === ChatRoom &&
+                        <Dropdown.Item onClick={handleLeaveConversation}>
+                            <Icon.UI name="account-minus"></Icon.UI>
+                            Leave conversation
+                        </Dropdown.Item>
+                    }                    
+                </Dropdown.UI>
 
-                        <Dropdown.UI directionX='left'>
-                            <>
-                                {item.is_unread &&
-                                    <Dropdown.Item onClick={handleRead}>Mark as read</Dropdown.Item>
-                                }
-                                {!item.is_unread &&
-                                    <Dropdown.Item onClick={handleUnread}>Mark as unread</Dropdown.Item>
-                                }
-                            </>
-                            <>
-                                {item.is_pinned &&
-                                    <Dropdown.Item onClick={handleUnpin}>Unpin</Dropdown.Item>
-                                }
-                                {!item.is_pinned &&
-                                    <Dropdown.Item onClick={handlePin}>Pin</Dropdown.Item>
-                                }
-                            </>
-                            {item.type === ChatRoom &&
-                                <Dropdown.Item onClick={handleLeaveConversation}>Leave conversation</Dropdown.Item>
-                            }
-
-                            {/* <li><Button.UI onClick={handleStar}>Star</Button.UI></li> */}
-                        </Dropdown.UI>
-
-                    </div>
+            </div>
         </div>
     )
 }

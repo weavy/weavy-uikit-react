@@ -12,7 +12,7 @@ $spinner-duration: 1.4s !default;
     stroke-dasharray: 1, 100;
     stroke-dashoffset: 0;
     transform-origin: center;
-    fill:none !important;
+    fill: none !important;
   }
 
   &.wy-spin {
@@ -22,6 +22,15 @@ $spinner-duration: 1.4s !default;
     circle {
       animation: wy-dash $spinner-duration ease-in-out infinite, wy-color ($spinner-duration*2) ease-in-out infinite;
     }
+  }
+
+  &.wy-spinner-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
   }
 }
 
