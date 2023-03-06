@@ -1,4 +1,4 @@
-interface WeavyClient {
+export interface IWeavyClient {
     url: string,
     tokenFactoryInternal: () => Promise<string>,
     subscribe: Function,
@@ -9,23 +9,23 @@ interface WeavyClient {
     upload: (url: string, method: "POST" | "PUT" | "PATCH", body: string | FormData, contentType?: string, onProgress?: (progress: number) => void, retry?: boolean) => Promise<Response>
 }
 
-type WeavyClientOptions = {
+export type WeavyClientOptions = {
     url: string,
     tokenFactory: (refresh: boolean) => Promise<string>
 }
 
-type ServerErrorResponse = {
+export type ServerErrorResponse = {
     status: number,
     title: string,
     detail?: string
 }
 
-type WeavyContextProps = {
-    client: WeavyClient | null,
+export type WeavyContextProps = {
+    client: IWeavyClient | null,
     options?: WeavyContextOptions  
 };
 
-type WeavyContextOptions = {
+export type WeavyContextOptions = {
     zoomAuthenticationUrl?: string,
     teamsAuthenticationUrl?: string,
     enableCloudFiles?: boolean,
@@ -36,37 +36,37 @@ type WeavyContextOptions = {
     reactions?: string[]
 }
 
-type MessengerContextProps = {    
+export type MessengerContextProps = {    
     selectedConversationId: null | number,
     setSelectedConversationId: Function    
 };
 
-type UserContextProps = {        
+export type UserContextProps = {        
     user: UserType    
 };
 
-type CloudFilesContextProps = {        
+export type CloudFilesContextProps = {        
   open: Function  
 };
 
-type PreviewContextProps = {
+export type PreviewContextProps = {
     openPreview: Function,
     closePreview: Function,
     setPreviewFiles: Function
 }
 
 
-type ProviderProps = {
+export type ProviderProps = {
     children: React.ReactNode,
     client: any
 };
 
-type InsertConversationProps = {
+export type InsertConversationProps = {
     title: string,
     text: string
 }
 
-type ConversationsResult = {
+export type ConversationsResult = {
     data: ConversationType[],
     start: number,
     end: number,
@@ -74,42 +74,42 @@ type ConversationsResult = {
 }
 
 
-type MembersResult = {
+export type MembersResult = {
     data: MemberType[],
     start: number,
     end: number,
     count: number
 }
 
-type MessagesResult = {
+export type MessagesResult = {
     data: MessageType[],
     start: number,
     end: number,
     count: number
 }
 
-type SortOrder = {
+export type SortOrder = {
     by: string,
     descending: boolean
 } 
 
-type FileOrderBy = "id" | "name" | "size" | "created_at" | "modified_at" | "timestamp";
+export type FileOrderBy = "id" | "name" | "size" | "created_at" | "modified_at" | "timestamp";
 
-type FileOrder = SortOrder & {
+export type FileOrder = SortOrder & {
     by: FileOrderBy,
     descending: boolean
 }
 
-type FileView = "list" | "grid";
+export type FileView = "list" | "grid";
 
-type FilesResult = {
+export type FilesResult = {
     data: FileType[],
     start: number,
     end: number,
     count: number
 }
 
-type ConversationType = {
+export type ConversationType = {
     id: number,
     created_by_id: number,
     display_name: string,    
@@ -123,7 +123,7 @@ type ConversationType = {
     member_count?: number
 }
 
-type MemberType = {
+export type MemberType = {
     id: number,
     name: string,
     display_name: string,
@@ -136,11 +136,11 @@ type MemberType = {
 
 }
 
-type MemberTypingType =  MemberType & {
+export type MemberTypingType =  MemberType & {
     time: number
 }
 
-type MessageType = {
+export type MessageType = {
     id: number,
     html: string,    
     text: string,    
@@ -167,14 +167,14 @@ type MessageType = {
     options?: PollOptionType[]
 }
 
-type PollOptionType = {
+export type PollOptionType = {
     id: number | null,
     text: string,
     has_voted?: boolean,
     vote_count?: number
 }
  
-type UserType = {
+export type UserType = {
     id: number,
     uid: string,
     name: string,
@@ -185,13 +185,13 @@ type UserType = {
     presence: string
 }
 
-type FileKindType = "archive"|"audio"|"code"|"document"|"email"|"presentation"|"spreadsheet"|"image"|"text"|"video"|"file";
+export type FileKindType = "archive"|"audio"|"code"|"document"|"email"|"presentation"|"spreadsheet"|"image"|"text"|"video"|"file";
 
-type PreviewFormatType = "audio"|"code"|"embed"|"html"|"image"|"pdf"|"text"|"video"|"none";
+export type PreviewFormatType = "audio"|"code"|"embed"|"html"|"image"|"pdf"|"text"|"video"|"none";
 
-type ProviderType = "google-drive"|"onedrive"|"box"|"dropbox";
+export type ProviderType = "google-drive"|"onedrive"|"box"|"dropbox";
 
-type BlobType = {
+export type BlobType = {
     id: number,
     name: string,
     size?: number,
@@ -199,7 +199,7 @@ type BlobType = {
     thumbnail_url?: string
 }
 
-type FileType = {
+export type FileType = {
     id: number,
     refId?: number 
     version: number,
@@ -231,7 +231,7 @@ type FileType = {
     progress?: number
 }
 
-type ReactionType = {    
+export type ReactionType = {    
     id: number,
     parent: MessageType, 
     content: string,    
@@ -239,25 +239,25 @@ type ReactionType = {
     count?: number
 }
 
-type ReactableType = {    
+export type ReactableType = {    
     content: string,    
     created_by_id: number    
 }
 
-type ReactionGroup = {
+export type ReactionGroup = {
     content: string,
     count: number,
     has_reacted: boolean
 }
 
-type ReactionsResult = {
+export type ReactionsResult = {
     data: ReactionType[],
     start: number,
     end: number,
     count: number
 }
 
-type MeetingType = {
+export type MeetingType = {
     id: number,
     provider: string,
     provider_id: string,
@@ -267,25 +267,25 @@ type MeetingType = {
     ended_at: string
 }
 
-type BadgeType = {
+export type BadgeType = {
     private: number,
     rooms: number,
     chat: number
 }
 
-type EntityType = {
+export type EntityType = {
     id: number,
     type: string
 }
 
-type RealtimeMessage = {
+export type RealtimeMessage = {
     action: string,
     id: number,
     actor: UserType,
     message: MessageType
 }
 
-type RealtimeReaction = {
+export type RealtimeReaction = {
     action: string,
     id: number,
     actor: UserType,
@@ -293,14 +293,14 @@ type RealtimeReaction = {
     reaction: string
 }
 
-type RealtimeApp = {
+export type RealtimeApp = {
     action: string,
     id: number,
     actor: UserType,
     app: ConversationType    
 }
 
-type RealtimeMember = {
+export type RealtimeMember = {
     action: string,
     id: number,
     actor: UserType,
@@ -308,7 +308,7 @@ type RealtimeMember = {
     member: MemberType    
 }
 
-type RealtimeTyping = {
+export type RealtimeTyping = {
     action: string,
     id: number,
     actor: MemberTypingType,
@@ -316,7 +316,7 @@ type RealtimeTyping = {
     type: string    
 }
 
-type AppType = {
+export type AppType = {
     id: number,
     type: string,
     uid: string,
@@ -339,7 +339,7 @@ type AppType = {
     archive_url: string
 }
 
-type PostsType = {
+export type PostsType = {
     id: number,
     display_name: string,    
     last_message: MessageType,
@@ -350,7 +350,7 @@ type PostsType = {
     avatar_url: string
 }
 
-type EmbedType = {
+export type EmbedType = {
     id: number,
     title: string,
     description: string,

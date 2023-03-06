@@ -53,7 +53,7 @@
   @include text.truncate;
   font-size: vars.$font-size-sm;
 
-  .wy-emoji, .wy-icon {
+  .wy-icon {
     width: 1.25rem;
     height: 1.25rem;
     vertical-align: -.3125rem;
@@ -104,7 +104,7 @@
 
 .wy-item-row {
   display: flex;
-  align-items: center;
+  align-items: baseline;
 
   &:first-child {
     margin-bottom: .125rem;

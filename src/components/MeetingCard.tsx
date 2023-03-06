@@ -2,6 +2,7 @@ import React from "react";
 import Button from '../ui/Button';
 import Icon from '../ui/Icon';
 import dayjs from 'dayjs';
+import { MeetingType } from "../types/types";
 type Props = {
     meeting: MeetingType
 
@@ -12,7 +13,7 @@ const MeetingCard = ({ meeting }: Props) => {
         <div className="wy-list">
             {meeting.ended_at &&
                 <div className="wy-item wy-meeting">
-                    <Icon.UI name="zoom" size={4} color="#cccccc"/>
+                    <Icon.UI name="zoom" size={96} color="gray"/>
                     <div className="wy-item-body">                        
                         <div className="wy-item-title">Zoom meeting</div>                        
                         <div className="wy-item-body">                            
@@ -30,7 +31,7 @@ const MeetingCard = ({ meeting }: Props) => {
 
             {!meeting.ended_at &&
                 <a className="wy-item wy-meeting" href={meeting.join_url} target="_blank">
-                    <Icon.UI name="zoom" color="#4a8cff" size={4} />
+                    <Icon.UI name="zoom" color="native" size={96} />
                     <div className="wy-item-body">                        
                         <div className="wy-item-title">Zoom meeting</div>                        
                         <div className="wy-item-body">

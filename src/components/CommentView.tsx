@@ -12,6 +12,7 @@ import { PreviewContext } from "../contexts/PreviewContext";
 import useMutateTrashComment from '../hooks/useMutateTrashComment';
 import { useQueryClient } from 'react-query';
 import { updateCacheItem } from '../utils/cacheUtils';
+import { EmbedType, FileType, MemberType, MessageType, ReactableType } from '../types/types';
 
 type Props = {
     appId: number,
@@ -77,14 +78,14 @@ const CommentView = ({ appId, id, parentId, html, created_at, modified_at, creat
                         {/* edit action */}
                         {user.id === created_by.id &&
                             <Dropdown.Item onClick={onEdit}>
-                                <Icon.UI name="pencil"></Icon.UI> Edit
+                                <Icon.UI name="pencil" /> Edit
                             </Dropdown.Item>
                         }
 
                         {/* trash action */}
                         {user.id === created_by.id &&
                             <Dropdown.Item onClick={handleDelete}>
-                                <Icon.UI name="trashcan"></Icon.UI> Trash
+                                <Icon.UI name="trashcan" /> Trash
                             </Dropdown.Item>
                         }
                     </Dropdown.UI>

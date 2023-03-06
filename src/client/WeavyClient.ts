@@ -1,6 +1,7 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { IWeavyClient, WeavyClientOptions } from '../types/types';
 
-export default class WeavyClient {
+export default class WeavyClient implements IWeavyClient {
     url;
     connection;
     tokenFactory;

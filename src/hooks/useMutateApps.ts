@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { QueryKey, useMutation, useQueryClient } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { AppType } from "../types/types";
 
 export function useMutateAppsSubscribe(appKey: QueryKey) {
 

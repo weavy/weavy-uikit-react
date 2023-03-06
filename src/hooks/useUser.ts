@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
-import WeavyClient from "../client/WeavyClient";
+import { UserType, IWeavyClient } from "../types/types";
 
 /// GET current user
-export default function useUser(client: WeavyClient) {    
+export default function useUser(client: IWeavyClient) {    
     if (!client) {
         throw new Error('useUser must be used within an WeavyProvider');
     }

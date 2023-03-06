@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useQueryClient } from 'react-query';
 import useCommentList from '../hooks/useCommentList';
 import useMutateComment from '../hooks/useMutateComment';
+import { BlobType, FileType, MessageType, PollOptionType } from '../types/types';
 import Spinner from '../ui/Spinner';
 import { updateCacheItem } from '../utils/cacheUtils';
 import Comment from './Comment';

@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { UserContext } from "../contexts/UserContext";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { MessageType } from "../types/types";
 import { updateCacheItem } from "../utils/cacheUtils";
 
 /// POST to add a reaction to a message

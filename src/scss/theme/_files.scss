@@ -9,6 +9,10 @@
   text-align: center;
 }
 
+.wy-files {
+    width: 100%;
+}
+
 .wy-files-dragging {
   &::after {
     content: "Drop files here to upload.";

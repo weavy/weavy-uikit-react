@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { Mutation, QueryFunctionContext, QueryKey, useInfiniteQuery, UseInfiniteQueryOptions, useQuery, useQueryClient } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { FileOrder, FilesResult, FileType } from "../types/types";
 import { addToQueryData, findAnyExistingItem, updateQueryData } from "../utils/cacheUtils";
 import { FileMutation } from "./useMutateFile";
 

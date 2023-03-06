@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { QueryKey, useQuery } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { FileType } from "../types/types";
 
 /// GET versions of a file
 export default function useFileVersions(filesKey: QueryKey, fileId: number, options: any) {

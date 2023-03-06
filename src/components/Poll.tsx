@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import useMutateVote from '../hooks/useMutateVote';
+import { PollOptionType } from '../types/types';
 import PollOption from './PollOption';
 
 type Props = {
     appId: number,
     parentId: number,
+    parentType: string,
     options: PollOptionType[]
 }
 
-const Poll = ({ appId, parentId, options }: Props) => {
+const Poll = ({ appId, parentId, parentType, options }: Props) => {
 
     const [pollOptions, setPollOptions] = useState<PollOptionType[]>(options)
     const [totalVotes, setTotalVotes] = useState<number>(0);
@@ -26,7 +28,7 @@ const Poll = ({ appId, parentId, options }: Props) => {
 
     const handleVote = async (optionId: number) => {
         if (optionId) {
-            await vote.mutateAsync({ id: optionId, appId: appId, parentId: parentId });            
+            await vote.mutateAsync({ id: optionId, appId: appId, type: parentType, parentId: parentId });            
         }
     }
 

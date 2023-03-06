@@ -6,7 +6,7 @@ import Messages from './Messages';
 import useMembers from '../hooks/useMembers';
 import Typing from './Typing';
 import useConversation from '../hooks/useConversation';
-import classNames from 'classnames';
+import classNames from "classnames";
 
 const Chat = ({ uid, className }: ChatProps) => {
     const { client } = useContext(WeavyContext);
@@ -29,7 +29,7 @@ const Chat = ({ uid, className }: ChatProps) => {
     });
 
     useEffect(() => {
-        if (dataChat) {
+        if (dataChat) {            
             setSelectedId(dataChat.id);
         } else {
             setSelectedId(null);
@@ -55,8 +55,8 @@ const Chat = ({ uid, className }: ChatProps) => {
                 <div>No chat with the contextual id <strong>{uid}</strong></div>
             }
 
-            {selectedId && dataMembers && dataChat &&
-                <Messages id={selectedId} chatRoom={true} members={dataMembers} lastMessageId={dataChat.last_message?.id} />
+            {selectedId && dataMembers && dataChat && dataConversation &&
+                <Messages id={selectedId} chatRoom={true} members={dataMembers} lastMessageId={dataConversation.last_message?.id} />
             }
         </div>
     )

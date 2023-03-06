@@ -2,7 +2,7 @@ import React, { FC, useContext } from 'react';
 import MessengerProvider from '../contexts/MessengerContext';
 import Conversation from './Conversation';
 import ConversationList from './ConversationList';
-import { Messenger } from '../types/Messenger';
+import { IMessenger } from '../types/Messenger';
 import { WeavyContext } from '../contexts/WeavyContext';
 import classNames from 'classnames';
 
@@ -10,7 +10,7 @@ type Props = {
     className?: string,
 }
 
-const Messenger: FC<Messenger> = ({ className }: Props) => {
+const Messenger: FC<IMessenger> = ({ className }: Props) => {
 
     const { client } = useContext(WeavyContext);
 

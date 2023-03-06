@@ -10,6 +10,7 @@ import { QueryKey } from 'react-query';
 import { toKebabCase } from '../utils/utils';
 import Spinner from '../ui/Spinner';
 import dayjs from 'dayjs';
+import { FileType } from '../types/types';
 
 
 type Props = {
@@ -73,10 +74,10 @@ const FileVersions = ({ filesKey, file, onVersionSelect }: Props) => {
 
                 return <div key={'file-version' + versionFile.version} className={classNames("wy-item wy-item-hover wy-item-lg", {"wy-active": versionFile.version == activeVersion?.version})} onClick={handleSelectWrapper.bind(FileVersions, versionFile)}>
                     {
-                        file.status === "error" ? <Icon.UI name="alert-octagon" color="error" size={48/16/1.5} /> :
-                        file.status === "conflict" ? <Icon.UI name="alert" color="yellow" size={48/16/1.5} /> :
+                        file.status === "error" ? <Icon.UI name="alert-octagon" color="error" size={48} /> :
+                        file.status === "conflict" ? <Icon.UI name="alert" color="yellow" size={48} /> :
                         file.status === "pending" ? <Spinner.UI spin={!versionFile.progress} progress={versionFile.progress} size={48} /> :
-                        <Icon.UI name={versionIcon} size={48/16/1.5} className={classNames("wy-kind-" + toKebabCase(versionFile.kind), "wy-ext-" + ext.substring(1))} />
+                        <Icon.UI name={versionIcon} size={48} className={classNames("wy-kind-" + toKebabCase(versionFile.kind), "wy-ext-" + ext.substring(1))} />
                     }
                     <div className="wy-item-body">
                         <div className="wy-item-title">{num}. {versionFile.name}</div>

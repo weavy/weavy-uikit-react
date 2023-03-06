@@ -4,6 +4,7 @@ import Spinner from "../ui/Spinner";
 import classNames from "classnames";
 import PdfViewer from "./PdfViewer";
 import { checkImageLoad, imageLoaded } from "./Image";
+import { PreviewFormatType } from "../types/types";
 
 const getStream = (response: Response) => {
     if (response && response.ok && response.body) {

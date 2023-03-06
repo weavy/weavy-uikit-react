@@ -4,6 +4,7 @@ import Icon from '../ui/Icon';
 import Sheet from '../ui/Sheet';
 import Avatar from './Avatar';
 import Spinner from '../ui/Spinner';
+import { UserType } from '../types/types';
 
 type Props = {
     id: number,

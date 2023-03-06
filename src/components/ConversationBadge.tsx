@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { WeavyContext } from "../contexts/WeavyContext";
 import useBadge from "../hooks/useBadge";
+import { BadgeType } from "../types/types";
 
 const ConversationBadge = () => {
     const { client } = useContext(WeavyContext);

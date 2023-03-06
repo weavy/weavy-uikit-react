@@ -9,12 +9,12 @@ import Dropdown from '../ui/Dropdown';
 import Icon from '../ui/Icon';
 import Button from '../ui/Button';
 import Typing from './Typing';
-import useMutateRemoveMembers from '../hooks/useMutateRemoveMembers';
 import Avatar from './Avatar';
 import { UserContext } from '../contexts/UserContext';
-import classNames from 'classnames';
+import classNames from "classnames";
 import useMutateStarred from '../hooks/useMutateStarred';
 import useMutateLeaveConversation from '../hooks/useMutateLeaveConversation';
+import { RealtimeApp, RealtimeMember, RealtimeMessage } from '../types/types';
 
 const ConversationListItem = ({ item, userId, refetchConversations }: ConversationListItemProps) => {
 
@@ -46,6 +46,27 @@ const ConversationListItem = ({ item, userId, refetchConversations }: Conversati
     //const shortCodeRegexp = /:[^:\s]*(?:::[^:\s]*)*:/gi;
     //const itemSnippet = (item.last_message?.text || '').replace(shortCodeRegexp, (shortCode) => messageEmojis[shortCode]);
 
+
+    // extract and keep all emojis
+    const emojiHtml = item.last_message?.html || '';
+    const emojiRegexp = /<img[^>]+wy-emoji[^>]+>/g;
+    const emojiUnicodeRegexp = /alt=\"([^\"]+)\"/;
+    const messageUnicodeEmojis: { [index: string]: string } = {};
+
+    emojiHtml.match(emojiRegexp)?.forEach((imgEmoji: any) => {
+        let uniCode = imgEmoji.match(emojiUnicodeRegexp)![1];
+
+        if (uniCode) {
+            messageUnicodeEmojis[uniCode] = imgEmoji;
+        }
+    });
+    
+    var emojiMessageText = item.last_message?.plain || '';
+
+    // replace text unicode emojis with extracted emojis
+    for (let emoji in messageUnicodeEmojis) {
+        emojiMessageText = emojiMessageText.replace(emoji, messageUnicodeEmojis[emoji]);
+    }
 
     const ChatRoom = "edb400ac-839b-45a7-b2a8-6a01820d1c44";
 
@@ -153,13 +174,13 @@ const ConversationListItem = ({ item, userId, refetchConversations }: Conversati
                                 }
 
                                 {item.last_message?.text &&
-                                    <>{item.last_message?.plain}</>
+                                    <span dangerouslySetInnerHTML={{ __html: emojiMessageText}}></span>
                                 }
                                 {!item.last_message?.text && (item.last_message?.attachment_count || 0) > 0 &&
-                                    <Icon.UI name="attachment" size={1} />
+                                    <Icon.UI name="attachment" />
                                 }
                                 {!item.last_message?.text && item.last_message?.meeting_id &&
-                                    <Icon.UI name="zoom" size={1} />
+                                    <Icon.UI name="zoom" />
                                 }
                                 {!item.last_message &&
                                     <>&nbsp;</>
@@ -176,7 +197,7 @@ const ConversationListItem = ({ item, userId, refetchConversations }: Conversati
             <div className="wy-item-actions wy-item-actions-bottom">
                 {item.is_starred &&
                     <Button.UI onClick={handleUnstar}>
-                        <Icon.UI name="star" size={1} className='wy-icon-yellow'/>
+                        <Icon.UI name="star" size={24} className='wy-icon-yellow'/>
                     </Button.UI>
 
                 }
@@ -185,13 +206,13 @@ const ConversationListItem = ({ item, userId, refetchConversations }: Conversati
                     <>
                         {item.is_unread &&
                             <Dropdown.Item onClick={handleRead}>
-                                <Icon.UI name="unread"></Icon.UI>
+                                <Icon.UI name="unread" />
                                 Mark as read
                             </Dropdown.Item>
                         }
                         {!item.is_unread &&
                             <Dropdown.Item onClick={handleUnread}>
-                                <Icon.UI name="read"></Icon.UI>
+                                <Icon.UI name="read" />
                                 Mark as unread
                             </Dropdown.Item>
                         }
@@ -199,13 +220,13 @@ const ConversationListItem = ({ item, userId, refetchConversations }: Conversati
                     <>
                         {item.is_pinned &&
                             <Dropdown.Item onClick={handleUnpin}>
-                                <Icon.UI name="unpin"></Icon.UI>
+                                <Icon.UI name="unpin" />
                                 Unpin
                             </Dropdown.Item>
                         }
                         {!item.is_pinned &&
                             <Dropdown.Item onClick={handlePin}>
-                                <Icon.UI name="pin"></Icon.UI>
+                                <Icon.UI name="pin" />
                                 Pin
                             </Dropdown.Item>
                         }
@@ -213,20 +234,20 @@ const ConversationListItem = ({ item, userId, refetchConversations }: Conversati
                     <>
                         {item.is_starred &&
                             <Dropdown.Item onClick={handleUnstar}>
-                                <Icon.UI name="unstar"></Icon.UI>
+                                <Icon.UI name="unstar" />
                                 Unstar
                             </Dropdown.Item>
                         }
                         {!item.is_starred &&
                             <Dropdown.Item onClick={handleStar}>
-                                <Icon.UI name="star"></Icon.UI>
+                                <Icon.UI name="star" />
                                 Star
                             </Dropdown.Item>
                         }
                     </>
                     {item.type === ChatRoom &&
                         <Dropdown.Item onClick={handleLeaveConversation}>
-                            <Icon.UI name="account-minus"></Icon.UI>
+                            <Icon.UI name="account-minus" />
                             Leave conversation
                         </Dropdown.Item>
                     }                    

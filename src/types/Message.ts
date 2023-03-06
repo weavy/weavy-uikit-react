@@ -1,3 +1,5 @@
+import { FileType, MeetingType, MemberType, PollOptionType, ReactableType } from "./types";
+
 export interface MessageProps {
     id: number,
     html: string,
@@ -9,7 +11,8 @@ export interface MessageProps {
     created_by: string,
     attachments: FileType[],
     meeting?: MeetingType,
-    parentId: number | null,
+    options?: PollOptionType[],
+    appId: number,
     reactions: ReactableType[],
     reactions_count?: number,
     seenBy: MemberType[],

@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useQuery } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { BadgeType } from "../types/types";
 
 /// GET the conversation badge
 export default function useBadge() {

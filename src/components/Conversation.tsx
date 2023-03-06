@@ -18,6 +18,9 @@ import Avatar from './Avatar';
 import { UserContext } from '../contexts/UserContext';
 import Messages from './Messages';
 import useMutateLeaveConversation from '../hooks/useMutateLeaveConversation';
+import { MemberType, RealtimeApp } from '../types/types';
+import ConversationBadge from './ConversationBadge';
+import Presence from './Presence';
 
 const Conversation = ({ id, showBackButton }: ConversationProps) => {
 
@@ -134,38 +137,46 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
             setIsRoomOrChat(true)
         }
     }, [dataConversation]);
-    
+
     return (
         <>
             <header className="wy-appbars" data-adjust-scrollbar-top>
                 <nav className="wy-appbar">
                     <div>
                         {showBackButton &&
-                            <Button.UI onClick={handleBack}><Icon.UI name="back" /></Button.UI>
+                            <>
+                                <Button.UI onClick={handleBack}><Icon.UI name="back" /></Button.UI>
+                                <ConversationBadge />
+                            </>
                         }</div>
                     {selectedConversationId && dataConversation &&
 
                         <>
                             <div className="wy-appbar-text">
                                 <Typing id={selectedConversationId} context="conversation">
-                                    {dataConversation.display_name}
+                                <div className="wy-appbar-text wy-typing-hide">
+                                        {!isRoomOrChat && dataConversation.user_id &&
+                                            <Presence id={dataConversation.user_id} status="away" />
+                                        }
+                                        {dataConversation.display_name}
+                                    </div>
                                 </Typing>
                             </div>
                             <Dropdown.UI directionX='left'>
 
                                 <Dropdown.Item onClick={() => toggleDetailsModal(true)}>
-                                    <Icon.UI name="information"></Icon.UI>
+                                    <Icon.UI name="information" />
                                     Details
                                 </Dropdown.Item>
 
                                 {dataConversation.type === ChatRoom &&
                                     <>
                                         <Dropdown.Item onClick={() => toggleAddModal(true)}>
-                                            <Icon.UI name="account-plus"></Icon.UI>
+                                            <Icon.UI name="account-plus" />
                                             Add members
                                         </Dropdown.Item>
                                         <Dropdown.Item onClick={handleLeaveConversation}>
-                                            <Icon.UI name="account-minus"></Icon.UI>
+                                            <Icon.UI name="account-minus" />
                                             Leave conversation
                                         </Dropdown.Item>
                                     </>
@@ -185,7 +196,9 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
                 </div>
             }
             {selectedConversationId && dataMembers && dataConversation &&
-                <Messages id={selectedConversationId} chatRoom={isRoomOrChat} members={dataMembers} displayName={dataConversation?.display_name} avatarUrl={dataConversation?.avatar_url} lastMessageId={dataConversation?.last_message?.id} />
+                <div className="wy-pane-body">
+                    <Messages id={selectedConversationId} chatRoom={isRoomOrChat} members={dataMembers} displayName={dataConversation?.display_name} avatarUrl={dataConversation?.avatar_url} lastMessageId={dataConversation?.last_message?.id} />
+                </div>
             }
 
             <Overlay.UI isOpen={modalAddOpen} className="wy-modal">
@@ -224,7 +237,7 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
 
                                     <input className="wy-input" value={title} onChange={(e) => handleUpdateTitle(e)} />
                                     <Button.UI onClick={handleSaveTitle} className="wy-button-icon">
-                                        <Icon.Raw name="content-save" />
+                                        <Icon.UI name="content-save" />
                                     </Button.UI>
                                 </div>
                                 <div className="wy-description">Changing the name of a group chat changes it for everyone.</div>
@@ -242,19 +255,19 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
                                             </div>
                                             {dataConversation.created_by_id === user.id && m.id !== user.id &&
                                                 <Button.UI onClick={() => handleRemoveMember(m.id)} className="wy-button-icon" title="Remove member">
-                                                    <Icon.Raw name="account-minus" />
+                                                    <Icon.UI name="account-minus" />
                                                 </Button.UI>
                                             }
                                             {m.id === user.id &&
                                                 <Button.UI onClick={() => handleLeaveConversation()} className="wy-button-icon" title="Leave conversation">
-                                                    <Icon.Raw name="account-minus" />
+                                                    <Icon.UI name="account-minus" />
                                                 </Button.UI>
                                             }
                                         </div>
                                     )
                                 })}
                                 <Button.UI onClick={handleAddMembers} title="Add members">
-                                    <Icon.UI name="account-plus"/> 
+                                    <Icon.UI name="account-plus" />
                                     <div className="wy-item-body">Add members</div>
                                 </Button.UI>
                             </div>

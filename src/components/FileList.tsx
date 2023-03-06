@@ -9,6 +9,7 @@ import { useMutateFileSubscribe, useMutateFileUnsubscribe } from '../hooks/useMu
 import Spinner from '../ui/Spinner';
 import Icon from '../ui/Icon';
 import PreviewFiles from './PreviewFiles';
+import { FileOrder, FileOrderBy, FileType, FileView } from '../types/types';
 
 type Props = {
     appId: number,

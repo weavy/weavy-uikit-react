@@ -16,6 +16,7 @@ import useMutateSubscribe from '../hooks/useMutateSubscribe';
 import useMutateUnsubscribe from '../hooks/useMutateUnsubscribe';
 import Poll from './Poll';
 import MeetingCard from './MeetingCard';
+import { EmbedType, FileType, MeetingType, MemberType, PollOptionType, ReactableType } from '../types/types';
 
 type Props = {
     appId: number,
@@ -99,12 +100,12 @@ const PostView = ({ appId, id, html, created_at, modified_at, created_by, attach
                         <Dropdown.Item onClick={handleSubscription}>
                             {is_subscribed &&
                                 <>
-                                    <Icon.UI name="bell-off"></Icon.UI> Unsubscribe
+                                    <Icon.UI name="bell-off" /> Unsubscribe
                                 </>
                             }
                             {!is_subscribed &&
                                 <>
-                                    <Icon.UI name="bell"></Icon.UI> Subscribe
+                                    <Icon.UI name="bell" /> Subscribe
                                 </>
                             }
 
@@ -113,14 +114,14 @@ const PostView = ({ appId, id, html, created_at, modified_at, created_by, attach
                         {/* edit action */}
                         {user.id === created_by.id &&
                             <Dropdown.Item onClick={onEdit}>
-                                <Icon.UI name="pencil"></Icon.UI> Edit
+                                <Icon.UI name="pencil" /> Edit
                             </Dropdown.Item>
                         }
 
                         {/* trash action */}
                         {user.id === created_by.id &&
                             <Dropdown.Item onClick={handleTrash}>
-                                <Icon.UI name="trashcan"></Icon.UI> Trash
+                                <Icon.UI name="trashcan" /> Trash
                             </Dropdown.Item>
                         }
                     </Dropdown.UI>
@@ -152,7 +153,7 @@ const PostView = ({ appId, id, html, created_at, modified_at, created_by, attach
 
                 {/* poll */}
                 {options && options.length > 0 &&
-                    <Poll appId={appId} parentId={id} options={options} />
+                    <Poll appId={appId} parentId={id} parentType="posts" options={options} />
                 }
 
                 {/* files */}

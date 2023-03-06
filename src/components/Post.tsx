@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PostView from './PostView';
 import PostEdit from './PostEdit';
 import PostTrashed from './PostTrashed';
+import { EmbedType, FileType, MeetingType, MemberType, PollOptionType, ReactableType } from '../types/types';
 
 type Props = {
     appId: number,

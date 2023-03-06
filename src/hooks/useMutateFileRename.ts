@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { MutationKey, useMutation, useQueryClient } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { FileType, ServerErrorResponse } from "../types/types";
 import { updateCacheItem } from "../utils/cacheUtils";
 
 /// PATCH to update a File

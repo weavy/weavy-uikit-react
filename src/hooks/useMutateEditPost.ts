@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { BlobType, FileType, MessageType, PollOptionType } from "../types/types";
 
 /// PATCH to update a Post
 export default function useMutateEditPost() {

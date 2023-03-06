@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { MessagesResult } from "../types/types";
 
 /// GET all messages in an app
 export default function useMessages(id: number | null, options: any) {

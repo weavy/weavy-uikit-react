@@ -1,5 +1,6 @@
 import React, { createContext} from "react";
 import useUser from "../hooks/useUser";
+import { UserContextProps } from "../types/types";
 
 export const UserContext = createContext<UserContextProps>({
     user: { id: -1, uid: "", username: "anonymous", name: "Anonymous", email: "", display_name: "", presence: "", avatar_url: "" }    

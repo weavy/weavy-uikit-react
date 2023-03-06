@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { MembersResult } from "../types/types";
 
 /// GET users by search query
 export default function useSearchUsers(text: string, options: any) {

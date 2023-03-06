@@ -7,6 +7,7 @@ import Button from '../ui/Button';
 import Spinner from '../ui/Spinner';
 import PostPlaceHolder from './PostPlaceholder';
 import useInfiniteScroll from '../hooks/useInfiniteScroll';
+import { MessageType, RealtimeReaction } from '../types/types';
 
 type Props = {
     appId: number

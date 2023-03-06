@@ -26,7 +26,7 @@ const Attachment = ({url, previewUrl, name,size, provider, onClick }: Props) => 
 
     return (
         <a href={previewUrl || url} className="wy-item wy-item-lg" target={"_blank"} title={name} onClick={onClick ? (e) => onClick(e) : undefined}>
-            <Icon.UI name={icon + (prov ? `+${prov}` : "")} size={2} className={classNames("wy-kind-" + toKebabCase(kind), "wy-ext-" + ext.substring(1))} />
+            <Icon.UI name={icon + (prov ? `+${prov}` : "")} size={48} className={classNames("wy-kind-" + toKebabCase(kind), "wy-ext-" + ext.substring(1))} />
             <div className="wy-item-body ">
                 <div className="wy-item-title">{name}</div>
                 {fileSize &&

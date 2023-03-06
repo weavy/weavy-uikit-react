@@ -6,7 +6,7 @@ import Spinner from '../ui/Spinner';
 import Message from './Message';
 import { scrollParentToBottom, isParentAtBottom } from "../utils/scroll-position";
 import { useReverseInfiniteScroll } from '../hooks/useInfiniteScroll';
-
+import dayjs from 'dayjs';
 import useEvents from '../hooks/useEvents';
 import useMutateRead from '../hooks/useMutateRead';
 import useMutateMessage from '../hooks/useMutateMessage';
@@ -14,6 +14,7 @@ import { useQueryClient } from 'react-query';
 import { WeavyContext } from '../contexts/WeavyContext';
 import Avatar from './Avatar';
 import Editor from './Editor';
+import { BlobType, FileType, MembersResult, MessageType, PollOptionType, RealtimeMessage, RealtimeReaction } from '../types/types';
 
 type Props = {
     id: number,
@@ -30,17 +31,17 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
     const { user } = useContext(UserContext);
 
     const queryClient = useQueryClient();
-    const { client } = useContext(WeavyContext);    
+    const { client } = useContext(WeavyContext);
     const messagesEndRef = useRef<any>();
-    
+
     const { dispatch, on, events } = useEvents();
-    
+
     const infiniteMessages = useMessages(id, {});
     const { isLoading, isError, data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = infiniteMessages;
-    
+
     const readMessageMutation = useMutateRead();
     const addMessageMutation = useMutateMessage();
-    
+
     // scroll to bottom when data changes
     useLayoutEffect(() => {
         //if (id && !isLoading && !isLoadingMembers && !isLoadingConversation) {
@@ -56,7 +57,7 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
     const readMoreRef = useReverseInfiniteScroll(infiniteMessages, [id]);
 
     useEffect(() => {
-        // mark conversation as read
+        // mark conversation as read        
         if (id && lastMessageId) {
             readMessageMutation.mutate({ id: id, read: true, messageId: lastMessageId })
         }
@@ -69,7 +70,7 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
             client?.subscribe(`a${id}`, "reaction_added", handleRealtimeReactionInserted);
             client?.subscribe(`a${id}`, "reaction_removed", handleRealtimeReactionDeleted);
 
-           
+
         }
 
         return () => {
@@ -104,17 +105,17 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
     const handleRealtimeReactionDeleted = useCallback((realtimeEvent: RealtimeReaction) => {
         dispatch("reaction_deleted_" + realtimeEvent.entity.id, realtimeEvent);
     }, [id]);
-  
+
     const handleCreate = async (text: string, blobs: BlobType[], attachments: FileType[], meeting: number | null, embed: number | null, options: PollOptionType[]) => {
         if (id) {
-            
+
             await addMessageMutation.mutateAsync({ id: id, text: text, blobs: blobs, meeting: meeting, userId: user.id }, {
                 onSuccess: (data: MessageType) => {
                     // mark conversation as read
                     readMessageMutation.mutate({ id: id, read: true, messageId: data.id }, {
                         onSettled: () => onNextRender(() => requestAnimationFrame(() => requestAnimationFrame(() => scrollParentToBottom(messagesEndRef.current, true))))
                     });
-                    
+
                 }
             });
         }
@@ -138,7 +139,7 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
         // set created_by
         realtimeEvent.message.created_by = realtimeEvent.actor;
 
-        // mark conversation as read
+        // mark conversation as read        
         readMessageMutation.mutate({ id: id, read: true, messageId: realtimeEvent.message.id })
 
         const previousData = queryClient.getQueryData<any>(['messages', id]);
@@ -190,12 +191,21 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
 
             </div>
             {data && members && data.pages && data.pages.map((group, i) => {
+                let lastDate: dayjs.Dayjs;
                 // Reverse key since page loading is reversed
                 return <React.Fragment key={data.pages.length - i}>
                     {
                         group.data?.map((item: MessageType) => {
 
-                            return <Message
+                            const date = dayjs.utc(item.created_at).tz(dayjs.tz.guess());
+                            let dateContent = <></>;
+
+                            if(lastDate?.format('YYMMDD') !== date.format('YYMMDD')){
+                                lastDate = date;
+                                dateContent = <div className="wy-date-separator"><time>{date.format("L")}</time></div>
+                            }
+
+                            const message = <Message  
                                 key={item.id}
                                 id={item.id}
                                 html={item.html}
@@ -207,14 +217,17 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
                                 created_by={item.created_by.display_name}
                                 attachments={item.attachments}
                                 meeting={item.meeting}
-                                parentId={id}
+                                options={item.options}
+                                appId={id}
                                 reactions={item.reactions}
                                 chatRoom={chatRoom}
                                 //reactions_count={item.reactions_count}
                                 seenBy={(members.data && members.data.length > 0) ? members.data.filter((member) => {
                                     return member.marked_id === item.id && member.id !== user.id;
                                 }) : []}
-                            />
+                            />;
+
+                            return <React.Fragment key={item.id}>{dateContent}{message}</React.Fragment>;
                         })
                     }
                 </React.Fragment>
@@ -225,7 +238,7 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
 
     if (isLoading) {
         messages = (
-            <Spinner.UI overlay={true}/>
+            <Spinner.UI overlay={true} />
         )
     }
 
@@ -236,7 +249,7 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
                 {messages}
             </div>
             <div className="wy-footerbar wy-footerbar-sticky">
-                <Editor key={id} appId={id} placeholder="Type a message" buttonText="" editorType="messages" editorLocation='apps' onSubmit={handleCreate} showAttachments={true} showCloudFiles={true} showMeetings={true} showTyping={true} useDraft={true}/>                
+                <Editor key={id} appId={id} placeholder="Type a message" buttonText="" editorType="messages" editorLocation='apps' onSubmit={handleCreate} showAttachments={true} showCloudFiles={true} showMeetings={true} showTyping={true} useDraft={true} />
             </div>
         </>
 

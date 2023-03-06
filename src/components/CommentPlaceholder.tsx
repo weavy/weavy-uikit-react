@@ -1,5 +1,5 @@
 import React from 'react';
-import Avatar from './Avatar';
+import { MemberType } from '../types/types';
 
 type Props = {
     text: string,

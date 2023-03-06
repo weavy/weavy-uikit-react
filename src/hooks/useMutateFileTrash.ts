@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { MutationKey, useMutation, useQueryClient } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { FileType, ServerErrorResponse } from "../types/types";
 import { removeCacheItem, updateCacheItem } from "../utils/cacheUtils";
 
 export function useMutateFileTrash(filesKey: MutationKey) {

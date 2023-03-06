@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useQuery } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { ReactionsResult } from "../types/types";
 
 /// GET who reacted on an entity
 export default function useReactionList(id: number, type: string, options: any) {

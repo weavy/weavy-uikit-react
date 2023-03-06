@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useMutation } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { BlobType, ServerErrorResponse } from "../types/types";
 
 export type UploadFileProps = {        
     file: File,

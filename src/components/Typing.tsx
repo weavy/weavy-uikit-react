@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import { WeavyContext } from '../contexts/WeavyContext';
+import { MemberTypingType, RealtimeMessage, RealtimeTyping } from '../types/types';
 
 type Props = {
     id: number,
@@ -25,12 +26,12 @@ const Typing = ({ children, id, context }: Props) => {
 
     useEffect(() => {
         setActiveTypers([]);
-        
-        client?.subscribe(`a${id}`, "typing", handleTyping);        
+
+        client?.subscribe(`a${id}`, "typing", handleTyping);
         client?.subscribe(`a${id}`, "message_created", handleStopTyping);
 
         return () => {
-            client?.unsubscribe(`a${id}`, "typing", handleTyping);            
+            client?.unsubscribe(`a${id}`, "typing", handleTyping);
             client?.unsubscribe(`a${id}`, "message_created", handleStopTyping);
         }
     }, [id])
@@ -88,7 +89,7 @@ const Typing = ({ children, id, context }: Props) => {
     }
 
     const setTypers = (actor: MemberTypingType) => {
-        
+
         // remove existing typing events by this user (can only type in one conversation at a time)
         activeTypers.forEach(function (item: any, index: number) {
             if (item.member.id === actor.id) {
@@ -101,26 +102,22 @@ const Typing = ({ children, id, context }: Props) => {
         setActiveTypers([...activeTypers, actor]);
     }
 
-    const handleTyping = useCallback((realtimeEvent: RealtimeTyping) => {        
-        if (realtimeEvent.entity.id === id && realtimeEvent.actor.id !== user.id) {            
+    const handleTyping = useCallback((realtimeEvent: RealtimeTyping) => {
+        if (realtimeEvent.entity.id === id && realtimeEvent.actor.id !== user.id) {
             setTypers(realtimeEvent.actor);
         }
     }, [id, context, activeTypers]);
 
-    const handleStopTyping = useCallback((realtimeEvent: RealtimeMessage) => {        
+    const handleStopTyping = useCallback((realtimeEvent: RealtimeMessage) => {
         if (realtimeEvent.message.app_id === id) {
             setActiveTypers([]);
         }
     }, [id, context, activeTypers]);
-    
+
     return (
         <>
-            {text !== "" &&
-                <>{text}</>
-            }
-            {text === "" &&
-                <>{children}</>
-            } 
+            <span {...(text !== "" ? {} : { "hidden": true })}>{text}</span>
+            <span {...(text === "" ? {} : { "hidden": true })}>{children}</span>
         </>
 
 

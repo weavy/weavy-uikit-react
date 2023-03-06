@@ -4,6 +4,7 @@ import useSearchUsers from "../hooks/useSearchUsers";
 import Avatar from './Avatar';
 import Button from '../ui/Button';
 import Icon from '../ui/Icon';
+import { MemberType } from "../types/types";
 
 type SearchUsersProps = {
     existingMembers?: MemberType[],
@@ -49,7 +50,7 @@ const SearchUsers = ({ existingMembers, handleSubmit, buttonTitle }: SearchUsers
             </div>
 
             <div className="wy-pane-group">
-                {data && (!data.data || data.data.filter(m => existingMembers?.find(e => e.id === m.id) === undefined).length === 0) &&
+                {data && (!data.data || data.data.filter((m: MemberType) => existingMembers?.find(e => e.id === m.id) === undefined).length === 0) &&
                     <div className="wy-table-no-result">Your search did not match any people.</div>
                 }
                 {selected && selected.length > 0 &&
@@ -88,7 +89,7 @@ const SearchUsers = ({ existingMembers, handleSubmit, buttonTitle }: SearchUsers
                 }
 
                 <div className="wy-pane-group">
-                    {data && data.data && data.data.filter(m => existingMembers?.find(e => e.id === m.id) === undefined && selected.find(s => s.id === m.id) === undefined).map((member: MemberType) => {
+                    {data && data.data && data.data.filter((m: MemberType) => existingMembers?.find(e => e.id === m.id) === undefined && selected.find(s => s.id === m.id) === undefined).map((member: MemberType) => {
                         return (
                             <div className='wy-item' key={member.id} >
                                 <Avatar src={member.avatar_url} size={32} id={member.id} presence={member.presence} name={member.display_name} />
@@ -115,8 +116,8 @@ const SearchUsers = ({ existingMembers, handleSubmit, buttonTitle }: SearchUsers
                                     <td className="wy-table-cell-icon">
                                         <input type="checkbox" className="wy-button-check" checked={isChecked(member.id)} onChange={(() => { })} />
                                         <Button.UI className='wy-button-icon'>
-                                            <Icon.Raw name="checkbox-blank" />
-                                            <Icon.Raw name="checkbox-marked" />
+                                            <Icon.UI name="checkbox-blank" />
+                                            <Icon.UI name="checkbox-marked" />
                                         </Button.UI>                                        
                                     </td>
                                 </tr>

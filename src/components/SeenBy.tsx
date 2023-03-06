@@ -1,6 +1,7 @@
 import React from "react";
 import Avatar from "./Avatar";
 import dayjs from 'dayjs';
+import { MemberType } from "../types/types";
 
 type Props = {
     id: number,

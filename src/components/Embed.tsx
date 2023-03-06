@@ -1,6 +1,7 @@
 import Icon from '../ui/Icon';
 import Button from '../ui/Button';
 import React from 'react';
+import { EmbedType } from '../types/types';
 
 type Props = {
     embed: EmbedType,

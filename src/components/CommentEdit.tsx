@@ -3,6 +3,7 @@ import Icon from '../ui/Icon';
 import Button from '../ui/Button';
 import Editor from './Editor';
 import useMutateEditComment from '../hooks/useMutateEditComment';
+import { BlobType, EmbedType, FileType, MemberType, PollOptionType, ReactableType } from '../types/types';
 
 type Props = {
     appId: number,

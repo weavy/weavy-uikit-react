@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useInfiniteQuery } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { ConversationsResult } from "../types/types";
 
 /// GET all conversations
 export default function useConversations(options: any) {

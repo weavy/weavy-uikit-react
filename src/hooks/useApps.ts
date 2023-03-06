@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useQuery } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { AppType } from "../types/types";
 
 /// GET a specific app
 export default function useApp(uid: string, options: any) {

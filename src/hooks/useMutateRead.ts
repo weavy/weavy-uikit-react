@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { ConversationType } from "../types/types";
 import { updateCacheItem } from "../utils/cacheUtils";
 
 /// PUT or DELETE to update read state on a conversation
@@ -30,7 +31,7 @@ export default function useMutateRead() {
         onSuccess: () => {
             queryClient.invalidateQueries("conversations");
         },
-        onMutate: async (variables: any) => {            
+        onMutate: async (variables: any) => {                      
             updateCacheItem(queryClient, 'conversations', variables.id, (item: ConversationType) => {                
                 item.is_unread = !variables.read;
             });

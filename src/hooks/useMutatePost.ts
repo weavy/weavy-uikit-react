@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { BlobType, MessageType, PollOptionType } from "../types/types";
 import { addCacheItem } from "../utils/cacheUtils";
 
 /// PSOT to add a new post to a Posts app

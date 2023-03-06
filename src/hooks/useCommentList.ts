@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { MessagesResult } from "../types/types";
 
 /// GET all comment for a parent
 export default function useCommentList(parentId: number | null, type: "posts" | "files" | "apps", options: any) {

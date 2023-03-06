@@ -1,4 +1,5 @@
 import { getAllJSDocTagsOfKind, isConstructorDeclaration } from "typescript";
+import { FileKindType, PreviewFormatType, ProviderType } from "../types/types";
 
 export const fileSizeAsString = (size: number, significantDigits: number = 3) => {
     var s = size;

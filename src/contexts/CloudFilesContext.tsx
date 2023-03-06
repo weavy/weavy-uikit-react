@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import useMutateExternalBlobs from "../hooks/useMutateExternalBlobs";
+import { CloudFilesContextProps, WeavyContextOptions } from "../types/types";
 import Overlay from '../ui/Overlay';
 import Spinner from '../ui/Spinner';
 import WeavyPostal from "../utils/postal-parent";

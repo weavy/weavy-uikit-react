@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import Editor from './Editor';
 import PostList from './PostList';
 import useMutatePost from '../hooks/useMutatePost';
+import { BlobType, FileType, MessageType, PollOptionType } from '../types/types';
 
 const Posts = ({ uid, className }: PostsProps) => {
 

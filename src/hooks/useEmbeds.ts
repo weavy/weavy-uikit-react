@@ -74,7 +74,7 @@ export default function useEmbeds(callback: Function) {
 
     const getEmbeds = async (content: string) => {
 
-        let matches = content.match(regexp);
+        let matches = content.match(regexp)?.map((match) =>match) || null;
 
         if (matches !== null) {
             matches = matches.map(url => {

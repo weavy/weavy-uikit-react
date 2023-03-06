@@ -149,22 +149,24 @@ export function addToQueryData(queryData: any, item: any, sorting: { by?: string
     return queryData;
 }
 
-export function updateQueryData (queryData: any, select: number|((item: any) => boolean), fnUpdater: Function) {
+export function updateQueryData (queryData: any, select: number|((item: any) => boolean), fnUpdater: Function) {    
     if (select !== undefined) {
         const predicate = select instanceof Function ? select : (item: any) => item.id === select;
-
-        if (queryData) {
-            if (queryData.pages) {
-                
+        
+        if (queryData) {            
+            if (queryData.pages) {                
                 const newPagesArray = queryData.pages.map((page: any, i: number) => {
-                    // update item
-                    page.data = [...page.data.map((item: any) => {
-                        if (predicate(item)) {
-                            item = JSON.parse(JSON.stringify(item)); // Immutable copy
-                            fnUpdater(item)
-                        }
-                        return item;
-                    })]
+                    // update item                    
+                    if(page.data){
+                        page.data = [...page.data.map((item: any) => {
+                            if (predicate(item)) {
+                                item = JSON.parse(JSON.stringify(item)); // Immutable copy
+                                fnUpdater(item)
+                            }
+                            return item;
+                        })]
+                    }
+                    
                     return page;
                 }) ?? [];
                 
@@ -172,7 +174,7 @@ export function updateQueryData (queryData: any, select: number|((item: any) => 
                     pages: newPagesArray,
                     pageParams: queryData.pageParams,
                 };
-            } else if(queryData.length) {
+            } else if(queryData.length) {                
                 return [...queryData.map((item: any) => {
                     if (predicate(item)) {
                         item = JSON.parse(JSON.stringify(item)); // Immutable copy

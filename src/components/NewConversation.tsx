@@ -5,6 +5,7 @@ import Overlay from '../ui/Overlay';
 import Button from '../ui/Button';
 import SearchUsers from './SearchUsers';
 import { MessengerContext } from '../contexts/MessengerContext';
+import { MemberType } from '../types/types';
 
 const NewConversation = () => {
     const [modalOpen, setModalOpen] = useState(false);

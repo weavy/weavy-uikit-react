@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { UserContext } from "../contexts/UserContext";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { MessageType, ReactableType } from "../types/types";
 import { updateCacheItem } from "../utils/cacheUtils";
 
 /// Replaces a reaction from on message

@@ -7,6 +7,7 @@ import { fileSizeAsString, getExtension, getIcon, isOfficeDocument } from "../ut
 import { toKebabCase } from "../utils/utils";
 import Spinner from "../ui/Spinner";
 import openUrl from "../utils/openUrl";
+import { FileType } from "../types/types";
 
 type FileProps = {
     file: FileType,
@@ -71,15 +72,15 @@ export const FileMenu = ({ file, className, onRename, onSubscribe, onUnsubscribe
                     { file.application_url &&
                         <Dropdown.Item onClick={() => triggerApplication(file)}><Icon.UI name={file.provider ? toKebabCase(file.provider) : icon } /> {`Open in ${file.provider || 'app'}`}</Dropdown.Item>
                     }
-                    <Dropdown.Item onClick={() => triggerDownload(file)}><Icon.UI name="download" size={1} /> Download</Dropdown.Item>
+                    <Dropdown.Item onClick={() => triggerDownload(file)}><Icon.UI name="download" size={24} /> Download</Dropdown.Item>
                 </>}
                 {isNotTemp && <>
-                    {onRename && <Dropdown.Item onClick={onRename}><Icon.UI name="textbox" size={1} /> Rename</Dropdown.Item>}
-                    {!file.is_subscribed && onSubscribe && <Dropdown.Item onClick={onSubscribe}><Icon.UI name="bell" size={1} /> Subscribe</Dropdown.Item>}
-                    {file.is_subscribed && onUnsubscribe && <Dropdown.Item onClick={onUnsubscribe}><Icon.UI name="bell-off" size={1} /> Unsubscribe</Dropdown.Item>}
+                    {onRename && <Dropdown.Item onClick={onRename}><Icon.UI name="textbox" size={24} /> Rename</Dropdown.Item>}
+                    {!file.is_subscribed && onSubscribe && <Dropdown.Item onClick={onSubscribe}><Icon.UI name="bell" size={24} /> Subscribe</Dropdown.Item>}
+                    {file.is_subscribed && onUnsubscribe && <Dropdown.Item onClick={onUnsubscribe}><Icon.UI name="bell-off" size={24} /> Unsubscribe</Dropdown.Item>}
                     {onTrash && <>
                         <Dropdown.Divider/>
-                        <Dropdown.Item onClick={onTrash}><Icon.UI name="delete" size={1} /> Trash</Dropdown.Item>
+                        <Dropdown.Item onClick={onTrash}><Icon.UI name="delete" size={24} /> Trash</Dropdown.Item>
                     </>}
                 </>}
             </>}
@@ -159,10 +160,10 @@ const FileRow = ({ file, className, onClick, onRename, isRenaming, onSubscribe, 
     return (
         <tr className={classNames({ "wy-table-trashed": file.is_trashed }, className)} onClick={onClickWrapper} title={title}>
             <td className="wy-table-cell-icon">{
-                file.status === "error" ? <Icon.UI name="alert-octagon" color="error" size={1} title={file.statusText || statusText} /> :
-                file.status === "conflict" ? <Icon.UI name="alert" color="yellow" size={1} title={file.statusText || statusText} /> :
+                file.status === "error" ? <Icon.UI name="alert-octagon" color="error" size={24} title={file.statusText || statusText} /> :
+                file.status === "conflict" ? <Icon.UI name="alert" color="yellow" size={24} title={file.statusText || statusText} /> :
                 file.status === "pending" ? <Spinner.UI spin={!file.progress} progress={file.progress} /> :
-                <Icon.UI name={icon} size={1} className={classNames("wy-kind-" + toKebabCase(file.kind), "wy-ext-" + ext.substring(1))} />
+                <Icon.UI name={icon} size={24} className={classNames("wy-kind-" + toKebabCase(file.kind), "wy-ext-" + ext.substring(1))} />
             }</td>
             <td>{renaming && onRename ? <>
                 <input 
@@ -254,8 +255,8 @@ const FileCard = ({ file, className, onClick, onRename, isRenaming, onSubscribe,
         <div className={classNames("wy-card", { "wy-card-trashed": file.is_trashed, "wy-card-hover": onClick && !file.is_trashed && !renaming }, className)} onClick={onClickWrapper} title={title}>
             <div className="wy-card-actions">
                 {
-                    file.status === "error" && <Icon.UI name="alert-octagon" color="error" size={1} title={file.statusText || statusText} /> ||
-                    file.status === "conflict" && <Icon.UI name="alert" color="yellow" size={1} title={file.statusText || statusText} /> ||
+                    file.status === "error" && <Icon.UI name="alert-octagon" color="error" size={24} title={file.statusText || statusText} /> ||
+                    file.status === "conflict" && <Icon.UI name="alert" color="yellow" size={24} title={file.statusText || statusText} /> ||
                     file.status === "pending" && <Spinner.UI spin={!file.progress} progress={file.progress} />
                 }
                 {children || <>
@@ -274,7 +275,7 @@ const FileCard = ({ file, className, onClick, onRename, isRenaming, onSubscribe,
                 <img className={classNames("wy-card-top wy-card-content", {"wy-card-top-image": file.kind === "image"})} src={file.thumbnail_url} loading="lazy" />
             ||
                 <div className="wy-content-icon wy-card-top wy-card-content">
-                    <Icon.UI name={icon} size={4/1.5} className={classNames("wy-kind-" + toKebabCase(file.kind), "wy-ext-" + ext.substring(1))} />
+                    <Icon.UI name={icon} size={96} className={classNames("wy-kind-" + toKebabCase(file.kind), "wy-ext-" + ext.substring(1))} />
                 </div>
             }
             <div className="wy-card-label wy-card-content wy-filename">
@@ -347,10 +348,10 @@ const FileItem = ({ file, className, onClick, onRename, isRenaming, onSubscribe,
     return (
         <div className={classNames("wy-item", { "wy-item-trashed": file.is_trashed, "wy-item-hover": onClick && !file.is_trashed && !renaming }, className)} onClick={onClickWrapper} title={title}>
             {
-                file.status === "error" ? <Icon.UI name="alert-octagon" color="error" size={1} title={file.statusText || statusText} /> :
-                file.status === "conflict" ? <Icon.UI name="alert" color="yellow" size={1} title={file.statusText || statusText} /> :
+                file.status === "error" ? <Icon.UI name="alert-octagon" color="error" size={24} title={file.statusText || statusText} /> :
+                file.status === "conflict" ? <Icon.UI name="alert" color="yellow" size={24} title={file.statusText || statusText} /> :
                 file.status === "pending" ? <Spinner.UI spin={!file.progress} progress={file.progress} /> :
-                <Icon.UI name={icon} size={1} className={classNames("wy-kind-" + toKebabCase(file.kind), "wy-ext-" + ext.substring(1))} />
+                <Icon.UI name={icon} size={24} className={classNames("wy-kind-" + toKebabCase(file.kind), "wy-ext-" + ext.substring(1))} />
             }
             <div className="wy-item-body">
                 {renaming && onRename ? <>

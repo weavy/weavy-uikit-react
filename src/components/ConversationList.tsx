@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { WeavyContext } from '../contexts/WeavyContext';
 import useConversations from '../hooks/useConversations';
 import ConversationListItem from './ConversationListItem';
@@ -8,6 +8,7 @@ import { UserContext } from '../contexts/UserContext';
 import Button from '../ui/Button';
 import Spinner from '../ui/Spinner';
 import useInfinteScroll from '../hooks/useInfiniteScroll';
+import { ConversationType } from '../types/types';
 
 const ConversationList = () => {
     const { client } = useContext(WeavyContext);
@@ -56,7 +57,7 @@ const ConversationList = () => {
                 }
 
                 {data && data.pages && data.pages.map((group, i) => {
-                    return group.data?.map((item) => {
+                    return group.data?.map((item: ConversationType) => {
                         return <ConversationListItem key={item.id} refetchConversations={refetch} item={item} userId={user.id} />
                     })
 

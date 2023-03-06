@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useQuery } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { ConversationType } from "../types/types";
 
 /// GET a specific conversation
 export default function useChat(id: string, options: any) {

@@ -1,9 +1,8 @@
 import { useContext } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { UserContext } from "../contexts/UserContext";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { MessageType, PollOptionType } from "../types/types";
 import { updateCacheItem } from "../utils/cacheUtils";
-//import usePost from "./usePost";
 
 /// POST to vote on an option
 export default function useMutateVote() {
@@ -13,12 +12,12 @@ export default function useMutateVote() {
     if (!client) {
         throw new Error('useMutateVote must be used within an WeavyProvider');
     }
-    //const { refetch } = usePost(parentId, { enabled: false });
 
     type MutateProps = {
         id: number,
         appId: number,
-        parentId: number
+        parentId: number,
+        type: string
     }
 
     const mutateVote = async ({ id }: MutateProps) => {
@@ -28,15 +27,15 @@ export default function useMutateVote() {
 
     return useMutation(mutateVote, {
         onSuccess: async (data: any, variables: any, context: any) => {            
-            const response = await client.get("/api/posts/" + variables.parentId);
+            const response = await client.get("/api/" + variables.type + "/" + variables.parentId);
             let json = await response.json();            
             // update cache
-            updateCacheItem(queryClient, ["posts", variables.appId], variables.parentId, (item: MessageType) => {
+            updateCacheItem(queryClient, [variables.type, variables.appId], variables.parentId, (item: MessageType) => {
                 item.options = json.options;
             });            
         },
         onMutate: async (variables: any) => {            
-            updateCacheItem(queryClient, ["posts", variables.appId], variables.parentId, (item: MessageType) => {
+            updateCacheItem(queryClient, [variables.type, variables.appId], variables.parentId, (item: MessageType) => {
                 item.options = item.options?.map((o: PollOptionType) => {
 
                     if (o.has_voted) {

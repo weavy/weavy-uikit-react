@@ -11,6 +11,7 @@ import classNames from "classnames";
 import Comments from "./Comments";
 import FileVersions from "./FileVersions";
 import { WeavyContext } from '../contexts/WeavyContext';
+import { FilesResult, FileType } from "../types/types";
 
 function allowedKeyTarget(e: any) {
     var notInputField = !e.target.matches("input, textarea, select") && !e.target.closest('[contenteditable="true"]');
@@ -258,7 +259,7 @@ const PreviewFiles = ({ appId, infiniteFiles, previewId, onClose }: Props) => {
                                 }
                                 <FileMenu file={activeFile}>
                                     {activeFile.id >= 1 &&
-                                        <Dropdown.Item active={versionsOpen} onClick={() => toggleSidebarTab("versions")}><Icon.UI name="backup-restore"/> Versions</Dropdown.Item>
+                                        <Dropdown.Item active={versionsOpen} onClick={() => toggleSidebarTab("versions")}><Icon.UI name="backup-restore" /> Versions</Dropdown.Item>
                                     }
                                 </FileMenu>                        
                             </>}

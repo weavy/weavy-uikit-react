@@ -1,6 +1,7 @@
 import React from "react";
 import { useQueryClient } from "react-query";
 import useMutateRestoreComment from "../hooks/useMutateRestoreComment";
+import { EmbedType, FileType, MemberType, MessageType, ReactableType } from "../types/types";
 import Button from '../ui/Button';
 import { updateCacheItem } from "../utils/cacheUtils";
 

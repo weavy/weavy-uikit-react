@@ -4,6 +4,7 @@ import { addCacheItem, findAnyExistingItem, removeCacheItem, updateCacheItem } f
 import { UserContext } from "../contexts/UserContext";
 import { getKind, getWebPreviewFormat } from "../utils/fileUtilities";
 import { UploadProgressProps, useUploadFile } from "./useFileUploader";
+import { BlobType, FileOrder, FilesResult, FileType, ServerErrorResponse, UserType } from "../types/types";
 
 export type CreateFileProps = {        
     blob: BlobType,

@@ -15,7 +15,7 @@ import Icon from '../ui/Icon';
 import Button from '../ui/Button';
 import Dropdown from '../ui/Dropdown';
 import Embed from './Embed';
-import classNames from 'classnames';
+import classNames from "classnames";
 import useCloudFiles from '../hooks/useCloudFiles';
 import throttle from 'lodash.throttle';
 import useMutateTyping from '../hooks/useMutateTyping';
@@ -25,6 +25,7 @@ import useUpdateEffect from '../hooks/useUpdateEffect';
 import { FileMutation, useClearMutatingFileUpload, useMutateFileUpload, useMutatingFileUploads, useRemoveMutatingFileUpload } from '../hooks/useMutateFile';
 import FileItem from './FileItem';
 import Dropzone from './Dropzone';
+import { BlobType, EmbedType, FileType, MeetingType, PollOptionType } from '../types/types';
 
 type Props = {
     id?: number,
@@ -469,6 +470,7 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
                             placeholder={placeholder}
                             extensions={extensions}
                             onChange={onChange}
+                            indentWithTab={false}
                             basicSetup={{
                                 defaultKeymap: false,
                                 lineNumbers: false,
@@ -516,6 +518,7 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
                                 placeholder={placeholder}
                                 extensions={extensions}
                                 onChange={onChange}
+                                indentWithTab={false}
                                 basicSetup={{
                                     defaultKeymap: false,
                                     lineNumbers: false,
@@ -546,6 +549,7 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
                             placeholder={placeholder}
                             extensions={extensions}
                             onChange={onChange}
+                            indentWithTab={false}
                             basicSetup={{
                                 defaultKeymap: false,
                                 lineNumbers: false,
@@ -574,7 +578,7 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
                         {/* cloud files */}
                         {showCloudFiles && options?.enableCloudFiles &&
                             <Button.UI title="Add file from cloud" onClick={openCloudFiles}>
-                                <Icon.UI name="cloud"></Icon.UI>
+                                <Icon.UI name="cloud" />
                             </Button.UI>
                         }
 
@@ -586,7 +590,7 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
                         {/* polls */}
                         {showPolls &&
                             <Button.UI title="Add poll" onClick={handlePoll}>
-                                <Icon.UI name="poll"></Icon.UI>
+                                <Icon.UI name="poll" />
                             </Button.UI>
                         }
 

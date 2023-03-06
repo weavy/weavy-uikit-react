@@ -9,6 +9,8 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import PreviewProvider from "./PreviewContext";
 import { detectScrollbars, detectScrollbarAdjustments } from '../utils/scrollbar-detection';
 import CloudFilesProvider from "./CloudFilesContext";
+import {  WeavyContextOptions, WeavyContextProps } from "../types/types";
+import WeavyClient from "../client/WeavyClient";
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -23,7 +25,7 @@ export const WeavyContext = createContext<WeavyContextProps>({
 
 type WeavyProviderProperties = {
   children: React.ReactNode,
-  client: WeavyClient,
+  client: WeavyClient | null,
   options?: WeavyContextOptions
 }
 

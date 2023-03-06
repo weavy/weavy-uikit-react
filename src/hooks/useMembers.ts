@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useQuery } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { MembersResult } from "../types/types";
 
 /// GET all members in an app
 export default function useMembers(id: number | null, options: any) {

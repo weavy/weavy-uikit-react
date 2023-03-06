@@ -1,13 +1,13 @@
 {
   "name": "@weavy/uikit-react",
-  "version": "15.0.1",
+  "version": "16.0.0",
   "author": "Weavy",
   "description": "React UI-kit for Weavy",
   "homepage": "https://github.com/weavy/weavy-uikit-react",
   "license": "MIT",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "types": "./dist/cjs/types/types.d.ts",
+  "types": "dist/index.d.ts",
   "style": "dist/css/weavy-react.css",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^23.0.2",
@@ -53,14 +53,14 @@
     "dayjs": "^1.11.1",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
-    "pdfjs-dist": "^3.0.279",
+    "pdfjs-dist": "^3.2.146",
     "react-dropzone": "^14.2.3",
     "react-modal": "^3.14.4",
     "react-popper": "^2.3.0",
     "react-query": "^3.34.16"
   },
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
+    "node": ">=19.3.0",
+    "npm": ">=9.2.0"
   }
 }

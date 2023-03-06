@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useQuery } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { MessageType } from "../types/types";
 
 /// GET a specific post
 export default function usePost(id: number, options: any) {

@@ -1,5 +1,6 @@
 import React, { createContext, useState } from "react";
 import usePresence from "../hooks/usePresence";
+import { MessengerContextProps } from "../types/types";
 
 export const MessengerContext = createContext<MessengerContextProps>({
     selectedConversationId: null,

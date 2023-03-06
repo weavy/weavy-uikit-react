@@ -1,5 +1,6 @@
 import React from "react";
 import useMutateRestorePost from "../hooks/useMutateRestorePost";
+import { EmbedType, FileType, MemberType, ReactableType } from "../types/types";
 import Button from '../ui/Button';
 
 type Props = {

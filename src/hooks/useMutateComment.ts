@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { BlobType, MessageType } from "../types/types";
 import { addCacheItem } from "../utils/cacheUtils";
 
 /// POST to add a new comment to a parent entity

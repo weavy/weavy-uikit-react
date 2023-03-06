@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { WeavyContext } from "../contexts/WeavyContext";
+import { FileType, ServerErrorResponse } from "../types/types";
 import { CreateFileProps } from "./useMutateFile";
 
 export const useMutateFilesCreate = (appId: number) => {

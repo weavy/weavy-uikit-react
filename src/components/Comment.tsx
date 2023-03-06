@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { EmbedType, FileType, MemberType, ReactableType } from '../types/types';
 import CommentEdit from './CommentEdit';
 import CommentTrashed from './CommentTrashed';
 import CommentView from './CommentView';

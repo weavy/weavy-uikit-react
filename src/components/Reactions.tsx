@@ -15,6 +15,7 @@ import { UserContext } from "../contexts/UserContext";
 import useMutateReplaceReaction from "../hooks/useMutateReplaceReaction";
 
 import { usePopper } from 'react-popper';
+import { ReactableType, ReactionGroup, ReactionType, RealtimeReaction } from "../types/types";
 
 type ReactionMenuProps = {
     id: number,
@@ -66,10 +67,8 @@ export const ReactionsMenu = ({ id, parentId, type, placement = "top", reactions
         setVisible(!visible);
     }
 
-    const handleReaction = async (e: any) => {
-        const emoji = e.target.dataset.emoji;
+    const handleReaction = async (emoji: string) => {
         const existing = reactions?.find((r) => r.created_by_id === user.id)
-
 
         if (existing && existing.content !== emoji) {
             // replace
@@ -84,15 +83,16 @@ export const ReactionsMenu = ({ id, parentId, type, placement = "top", reactions
         
         
         setVisible(false);
+
     }
 
     return (
         <div className={classNames({ "wy-active": visible })} style={{ position: 'relative' }}>
-            <Button.UI ref={setReferenceElement} className="wy-reaction-menu-button" onClick={toggleReactionMenu}><Icon.UI name="emoticon-plus" size={1.25 / 1.5} /></Button.UI>
+            <Button.UI ref={setReferenceElement} className="wy-reaction-menu-button" onClick={toggleReactionMenu}><Icon.UI name="emoticon-plus" size={20} /></Button.UI>
             <div ref={setPopperElement} className="wy-reaction-menu wy-dropdown-menu" hidden={!visible} style={styles.popper} {...attributes.popper}>
                 <div className="wy-reaction-picker">
                     {emojis?.map((r: string, i: number) => {
-                        return <Button.UI key={i} onClick={handleReaction} className={classNames("wy-button-icon wy-reaction-button", { "wy-active": reactedEmoji === r })} data-emoji={r}>{r}</Button.UI> //reactedEmoji
+                        return <Button.UI key={i} onClick={() => handleReaction(r)} className={classNames("wy-button-icon wy-reaction-button", { "wy-active": reactedEmoji === r })} data-emoji={r}><span className="wy-emoji">{r}</span></Button.UI> //reactedEmoji
                     })}
                 </div>
             </div>
@@ -177,7 +177,7 @@ export const ReactionsList = ({ id, type, reactions }: ReactionsProps) => {
             {count > 0 && <>
                 <Button.UI className="wy-reactions wy-button-icon" onClick={handleOpen}>
                     {!!list && list.map((r: ReactionGroup, i: number) => {
-                        return <span key={i} className="wy-reaction" title={r.count.toString()}>{r.content}</span>
+                        return <span key={i} className="wy-emoji" title={r.count.toString()}>{r.content}</span>
                     })}
                     {count > 1 && <span className="wy-reaction-count">{count}</span>}
                 </Button.UI>
@@ -192,7 +192,7 @@ export const ReactionsList = ({ id, type, reactions }: ReactionsProps) => {
                                 <div className="wy-item" key={'r' + index}>
                                     <Avatar size={32} src={reaction.created_by.avatar_url} name={reaction.created_by.display_name} />
                                     <div className="wy-item-body">{reaction.created_by.display_name}</div>
-                                    <div>{reaction.content}</div>
+                                    <span className="wy-emoji">{reaction.content}</span>
                                 </div>
                             )
                         })}

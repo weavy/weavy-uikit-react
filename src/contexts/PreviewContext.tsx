@@ -6,6 +6,7 @@ import Preview from '../components/Preview';
 import { getIcon, getExtension } from "../utils/fileUtilities";
 import classNames from "classnames";
 import openUrl from "../utils/openUrl";
+import { FileType, PreviewContextProps } from "../types/types";
 
 export const PreviewContext = createContext<PreviewContextProps>({
     openPreview: Function,

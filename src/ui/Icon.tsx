@@ -65,7 +65,6 @@ import {
     mdiStar,
     mdiStarOff,
     mdiSwapHorizontal,
-    mdiTextBox,
     mdiTrashCan,    
     mdiVideo, 
     mdiViewListOutline,
@@ -155,6 +154,15 @@ const iconMapping: { [index: string]: string } = {
     "cloud": mdiCloud
 }
 
+const nativeColors: { [index: string]: string } = {
+    "dropbox": "#0061fe",
+    "onedrive": "#0078d4",
+    "box": "#0161d5",
+    "google-drive": "#1a73e8",
+    "zoom": "#4a8cff"
+}
+
+
 type Props = {
     name: string,
     color?: string,
@@ -163,39 +171,45 @@ type Props = {
     className?: string
 }
 
-function getIconMapping(name: string) {
-    let [iconName] = name.split("+");
-    return iconName in iconMapping ? iconMapping[iconName] : "";
+function getIconName(name: string) {
+    return name.split("+");
 }
 
-
-function getIconOverlay(name: string) {
-    let [, overlay] = name.split("+");
-    return overlay in iconMapping ? iconMapping[overlay] : "";
+function getIconMapping(name: string) {
+    return name in iconMapping ? iconMapping[name] : "";
 }
 
 const Icon = ({ name, color = "", size, className, title, ...props }: Props) => {
-    let iconPath = getIconMapping(name);
-    let overlayPath = getIconOverlay(name);
+    let [iconName, overlayName] = getIconName(name);
+    let iconPath = getIconMapping(iconName);
+    let overlayPath = getIconMapping(overlayName);
 
-    return (
-        <span className={classNames('wy-icon', (color ? 'wy-icon-' + color : ''), className)} style={{width: size && (size * 1.5 + "rem"), height: size && (size * 1.5 + "rem")}} title={title} { ...props }>
-            {iconPath ? <MdiIcon.Icon color={color && ""} path={iconPath} size={size} /> : name }
-            {overlayPath && <MdiIcon.Icon color={color && ""} path={overlayPath} className="wy-icon-overlay" size={(size || 1) / 2} /> }
-        </span>
-    );
-}
+    let nativeIconColor = color === "native" && nativeColors[iconName] || "";
+    let nativeOverlayColor = overlayName && nativeColors[overlayName] || "";  
 
-const IconRaw = ({ name, color = "", size, className, title, ...props }: Props) => {
-    let iconPath = getIconMapping(name);
-    let overlayPath = getIconOverlay(name);
+    title ??= name.split("+").join(" ");
 
-    return (
-        <>
-            {iconPath ? <MdiIcon.Icon color={color && ""} path={iconPath} size={size} title={title} /> : name }
-            {overlayPath && <MdiIcon.Icon color={color && ""} path={overlayPath} className="wy-icon-overlay" size={(size || 1) / 2} title={title} /> }
-        </>
-    );
+    let remSize = size ? size / 16 : undefined;
+    let mdiSize = remSize ? remSize / 1.5 : undefined;
+
+    if (iconPath) {
+        if (overlayPath) { 
+            return (
+                <span className={'wy-icon-stack'} style={{width: remSize && (remSize + "rem"), height: remSize && (remSize + "rem")}} title={title}>
+                    <MdiIcon.Icon className={classNames('wy-icon', (color ? 'wy-icon-' + color : ''), className)} color={nativeIconColor} path={iconPath} size={mdiSize || ""} data-icon={iconName} { ...props } />
+                    <MdiIcon.Icon color={nativeOverlayColor} path={overlayPath} className={classNames("wy-icon", "wy-icon-overlay", `wy-icon-${overlayName}`)} size={(mdiSize || 1) / 2} data-icon={overlayName}  />
+                </span>
+            );
+        } else {
+            return (
+                <MdiIcon.Icon className={classNames('wy-icon', (color ? 'wy-icon-' + color : ''), className)} color={nativeIconColor} path={iconPath} size={mdiSize || ""} title={title} data-icon={iconName} { ...props } />
+            );
+        }
+    } else {
+        // Fallback
+        return <>{name}</>;
+    }
+
 }
 
 type IconActiveStackProps = {
@@ -208,5 +222,5 @@ const IconActiveStack = ({ className, children }: IconActiveStackProps) => {
 }
 
 // Export as replacable UI component
-const UIIcon = { UI: Icon, Raw: IconRaw, ActiveStack: IconActiveStack };
+const UIIcon = { UI: Icon, ActiveStack: IconActiveStack };
 export default UIIcon;
