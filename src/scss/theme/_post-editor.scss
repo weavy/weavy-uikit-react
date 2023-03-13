@@ -100,7 +100,7 @@
 
 %post-editor-textcontent,
 .wy-post-editor-textcontent {
-  font-family: vars.$font-family-base;
+  font-family: var(--wy-font-family), #{vars.$font-family-base};
   font-size: vars.$font-size-base;
   padding: vars.$input-padding-y vars.$input-padding-x;
 }

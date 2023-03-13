@@ -63,7 +63,7 @@
     }
 
     .wy-tab-label {
-        font-family: var(--wy-btn-font-family);
+        font-family: var(--wy-btn-font-family), inherit;
         line-height: var(--wy-btn-line-height);
     
         font-size: vars.$font-size-xs;

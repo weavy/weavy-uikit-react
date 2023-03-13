@@ -23,7 +23,7 @@
   background: var(--wy-component-background-color, transparent);
 
   padding: var(--wy-btn-padding-y) var(--wy-btn-padding-x);
-  font-family: var(--wy-btn-font-family);
+  font-family: var(--wy-btn-font-family), inherit;
   font-size: var(--wy-btn-font-size);
   font-weight: var(--wy-btn-font-weight);
   line-height: var(--wy-btn-line-height);

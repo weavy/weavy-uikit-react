@@ -38,7 +38,6 @@
   flex: 0 0 vars.$appbar-height;
   grid-template-columns: minmax(2.5rem, max-content) minmax(0, max-content) minmax(2.5rem, max-content);
   column-gap: .5rem;
-  //font-family: vars.$font-family-base;
   line-height: vars.$line-height-base;
 
   background-color: var(--wy-component-background-color);
@@ -113,7 +112,6 @@
   padding: .25rem;
   flex: 1 0 vars.$appbar-height;
   column-gap: .25rem;
-  //font-family: vars.$font-family-base;
   line-height: vars.$line-height-base;
 
   background-color: var(--wy-component-background-color);
