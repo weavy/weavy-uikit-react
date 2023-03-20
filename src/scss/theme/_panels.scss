@@ -79,7 +79,7 @@
             justify-content: center;
             transition: opacity .1s step-end;
             transition-delay: .2s;
-            font-family: inherit;
+            font-family: #{vars.$font-family-base}, inherit;
             line-height: vars.$line-height-base;
             font-weight: vars.$font-weight-base;
 

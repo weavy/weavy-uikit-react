@@ -10,7 +10,7 @@
   display: block;
   width: 100%;
   padding: vars.$input-padding-y vars.$input-padding-x;
-  font-family: var(--wy-font-family), inherit;
+  font-family: #{vars.$font-family-base}, inherit;
   font-size: vars.$input-font-size;
   font-weight: vars.$input-font-weight;
   line-height: vars.$input-line-height;

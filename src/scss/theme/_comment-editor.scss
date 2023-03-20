@@ -102,7 +102,7 @@
 
 %comment-editor-textcontent,
 .wy-comment-editor-textcontent {
-  font-family: var(--wy-font-family), #{vars.$font-family-base};
+  font-family: #{vars.$font-family-base}, inherit;
   font-size: vars.$font-size-base;
   padding: vars.$input-padding-y vars.$input-padding-x;
 }

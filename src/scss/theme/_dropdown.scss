@@ -91,7 +91,7 @@ $dropdown-item-padding-x: 1rem;
   width: 100%; // For `<button>`s
   padding: $dropdown-item-padding-y $dropdown-item-padding-x;
   clear: both;
-  font-family: inherit;
+  font-family: var(--wy-font-family), inherit;
   font-size: inherit;
   font-weight: vars.$font-weight-normal;
   line-height: 1;

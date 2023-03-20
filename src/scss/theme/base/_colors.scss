@@ -191,7 +191,7 @@ $shadow: $black;
   --wy-gray: var(--wy-gray-light);
 }
 
-:where(.wy-dark) {
+:where(.wy-dark:not(.wy-light)) {
   // dark mode
   color-scheme: dark;
 

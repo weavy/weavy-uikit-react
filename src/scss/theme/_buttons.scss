@@ -5,7 +5,7 @@
 :where(:root, :host > *) {
   --wy-btn-padding-x: 1.5rem;
   --wy-btn-padding-y: .5rem;
-  --wy-btn-font-family: var(--wy-font-family);
+  --wy-btn-font-family: #{vars.$font-family-base};
   --wy-btn-font-size: #{vars.$font-size-base};
   --wy-btn-font-weight: #{vars.$font-weight-normal};
   --wy-btn-line-height: #{vars.$line-height-base};
