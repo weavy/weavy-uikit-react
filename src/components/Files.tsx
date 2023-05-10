@@ -18,25 +18,30 @@ import { useMutateAppsSubscribe } from '../hooks/useMutateApps';
 import openUrl from '../utils/openUrl';
 import { useDropzone } from 'react-dropzone';
 import { BlobType, FileOrder, FileType, FileView } from '../types/types';
+import useFeatures from '../hooks/useFeatures';
+import { Feature, hasFeature } from '../utils/featureUtils';
 
-const Files = ({ 
-    uid, 
-    className, 
-    view: initView = "list", 
+const Files = ({
+    uid,
+    className,
+    view: initView = "list",
     order: initOrder = { by: "name", descending: false },
-    trashed: initTrashed = false
+    trashed: initTrashed = false,
+    features
 }: FilesProps) => {
 
     const { client } = useContext(WeavyContext);
     const [appId, setAppId] = useState<number>();
     const [selectedFiles, setSelectedFiles] = useState<string>("");
- 
+
     if (!client) {
         throw new Error('Weavy Files component must be used within an WeavyProvider');
     }
 
     // init app
     const { isLoading, data } = useFiles(uid, {});
+    const { isLoading: isLoadingFeatures, data: dataFeatures } = useFeatures("files", {});
+
     const mutateFilesSubscribe = useMutateAppsSubscribe(["apps", uid]);
 
     const [showUploadDetails, setShowUploadDetails] = useState<boolean>(false);
@@ -79,7 +84,7 @@ const Files = ({
 
     const handleSubscribe = (subscribe: boolean) => {
         if (appId) {
-            mutateFilesSubscribe.mutateAsync({appId, subscribe})
+            mutateFilesSubscribe.mutateAsync({ appId, subscribe })
         }
     }
 
@@ -122,13 +127,13 @@ const Files = ({
 
     const handleOverwriteUpload = (mutation: FileMutation) => {
         removeMutatingFileUpload(mutation);
-        
+
         let fileBlob = mutation.state.context?.blob;
         if (fileBlob) {
             handleCreateFile(fileBlob, mutation.state.context?.file, true);
         }
     }
-      // Pasted file(s)
+    // Pasted file(s)
 
 
     const handleDownloadArchive = () => {
@@ -164,10 +169,10 @@ const Files = ({
         let files: File[] = [];
         const items = (evt.clipboardData || evt.originalEvent.clipboardData).items;
         for (let index in items) {
-        const item = items[index];
-        if (item.kind === 'file') {
-            files = [...files, item.getAsFile()];
-        }
+            const item = items[index];
+            if (item.kind === 'file') {
+                files = [...files, item.getAsFile()];
+            }
         }
         if (files.length) {
             for (var i = 0; i < files.length; i++) {
@@ -202,101 +207,108 @@ const Files = ({
         }
     }, [appId])
 
-    if(!isLoading && !data){
+    if (!isLoading && !data) {
         return <div>No files app with the contextual id <strong>{uid}</strong> was found.</div>;
     }
-
+    
     return (
         <>
-        {appId && 
-         <div className={classNames("wy-files", className, { "wy-files-dragging": isDragActive })} {...getRootProps()}>
-         <header className="wy-appbars">
-             <nav className="wy-toolbar">
+            {appId && dataFeatures &&
+                <div className={classNames("wy-files", className, { "wy-files-dragging": isDragActive })} {...getRootProps()}>
+                    <header className="wy-appbars">
+                        <nav className="wy-toolbar">
 
-                 <div className="wy-toolbar-buttons">
-                     <Dropdown.UI title="Add files" disabled={!appId} buttonContent={
-                         <><span>Add files</span><Icon.UI name="plus"/></>
-                         }>
-                         <>
-                             <Dropdown.Item onClick={openFileInput}><Icon.UI name="attachment"/> From device</Dropdown.Item>
-                             <input type="file" value={selectedFiles}  ref={input => fileInput = input} onChange={handleFileUpload} multiple hidden tabIndex={-1} />
-                         </>
-                         <Dropdown.Item onClick={openCloudFiles}><Icon.UI name="cloud"/> From cloud</Dropdown.Item>
-                     </Dropdown.UI>
-                 </div>
+                            <div className="wy-toolbar-buttons">
+                                {(hasFeature(dataFeatures, Feature.Attachments, features?.attachments) || hasFeature(dataFeatures, Feature.CloudFiles, features?.cloudFiles)) &&
+                                    <Dropdown.UI title="Add files" disabled={!appId} buttonContent={
+                                        <><span>Add files</span><Icon.UI name="plus" /></>
+                                    }>
+                                        {hasFeature(dataFeatures, Feature.Attachments, features?.attachments) &&
+                                            <>
+                                                <Dropdown.Item onClick={openFileInput}><Icon.UI name="attachment" /> From device</Dropdown.Item>
+                                                <input type="file" value={selectedFiles} ref={input => fileInput = input} onChange={handleFileUpload} multiple hidden tabIndex={-1} />
+                                            </>
+                                        }
+                                        {hasFeature(dataFeatures, Feature.CloudFiles, features?.cloudFiles) &&
+                                            <Dropdown.Item onClick={openCloudFiles}><Icon.UI name="cloud" /> From cloud</Dropdown.Item>
+                                        }
+                                    </Dropdown.UI>
+                                }
 
-                 <div className="wy-toolbar-buttons wy-toolbar-buttons-last">
-                     {mutations.length > 0 && <Button.UI onClick={() => setShowUploadDetails(!showUploadDetails)}>
-                         {
-                             status === "conflict" ? <Icon.UI name="alert" color="yellow" title="File conflict" /> :
-                             status === "error" ? <Icon.UI name="alert-octagon" color="error" title="Upload error" /> : 
-                             status === "pending" ? <Spinner.UI spin={progress === undefined} progress={progress} />:
-                             <Icon.UI name="check" title='All uploads finished' />
-                         }
-                     </Button.UI>}
-                     <Sheet.UI title={"Uploads"} isOpen={showUploadDetails} onClose={() => setShowUploadDetails(false)}>
-                         {mutations.map((mutation) => {
-                             let file = mutation.state.context?.file;
-                             if (file) {  
-                                 return (
-                                     <FileItem.Item key={"file-mutation" + mutation.mutationId} file={file} statusText={file.status === "conflict" ? "Replace existing file?" : ''} title={file.name + (file.statusText ? `: ${file.statusText}` : '')}>
-                                         <div className='wy-item-actions'>
-                                             {file.status === "conflict" && <>
-                                                 <Button.UI onClick={handleOverwriteUpload.bind(Files, mutation) } title="Replace"><Icon.UI name='check' /></Button.UI>
-                                             </>}
-                                             <Button.UI onClick={handleRemoveUpload.bind(Files, mutation)} title="Discard"><Icon.UI name='close' /></Button.UI>
-                                         </div>
-                                     </FileItem.Item>
-                                 )
-                             }
-                             return undefined;
-                         })}
-                     </Sheet.UI>
+                            </div>
 
-                     <Dropdown.UI icon="sort" title="Sort items by" directionX='left'>
-                         <Dropdown.Item className={classNames("wy-option", { "wy-selected": order.by === "name" })} onClick={(e: any) => setOrder({...order, by: "name" })}><Icon.UI name="check"/> Name</Dropdown.Item>
-                         <Dropdown.Item className={classNames("wy-option", { "wy-selected": order.by === "modified_at" })} onClick={(e: any) => setOrder({...order, by: "modified_at" })}><Icon.UI name="check"/> Modified</Dropdown.Item>
-                         <Dropdown.Item className={classNames("wy-option", { "wy-selected": order.by === "size" })} onClick={(e: any) => setOrder({...order, by: "size" })}><Icon.UI name="check"/> Size</Dropdown.Item>
-                         <Dropdown.Divider/>
-                         <Dropdown.Item className={classNames("wy-option", { "wy-selected": !order.descending })} onClick={(e: any) => setOrder({...order, descending: false })}><Icon.UI name="check"/> Ascending</Dropdown.Item>
-                         <Dropdown.Item className={classNames("wy-option", { "wy-selected": order.descending })} onClick={(e: any) => setOrder({...order, descending: true })}><Icon.UI name="check"/> Descending</Dropdown.Item>
-                     </Dropdown.UI>
+                            <div className="wy-toolbar-buttons wy-toolbar-buttons-last">
+                                {mutations.length > 0 && <Button.UI onClick={() => setShowUploadDetails(!showUploadDetails)}>
+                                    {
+                                        status === "conflict" ? <Icon.UI name="alert" color="yellow" title="File conflict" /> :
+                                            status === "error" ? <Icon.UI name="alert-octagon" color="error" title="Upload error" /> :
+                                                status === "pending" ? <Spinner.UI spin={progress === undefined} progress={progress} /> :
+                                                    <Icon.UI name="check" title='All uploads finished' />
+                                    }
+                                </Button.UI>}
+                                <Sheet.UI title={"Uploads"} isOpen={showUploadDetails} onClose={() => setShowUploadDetails(false)}>
+                                    {mutations.map((mutation) => {
+                                        let file = mutation.state.context?.file;
+                                        if (file) {
+                                            return (
+                                                <FileItem.Item key={"file-mutation" + mutation.mutationId} features={dataFeatures} appFeatures={features} file={file} statusText={file.status === "conflict" ? "Replace existing file?" : ''} title={file.name + (file.statusText ? `: ${file.statusText}` : '')}>
+                                                    <div className='wy-item-actions'>
+                                                        {file.status === "conflict" && <>
+                                                            <Button.UI onClick={handleOverwriteUpload.bind(Files, mutation)} title="Replace"><Icon.UI name='check' /></Button.UI>
+                                                        </>}
+                                                        <Button.UI onClick={handleRemoveUpload.bind(Files, mutation)} title="Discard"><Icon.UI name='close' /></Button.UI>
+                                                    </div>
+                                                </FileItem.Item>
+                                            )
+                                        }
+                                        return undefined;
+                                    })}
+                                </Sheet.UI>
 
-                     <Dropdown.UI icon={view === "grid" ? "view-module-outline" :"view-list-outline"} title="View options" directionX='left'>
-                         <Dropdown.Item className={classNames("wy-option", { "wy-selected": view === "list" })} onClick={(e: any) => setView("list")}><Icon.UI name="check"/> List view</Dropdown.Item>
-                         <Dropdown.Item className={classNames("wy-option", { "wy-selected": view === "grid" })} onClick={(e: any) => setView("grid")}><Icon.UI name="check"/> Grid view</Dropdown.Item>
-                         <Dropdown.Divider/>
-                         <Dropdown.Item className={classNames("wy-option", { "wy-selected": !showTrashed })} onClick={(e: any) => setShowTrashed(false)}><Icon.UI name="check" /> Hide trashed</Dropdown.Item>
-                         <Dropdown.Item className={classNames("wy-option", { "wy-selected": showTrashed })} onClick={(e: any) => setShowTrashed(true)}><Icon.UI name="check" /> Show trashed</Dropdown.Item>
-                     </Dropdown.UI>
+                                <Dropdown.UI icon="sort" title="Sort items by" directionX='left'>
+                                    <Dropdown.Item className={classNames("wy-option", { "wy-selected": order.by === "name" })} onClick={(e: any) => setOrder({ ...order, by: "name" })}><Icon.UI name="check" /> Name</Dropdown.Item>
+                                    <Dropdown.Item className={classNames("wy-option", { "wy-selected": order.by === "modified_at" })} onClick={(e: any) => setOrder({ ...order, by: "modified_at" })}><Icon.UI name="check" /> Modified</Dropdown.Item>
+                                    <Dropdown.Item className={classNames("wy-option", { "wy-selected": order.by === "size" })} onClick={(e: any) => setOrder({ ...order, by: "size" })}><Icon.UI name="check" /> Size</Dropdown.Item>
+                                    <Dropdown.Divider />
+                                    <Dropdown.Item className={classNames("wy-option", { "wy-selected": !order.descending })} onClick={(e: any) => setOrder({ ...order, descending: false })}><Icon.UI name="check" /> Ascending</Dropdown.Item>
+                                    <Dropdown.Item className={classNames("wy-option", { "wy-selected": order.descending })} onClick={(e: any) => setOrder({ ...order, descending: true })}><Icon.UI name="check" /> Descending</Dropdown.Item>
+                                </Dropdown.UI>
 
-                     <Dropdown.UI directionX='left' disabled={isLoading || !data}>
-                         {data && <>
-                             {data.is_subscribed ?
-                                 <Dropdown.Item onClick={() => handleSubscribe(false)}><Icon.UI name="bell-off"/> Unsubscribe</Dropdown.Item>
-                             :
-                                 <Dropdown.Item onClick={() => handleSubscribe(true)}><Icon.UI name="bell"/> Subscribe</Dropdown.Item>
-                             }
-                             {data.archive_url && 
-                                 <Dropdown.Item onClick={() => openUrl(data.archive_url, "_top", `${uid}.zip`, true)}><Icon.UI name="download"/> Download files</Dropdown.Item>
-                             }
-                             
-                         </>}
-                     </Dropdown.UI>
-     
-                 </div>
-                 
-             </nav>
-         </header>
+                                <Dropdown.UI icon={view === "grid" ? "view-module-outline" : "view-list-outline"} title="View options" directionX='left'>
+                                    <Dropdown.Item className={classNames("wy-option", { "wy-selected": view === "list" })} onClick={(e: any) => setView("list")}><Icon.UI name="check" /> List view</Dropdown.Item>
+                                    <Dropdown.Item className={classNames("wy-option", { "wy-selected": view === "grid" })} onClick={(e: any) => setView("grid")}><Icon.UI name="check" /> Grid view</Dropdown.Item>
+                                    <Dropdown.Divider />
+                                    <Dropdown.Item className={classNames("wy-option", { "wy-selected": !showTrashed })} onClick={(e: any) => setShowTrashed(false)}><Icon.UI name="check" /> Hide trashed</Dropdown.Item>
+                                    <Dropdown.Item className={classNames("wy-option", { "wy-selected": showTrashed })} onClick={(e: any) => setShowTrashed(true)}><Icon.UI name="check" /> Show trashed</Dropdown.Item>
+                                </Dropdown.UI>
 
-         <FileList appId={appId} view={view} order={order} trashed={showTrashed} onSorting={(sortOrder) => setOrder(sortOrder)} onHandleError={(errorFile) => setShowUploadDetails(true)} />
-     </div>
-        }
+                                <Dropdown.UI directionX='left' disabled={isLoading || !data}>
+                                    {data && <>
+                                        {data.is_subscribed ?
+                                            <Dropdown.Item onClick={() => handleSubscribe(false)}><Icon.UI name="bell-off" /> Unsubscribe</Dropdown.Item>
+                                            :
+                                            <Dropdown.Item onClick={() => handleSubscribe(true)}><Icon.UI name="bell" /> Subscribe</Dropdown.Item>
+                                        }
+                                        {data.archive_url &&
+                                            <Dropdown.Item onClick={() => openUrl(data.archive_url, "_top", `${uid}.zip`, true)}><Icon.UI name="download" /> Download files</Dropdown.Item>
+                                        }
+
+                                    </>}
+                                </Dropdown.UI>
+
+                            </div>
+
+                        </nav>
+                    </header>
+
+                    <FileList appId={appId} view={view} order={order} trashed={showTrashed} onSorting={(sortOrder) => setOrder(sortOrder)} onHandleError={(errorFile) => setShowUploadDetails(true)} features={dataFeatures} appFeatures={features}/>
+                </div>
+            }
         </>
-    
-        
-           
-        
+
+
+
+
     )
 }
 

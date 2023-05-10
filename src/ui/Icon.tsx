@@ -65,6 +65,8 @@ import {
     mdiStar,
     mdiStarOff,
     mdiSwapHorizontal,
+    mdiThumbUp,
+    mdiThumbUpOutline,
     mdiTrashCan,    
     mdiVideo, 
     mdiViewListOutline,
@@ -127,6 +129,8 @@ const iconMapping: { [index: string]: string } = {
     "unstar": mdiStarOff,
     "swap-horizontal": mdiSwapHorizontal,
     "textbox": mdiFormTextbox,
+    "thumb-up": mdiThumbUp,
+    "thumb-up-outline": mdiThumbUpOutline,
     "trashcan": mdiTrashCan,
     "video": mdiVideo,
     "view-list-outline": mdiViewListOutline,
@@ -179,7 +183,7 @@ function getIconMapping(name: string) {
     return name in iconMapping ? iconMapping[name] : "";
 }
 
-const Icon = ({ name, color = "", size, className, title, ...props }: Props) => {
+const Icon = ({ name, color = "", size, className, title = "", ...props }: Props) => {
     let [iconName, overlayName] = getIconName(name);
     let iconPath = getIconMapping(iconName);
     let overlayPath = getIconMapping(overlayName);

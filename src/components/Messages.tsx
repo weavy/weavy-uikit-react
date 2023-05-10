@@ -14,7 +14,8 @@ import { useQueryClient } from 'react-query';
 import { WeavyContext } from '../contexts/WeavyContext';
 import Avatar from './Avatar';
 import Editor from './Editor';
-import { BlobType, FileType, MembersResult, MessageType, PollOptionType, RealtimeMessage, RealtimeReaction } from '../types/types';
+import { AppFeatures, BlobType, FileType, MembersResult, MessageType, PollOptionType, RealtimeMessage, RealtimeReaction } from '../types/types';
+import { Feature, hasFeature } from '../utils/featureUtils';
 
 type Props = {
     id: number,
@@ -22,10 +23,12 @@ type Props = {
     displayName?: string,
     avatarUrl?: string,
     lastMessageId: number | null,
-    chatRoom: boolean
+    chatRoom: boolean,
+    features: string[],
+    appFeatures: AppFeatures | undefined
 }
 
-const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom }: Props) => {
+const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom, features, appFeatures }: Props) => {
     const [, onNextRender] = useState<any>();
 
     const { user } = useContext(UserContext);
@@ -55,6 +58,12 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
     }, [id, isLoading]);
 
     const readMoreRef = useReverseInfiniteScroll(infiniteMessages, [id]);
+
+    // useEffect(() => {
+    //         console.log("Data chagned")
+    //         onNextRender(() => requestAnimationFrame(() => scrollParentToBottom(readMoreRef.current, true)));
+        
+    // }, [data?.pages.reverse()[0].data]);
 
     useEffect(() => {
         // mark conversation as read        
@@ -106,20 +115,24 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
         dispatch("reaction_deleted_" + realtimeEvent.entity.id, realtimeEvent);
     }, [id]);
 
-    const handleCreate = async (text: string, blobs: BlobType[], attachments: FileType[], meeting: number | null, embed: number | null, options: PollOptionType[]) => {
-        if (id) {
+    const scrollCallback = () => {        
+        onNextRender(() => requestAnimationFrame(() => scrollParentToBottom(readMoreRef.current, true)));
+    }
 
-            await addMessageMutation.mutateAsync({ id: id, text: text, blobs: blobs, meeting: meeting, userId: user.id }, {
-                onSuccess: (data: MessageType) => {
+    const handleCreate = async (text: string, blobs: BlobType[], attachments: FileType[], meeting: number | null, embed: number | null, options: PollOptionType[]) => {
+        if (id) {            
+            await addMessageMutation.mutateAsync({ id: id, text: text, blobs: blobs, meeting: meeting, userId: user.id, callback: scrollCallback }, {                
+                onSuccess: (data: MessageType) => {                    
+                    onNextRender(() => requestAnimationFrame(() => scrollParentToBottom(readMoreRef.current, true)));
+
                     // mark conversation as read
                     readMessageMutation.mutate({ id: id, read: true, messageId: data.id }, {
                         onSettled: () => onNextRender(() => requestAnimationFrame(() => requestAnimationFrame(() => scrollParentToBottom(messagesEndRef.current, true))))
                     });
 
                 }
-            });
+            });            
         }
-
     }
 
     const handleRealtimeSeenBy = async (data: any) => {
@@ -221,6 +234,8 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
                                 appId={id}
                                 reactions={item.reactions}
                                 chatRoom={chatRoom}
+                                features={features}
+                                appFeatures={appFeatures}
                                 //reactions_count={item.reactions_count}
                                 seenBy={(members.data && members.data.length > 0) ? members.data.filter((member) => {
                                     return member.marked_id === item.id && member.id !== user.id;
@@ -249,7 +264,20 @@ const Messages = ({ id, members, displayName, avatarUrl, lastMessageId, chatRoom
                 {messages}
             </div>
             <div className="wy-footerbar wy-footerbar-sticky">
-                <Editor key={id} appId={id} placeholder="Type a message" buttonText="" editorType="messages" editorLocation='apps' onSubmit={handleCreate} showAttachments={true} showCloudFiles={true} showMeetings={true} showTyping={true} useDraft={true} />
+                <Editor 
+                    key={id} 
+                    appId={id} 
+                    placeholder="Type a message" 
+                    buttonText="" 
+                    editorType="messages" 
+                    editorLocation='apps' 
+                    onSubmit={handleCreate} 
+                    showMention={hasFeature(features, Feature.Mentions, appFeatures?.mentions)} 
+                    showAttachments={hasFeature(features, Feature.Attachments, appFeatures?.attachments)} 
+                    showCloudFiles={hasFeature(features, Feature.CloudFiles, appFeatures?.cloudFiles)} 
+                    showMeetings={hasFeature(features, Feature.Meetings, appFeatures?.meetings)} 
+                    showTyping={hasFeature(features, Feature.Typing, appFeatures?.typing)} 
+                    useDraft={true} />
             </div>
         </>
 

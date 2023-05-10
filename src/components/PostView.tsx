@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import dayjs from 'dayjs';
 import Dropdown from '../ui/Dropdown';
 import Icon from '../ui/Icon';
-import { ReactionsList, ReactionsMenu } from './Reactions';
+import { ReactionsLike, ReactionsList, ReactionsMenu } from './Reactions';
 import Comments from './Comments';
 import Image, { ImageGrid } from './Image';
 import { PreviewContext } from "../contexts/PreviewContext";
@@ -16,7 +16,8 @@ import useMutateSubscribe from '../hooks/useMutateSubscribe';
 import useMutateUnsubscribe from '../hooks/useMutateUnsubscribe';
 import Poll from './Poll';
 import MeetingCard from './MeetingCard';
-import { EmbedType, FileType, MeetingType, MemberType, PollOptionType, ReactableType } from '../types/types';
+import { AppFeatures, EmbedType, FileType, MeetingType, MemberType, PollOptionType, ReactableType } from '../types/types';
+import { Feature, hasFeature } from '../utils/featureUtils';
 
 type Props = {
     appId: number,
@@ -34,10 +35,12 @@ type Props = {
     is_subscribed: boolean,
     options?: PollOptionType[],
     meeting?: MeetingType,
+    features: string[],
+    appFeatures: AppFeatures | undefined,
     onEdit: (e: any) => void
 }
 
-const PostView = ({ appId, id, html, created_at, modified_at, created_by, attachments, reactions, embed, comment_count, is_subscribed, options, meeting, onEdit }: Props) => {
+const PostView = ({ appId, id, html, created_at, modified_at, created_by, attachments, reactions, embed, comment_count, is_subscribed, options, meeting, features, appFeatures, onEdit }: Props) => {
     const { user } = useContext(UserContext);
     const [loadComments, setLoadComments] = useState<boolean>(false);
     const [showComments, setShowComments] = useState<boolean>(false);
@@ -165,27 +168,38 @@ const PostView = ({ appId, id, html, created_at, modified_at, created_by, attach
 
                 {/* meeting */}
                 {meeting &&
-                    <MeetingCard meeting={meeting}/>
+                    <MeetingCard meeting={meeting} />
                 }
             </div>
 
             <div className='wy-post-footer'>
                 <div className='wy-reactions-line'>
-                    {/* reactions */}
-                    <ReactionsList id={id} type="posts" parentId={appId} reactions={reactions} />
-                    <ReactionsMenu id={id} type="posts" parentId={appId} reactions={reactions} />
+                    {hasFeature(features, Feature.Reactions, appFeatures?.reactions) ?
+                        <>
+                            <ReactionsList id={id} type="posts" parentId={appId} reactions={reactions} />
+                            <ReactionsMenu id={id} type="posts" parentId={appId} reactions={reactions} />
+                        </>
+                        :
+                        <>
+                            <ReactionsLike id={id} type="posts" parentId={appId} reactions={reactions} />
+                            <ReactionsList id={id} type="posts" parentId={appId} reactions={reactions} featureEnabled={false} />
+                        </>
+
+                    }
                 </div>
 
                 {/* comment count */}
-                <a href="#" className='wy-meta' onClick={(e) => handleCommentsClick(e)}>
-                    <CommentCount id={id} count={comment_count || 0} />
-                </a>
+                {(appFeatures?.comments ?? true) &&
+                    <a href="#" className='wy-meta' onClick={(e) => handleCommentsClick(e)}>
+                        <CommentCount id={id} count={comment_count || 0} />
+                    </a>
+                }
             </div>
 
             {/* comments */}
             {loadComments &&
                 <div {...(showComments ? {} : { "hidden": true })}>
-                    <Comments appId={appId} parentId={id} type="posts" />
+                    <Comments appId={appId} parentId={id} type="posts" features={features} appFeatures={appFeatures} />
                 </div>
             }
         </div>

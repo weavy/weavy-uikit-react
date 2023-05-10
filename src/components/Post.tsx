@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PostView from './PostView';
 import PostEdit from './PostEdit';
 import PostTrashed from './PostTrashed';
-import { EmbedType, FileType, MeetingType, MemberType, PollOptionType, ReactableType } from '../types/types';
+import { AppFeatures, EmbedType, FileType, MeetingType, MemberType, PollOptionType, ReactableType } from '../types/types';
 
 type Props = {
     appId: number,
@@ -20,7 +20,9 @@ type Props = {
     is_subscribed: boolean,
     is_trashed: boolean,
     options?: PollOptionType[],
-    meeting?: MeetingType
+    meeting?: MeetingType,
+    features: string[],
+    appFeatures: AppFeatures | undefined
 }
 
 

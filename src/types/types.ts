@@ -27,8 +27,7 @@ export type WeavyContextProps = {
 
 export type WeavyContextOptions = {
     zoomAuthenticationUrl?: string,
-    teamsAuthenticationUrl?: string,
-    enableCloudFiles?: boolean,
+    teamsAuthenticationUrl?: string,    
     enableScrollbarDetection?: boolean,
     filebrowserUrl?: string,
     pdfWorkerUrl?: string,
@@ -368,4 +367,21 @@ export type EmbedType = {
     author_url: string,
     html?: string
     image?: string
+}
+
+export type AppFeatures = {
+    attachments?: boolean,
+    cloudFiles?: boolean,
+    embeds?: boolean,
+    meetings?: boolean,
+    mentions?: boolean,
+    polls?: boolean,
+    previews?: boolean,
+    reactions?: boolean,
+    receipts?: boolean,
+    thumbnails?: boolean,
+    typing?: boolean,
+    comments?: boolean,
+    versions?: boolean,
+    webDAV?: boolean,
 }

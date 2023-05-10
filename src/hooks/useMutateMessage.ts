@@ -20,6 +20,7 @@ export default function useMutateMessage() {
         userId: number,
         blobs: BlobType[],
         meeting: number | null,
+        callback: Function
     }
 
     const mutateMessage = async ({ id, text, blobs, meeting }: MutateProps) => {
@@ -34,15 +35,12 @@ export default function useMutateMessage() {
     };
 
     return useMutation(mutateMessage, {
-        onSuccess: (data: MessageType, variables: any, context: any) => {
-
-            addCacheItem(queryClient, ['messages', variables.id], data, context.tempId);
-
+        onSuccess: (data: MessageType, variables: any, context: any) => {            
+            addCacheItem(queryClient, ['messages', variables.id], data, context.tempId);            
             // refetch conversations list
             queryClient.invalidateQueries("conversations");
-
         },
-        onMutate: async (variables: any) => {
+        onMutate: async (variables: any) => {            
             await queryClient.cancelQueries(['messages', variables.id]);
 
             const tempId = Math.random();
@@ -63,6 +61,8 @@ export default function useMutateMessage() {
                 reactions: []                                
             }
             addCacheItem(queryClient, ['messages', variables.id], tempData);
+            
+            variables.callback();
 
             return { tempId }
         }

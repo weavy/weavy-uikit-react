@@ -11,7 +11,8 @@ import classNames from "classnames";
 import Comments from "./Comments";
 import FileVersions from "./FileVersions";
 import { WeavyContext } from '../contexts/WeavyContext';
-import { FilesResult, FileType } from "../types/types";
+import { AppFeatures, FilesResult, FileType } from "../types/types";
+import { Feature, hasFeature } from "../utils/featureUtils";
 
 function allowedKeyTarget(e: any) {
     var notInputField = !e.target.matches("input, textarea, select") && !e.target.closest('[contenteditable="true"]');
@@ -22,10 +23,12 @@ type Props = {
     appId: number,
     infiniteFiles: UseInfiniteQueryResult<FilesResult, unknown>,
     previewId?: number,
+    features: string[],
+    appFeatures: AppFeatures | undefined,
     onClose?: () => void
 }
 
-const PreviewFiles = ({ appId, infiniteFiles, previewId, onClose }: Props) => {
+const PreviewFiles = ({ appId, infiniteFiles, previewId, features, appFeatures, onClose }: Props) => {
     const { client } = useContext(WeavyContext);
     
     const [modalPreviewOpen, setModalPreviewOpen] = useState<boolean>(false);
@@ -100,7 +103,7 @@ const PreviewFiles = ({ appId, infiniteFiles, previewId, onClose }: Props) => {
                                         //console.log("fetchy fetchy")
                                         let fetchedInfiniteFiles = await fetchNextPage({ cancelRefetch: false });
                                         infiniteFilesData = fetchedInfiniteFiles.data;
-                                        console.log("preview nextpage was fetched");
+                                        console.debug("preview nextpage was fetched");
                                     }
                                     let foundFile;
                                     infiniteFilesData?.pages.find((page) => {
@@ -249,16 +252,16 @@ const PreviewFiles = ({ appId, infiniteFiles, previewId, onClose }: Props) => {
                         </div>
                         <div className="wy-appbar-buttons">
                             {activeFile && <>
-                                {activeFile.id >= 1 &&
+                                {activeFile.id >= 1 && hasFeature(features, Feature.Comments, appFeatures?.comments) && 
                                     <Button.UI active={commentsOpen} onClick={() => toggleSidebarTab("comments")} title={`Comments`}>
-                                        <Icon.ActiveStack>
+                                        <Icon.ActiveStack> 
                                             <Icon.UI name="comment-outline" />
                                             <Icon.UI name="comment" />
                                         </Icon.ActiveStack>
                                     </Button.UI>
                                 }
-                                <FileMenu file={activeFile}>
-                                    {activeFile.id >= 1 &&
+                                <FileMenu file={activeFile} features={features} appFeatures={appFeatures}>
+                                    {activeFile.id >= 1  && hasFeature(features, Feature.Versions, appFeatures?.versions) &&
                                         <Dropdown.Item active={versionsOpen} onClick={() => toggleSidebarTab("versions")}><Icon.UI name="backup-restore" /> Versions</Dropdown.Item>
                                     }
                                 </FileMenu>                        
@@ -280,7 +283,7 @@ const PreviewFiles = ({ appId, infiniteFiles, previewId, onClose }: Props) => {
                             </nav>
                             <div className="wy-pane wy-scroll-y">
                                 {commentsOpen && activeFile && activeFile.id >= 1 && appId && 
-                                    <Comments appId={appId} parentId={activeFile.id} type="files" />
+                                    <Comments appId={appId} parentId={activeFile.id} type="files" features={features} appFeatures={appFeatures}/>
                                 }
                             </div>
                         </aside>

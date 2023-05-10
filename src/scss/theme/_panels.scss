@@ -52,6 +52,10 @@
         transition: opacity vars.$transition-fast;
         transition-delay: .2s;
         opacity: 1;
+
+        &:not([src]) {
+            display: none;
+        }
     }
 
     &:not(.wy-loaded) .wy-panel-frame {

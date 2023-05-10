@@ -1,4 +1,4 @@
-import { FileType, MeetingType, MemberType, PollOptionType, ReactableType } from "./types";
+import { AppFeatures, FileType, MeetingType, MemberType, PollOptionType, ReactableType } from "./types";
 
 export interface MessageProps {
     id: number,
@@ -16,6 +16,8 @@ export interface MessageProps {
     reactions: ReactableType[],
     reactions_count?: number,
     seenBy: MemberType[],
-    chatRoom: boolean
+    chatRoom: boolean,
+    features: string[],
+    appFeatures: AppFeatures | undefined
 }
 

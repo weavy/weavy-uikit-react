@@ -7,8 +7,9 @@ import useMembers from '../hooks/useMembers';
 import Typing from './Typing';
 import useConversation from '../hooks/useConversation';
 import classNames from "classnames";
+import useFeatures from '../hooks/useFeatures';
 
-const Chat = ({ uid, className }: ChatProps) => {
+const Chat = ({ uid, className, features }: ChatProps) => {
     const { client } = useContext(WeavyContext);
     const [selectedId, setSelectedId] = useState<number | null>(null)
 
@@ -24,6 +25,11 @@ const Chat = ({ uid, className }: ChatProps) => {
     });
 
     const { isLoading: isLoadingConversation, data: dataConversation } = useConversation(selectedId, {
+        // The query will not execute until the activeConversation exists
+        enabled: selectedId != null
+    });
+
+    const { isLoading: isLoadingFeatures, data: dataFeatures } = useFeatures("chat", {
         // The query will not execute until the activeConversation exists
         enabled: selectedId != null
     });
@@ -55,8 +61,8 @@ const Chat = ({ uid, className }: ChatProps) => {
                 <div>No chat with the contextual id <strong>{uid}</strong></div>
             }
 
-            {selectedId && dataMembers && dataChat && dataConversation &&
-                <Messages id={selectedId} chatRoom={true} members={dataMembers} lastMessageId={dataConversation.last_message?.id} />
+            {selectedId && dataMembers && dataChat && dataConversation && dataFeatures &&
+                <Messages id={selectedId} chatRoom={true} members={dataMembers} lastMessageId={dataConversation.last_message?.id} features={dataFeatures} appFeatures={features}/>
             }
         </div>
     )

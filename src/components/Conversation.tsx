@@ -21,8 +21,9 @@ import useMutateLeaveConversation from '../hooks/useMutateLeaveConversation';
 import { MemberType, RealtimeApp } from '../types/types';
 import ConversationBadge from './ConversationBadge';
 import Presence from './Presence';
+import useFeatures from '../hooks/useFeatures';
 
-const Conversation = ({ id, showBackButton }: ConversationProps) => {
+const Conversation = ({ id, showBackButton, features }: ConversationProps) => {
 
     const queryClient = useQueryClient();
     const { client } = useContext(WeavyContext);
@@ -46,6 +47,11 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
     });
 
     const { isLoading: isLoadingMembers, data: dataMembers, refetch: refetchMembers } = useMembers(selectedConversationId, {
+        // The query will not execute until the activeConversation exists
+        enabled: selectedConversationId != null
+    });
+
+    const { isLoading: isLoadingFeatures, data: dataFeatures } = useFeatures("chat", {
         // The query will not execute until the activeConversation exists
         enabled: selectedConversationId != null
     });
@@ -195,9 +201,9 @@ const Conversation = ({ id, showBackButton }: ConversationProps) => {
                     Create or select a conversation to get started
                 </div>
             }
-            {selectedConversationId && dataMembers && dataConversation &&
+            {selectedConversationId && dataMembers && dataConversation && dataFeatures &&
                 <div className="wy-pane-body">
-                    <Messages id={selectedConversationId} chatRoom={isRoomOrChat} members={dataMembers} displayName={dataConversation?.display_name} avatarUrl={dataConversation?.avatar_url} lastMessageId={dataConversation?.last_message?.id} />
+                    <Messages id={selectedConversationId} chatRoom={isRoomOrChat} members={dataMembers} displayName={dataConversation?.display_name} avatarUrl={dataConversation?.avatar_url} lastMessageId={dataConversation?.last_message?.id} features={dataFeatures} appFeatures={features}/>
                 </div>
             }
 

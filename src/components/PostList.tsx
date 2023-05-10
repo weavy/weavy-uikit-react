@@ -7,13 +7,15 @@ import Button from '../ui/Button';
 import Spinner from '../ui/Spinner';
 import PostPlaceHolder from './PostPlaceholder';
 import useInfiniteScroll from '../hooks/useInfiniteScroll';
-import { MessageType, RealtimeReaction } from '../types/types';
+import { AppFeatures, MessageType, RealtimeReaction } from '../types/types';
 
 type Props = {
-    appId: number
+    appId: number,
+    features: string[],
+    appFeatures: AppFeatures | undefined
 }
 
-const PostList = ({ appId }: Props) => {
+const PostList = ({ appId, features, appFeatures }: Props) => {
 
     const { client } = useContext(WeavyContext);
     const { dispatch } = useEvents();
@@ -75,6 +77,8 @@ const PostList = ({ appId }: Props) => {
                                     is_trashed={post.is_trashed}
                                     options={post.options}
                                     meeting={post.meeting}
+                                    features={features}
+                                    appFeatures={appFeatures}
                                 />
                         })
                     }

@@ -9,18 +9,20 @@ import { useMutateFileSubscribe, useMutateFileUnsubscribe } from '../hooks/useMu
 import Spinner from '../ui/Spinner';
 import Icon from '../ui/Icon';
 import PreviewFiles from './PreviewFiles';
-import { FileOrder, FileOrderBy, FileType, FileView } from '../types/types';
+import { AppFeatures, FileOrder, FileOrderBy, FileType, FileView } from '../types/types';
 
 type Props = {
     appId: number,
     view?: FileView,
     order?: FileOrder,
     trashed?: boolean,
+    features: string[],
+    appFeatures: AppFeatures | undefined,
     onSorting?: (order: FileOrder) => void,
     onHandleError?: (file: FileType) => void
 }
 
-const FileList = ({ appId, view = "list", order, trashed = false, onSorting, onHandleError }: Props) => {
+const FileList = ({ appId, view = "list", order, trashed = false, features, appFeatures, onSorting, onHandleError }: Props) => {
     
     const infiniteFiles = useFileList(appId, { meta: { order: order, trashed: trashed }});
     const { isLoading, data, fetchNextPage, hasNextPage, isFetchingNextPage, remove: resetInfiniteFiles } = infiniteFiles;
@@ -76,6 +78,8 @@ const FileList = ({ appId, view = "list", order, trashed = false, onSorting, onH
                                     onRestore={(file: FileType) => mutateFileRestore.mutateAsync({ file: file })}
                                     onDeleteForever={(file: FileType) => mutateFileDeleteForever.mutateAsync({ file: file })}
                                     onHandleError={onHandleError}
+                                    features={features}
+                                    appFeatures={appFeatures}
                                 />
                             })
                         }
@@ -90,7 +94,7 @@ const FileList = ({ appId, view = "list", order, trashed = false, onSorting, onH
                                 : ""}
                 </div>
             </div>
-            <PreviewFiles appId={appId} infiniteFiles={infiniteFiles} previewId={currentPreview} onClose={onClosePreview} />
+            <PreviewFiles appId={appId} infiniteFiles={infiniteFiles} previewId={currentPreview} onClose={onClosePreview} features={features} appFeatures={appFeatures}/>
             </>
         );
     }
@@ -140,6 +144,8 @@ const FileList = ({ appId, view = "list", order, trashed = false, onSorting, onH
                                     onRestore={(file: FileType) => mutateFileRestore.mutateAsync({ file: file })}
                                     onDeleteForever={(file: FileType) => mutateFileDeleteForever.mutateAsync({ file: file })}
                                     onHandleError={onHandleError}
+                                    features={features}
+                                    appFeatures={appFeatures}
                                 />
                             })
                         }
@@ -159,7 +165,7 @@ const FileList = ({ appId, view = "list", order, trashed = false, onSorting, onH
     
             </tbody>
         </table>
-        <PreviewFiles appId={appId} infiniteFiles={infiniteFiles} previewId={currentPreview} onClose={onClosePreview} />
+        <PreviewFiles appId={appId} infiniteFiles={infiniteFiles} previewId={currentPreview} onClose={onClosePreview} features={features} appFeatures={appFeatures}/>
         </>
      )
 }

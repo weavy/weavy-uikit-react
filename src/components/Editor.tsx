@@ -45,6 +45,7 @@ type Props = {
     showMeetings?: boolean,
     showTyping?: boolean,
     useDraft?: boolean,
+    showMention?: boolean,
     onSubmit: (text: string, blobs: BlobType[], attachments: FileType[], meeting: number | null, embed: number | null, options: PollOptionType[]) => Promise<void>,
     editorType: "posts" | "comments" | "messages",
     editorLocation: "apps" | "posts" | "messages" | "files"
@@ -52,7 +53,7 @@ type Props = {
 
 let typed = null;
 
-const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, attachments: initialAttachments, options: initialOptions, meeting: initialMeeting, showAttachments = false, showCloudFiles = false, showEmbeds = false, showPolls = false, showMeetings = false, showTyping = false, useDraft = false, onSubmit, editorType, editorLocation }: Props) => {
+const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, attachments: initialAttachments, options: initialOptions, meeting: initialMeeting, showAttachments = false, showCloudFiles = false, showEmbeds = false, showPolls = false, showMeetings = false, showTyping = false, useDraft = false, showMention = false, onSubmit, editorType, editorLocation }: Props) => {
 
     const { client, options } = useContext(WeavyContext);
     const [files, setFiles] = useState<string>("");
@@ -90,7 +91,7 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
         markdown({ base: markdownLanguage }),
         mentions,
         autocompletion({
-            override: [autocomplete],
+            override: showMention ? [autocomplete] : null,
             closeOnBlur: false,
             icons: false,
             addToOptions: [
@@ -134,7 +135,7 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
                         files = [...files, item.getAsFile()];
                     }
                 }
-                if (files.length > 0) {
+                if (files.length > 0 && showAttachments) {
                     for (var i = 0; i < files.length; i++) {
                         let file = files[i];
                         let fileProps = { file: file }
@@ -174,9 +175,9 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
                     label: item.display_name,
                     apply: function (view: EditorView, completion: Completion, from: number, to: number) {
                         var toInsert = "[" + item.display_name + "](@u" + item.id.toString() + ")";
-                        var transaction = view.state.update({ changes: { from: from -1, to: from } });
+                        var transaction = view.state.update({ changes: { from: from - 1, to: from } });
                         view.dispatch(transaction);
-                        transaction = view.state.update({ changes: { from: from -1, to: to -1, insert: toInsert } });
+                        transaction = view.state.update({ changes: { from: from - 1, to: to - 1, insert: toInsert } });
                         view.dispatch(transaction);
                         //view.dispatch(pickedCompletion);
                     }
@@ -356,8 +357,8 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         // this callback will be called after files get dropped, we will get the acceptedFiles. If you want, you can even access the rejected files too
-        console.log(acceptedFiles);
-        if (acceptedFiles.length > 0) {
+        
+        if (acceptedFiles.length > 0 && showAttachments) {
             for (var i = 0; i < acceptedFiles.length; i++) {
                 let file = acceptedFiles[i];
                 let fileProps = { file: file }
@@ -442,27 +443,29 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
         <>
             {editorType === "messages" &&
                 <div className="wy-message-editor-inputs">
-                    <Dropdown.UI directionY='up' icon="plus">
+                    {(showAttachments || showCloudFiles) &&
+                        <Dropdown.UI directionY='up' icon="plus">
 
-                        {showAttachments &&
-                            <>
-                                <Dropdown.Item onClick={openFileInput}>
-                                    <Icon.UI name="attachment" /> File from device
+                            {showAttachments &&
+                                <>
+                                    <Dropdown.Item onClick={openFileInput}>
+                                        <Icon.UI name="attachment" /> File from device
+                                    </Dropdown.Item>
+                                    <input type="file" ref={input => fileInput = input} value={files} onChange={handleFileUpload} multiple hidden tabIndex={-1} />
+                                </>
+                            }
+
+                            {showCloudFiles &&
+                                <Dropdown.Item onClick={openCloudFiles}>
+                                    <Icon.UI name="cloud" /> File from cloud
                                 </Dropdown.Item>
-                                <input type="file" ref={input => fileInput = input} value={files} onChange={handleFileUpload} multiple hidden tabIndex={-1} />
-                            </>
-                        }
-
-                        {showCloudFiles && options?.enableCloudFiles &&
-                            <Dropdown.Item onClick={openCloudFiles}>
-                                <Icon.UI name="cloud" /> File from cloud
-                            </Dropdown.Item>
-                        }
-                        {/* meetings */}
-                        {showMeetings &&
-                            <Meetings onMeetingAdded={handleMeetingAdd} dropdown={true} />
-                        }
-                    </Dropdown.UI>
+                            }
+                            {/* meetings */}
+                            {showMeetings &&
+                                <Meetings onMeetingAdded={handleMeetingAdd} dropdown={true} />
+                            }
+                        </Dropdown.UI>
+                    }
                     <div className={classNames("wy-message-editor-text", { "wy-is-invalid": editorError })}>
                         <ReactCodeMirror
                             ref={editorRef}
@@ -494,23 +497,25 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
                 <>
                     <div className="wy-comment-editor-inputs">
 
-                        <Dropdown.UI directionY='up' icon="plus">
+                        {(showAttachments || showCloudFiles) &&
+                            <Dropdown.UI directionY='up' icon="plus">
 
-                            {showAttachments &&
-                                <>
-                                    <Dropdown.Item onClick={openFileInput}>
-                                        <Icon.UI name="attachment" /> File from device
+                                {showAttachments &&
+                                    <>
+                                        <Dropdown.Item onClick={openFileInput}>
+                                            <Icon.UI name="attachment" /> File from device
+                                        </Dropdown.Item>
+                                        <input type="file" ref={input => fileInput = input} value={files} onChange={handleFileUpload} multiple hidden tabIndex={-1} />
+                                    </>
+                                }
+
+                                {showCloudFiles &&
+                                    <Dropdown.Item onClick={openCloudFiles}>
+                                        <Icon.UI name="cloud" /> File from cloud
                                     </Dropdown.Item>
-                                    <input type="file" ref={input => fileInput = input} value={files} onChange={handleFileUpload} multiple hidden tabIndex={-1} />
-                                </>
-                            }
-
-                            {showCloudFiles && options?.enableCloudFiles &&
-                                <Dropdown.Item onClick={openCloudFiles}>
-                                    <Icon.UI name="cloud" /> File from cloud
-                                </Dropdown.Item>
-                            }
-                        </Dropdown.UI>
+                                }
+                            </Dropdown.UI>
+                        }
                         <div className={classNames("wy-comment-editor-text", { "wy-is-invalid": editorError })}>
                             <ReactCodeMirror
                                 ref={editorRef}
@@ -576,7 +581,7 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
                         }
 
                         {/* cloud files */}
-                        {showCloudFiles && options?.enableCloudFiles &&
+                        {showCloudFiles &&
                             <Button.UI title="Add file from cloud" onClick={openCloudFiles}>
                                 <Icon.UI name="cloud" />
                             </Button.UI>
@@ -635,7 +640,7 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
                         return (
                             <React.Fragment key={'f' + index}>
                                 {f &&
-                                    <FileItem.Item file={f}>
+                                    <FileItem.Item file={f} features={[]} appFeatures={undefined}>
                                         <Button.UI onClick={handleRemoveFile.bind(Editor, m, f.id)}><Icon.UI name='close-circle' /></Button.UI>
                                     </FileItem.Item>
                                 }

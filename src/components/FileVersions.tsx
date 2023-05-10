@@ -45,13 +45,13 @@ const FileVersions = ({ filesKey, file, onVersionSelect }: Props) => {
     }
 
     const handleRevert = (versionFile: FileType) => {
-        console.log("reverting file version", versionFile.version);
+        console.debug("reverting file version", versionFile.version);
         mutateFileVersionRestore.mutate({versionFile});
         handleSelect(versionFile);
     }
 
     const handleRemove = (versionFile: FileType) => {
-        console.log("removing file version", versionFile.version);
+        console.debug("removing file version", versionFile.version);
         mutateFileVersionDelete.mutate({versionFile});
         if (activeVersion === versionFile) {
             setActiveVersion(file);

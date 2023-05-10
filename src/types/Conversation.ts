@@ -1,4 +1,7 @@
+import { AppFeatures } from "./types";
+
 export interface ConversationProps {
   id?: number | null,  
-  showBackButton?: boolean
+  showBackButton?: boolean,
+  features?: AppFeatures | undefined
 }

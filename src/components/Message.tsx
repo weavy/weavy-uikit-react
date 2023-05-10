@@ -2,7 +2,7 @@ import React, { FC, useContext } from 'react';
 import dayjs from 'dayjs';
 import { MessageProps } from "../types/Message"
 import Attachment from './Attachment';
-import { ReactionsMenu, ReactionsList } from './Reactions';
+import { ReactionsMenu, ReactionsList, ReactionsLike } from './Reactions';
 import { Image, ImageGrid } from "./Image"
 import SeenBy from './SeenBy';
 import Avatar from "./Avatar";
@@ -11,8 +11,9 @@ import { PreviewContext } from "../contexts/PreviewContext";
 import classNames from 'classnames';
 import { FileType } from '../types/types';
 import Poll from './Poll';
+import { Feature, hasFeature } from '../utils/featureUtils';
 
-const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_at, created_by, attachments, meeting, options, appId, reactions, seenBy, chatRoom }) => {
+const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_at, created_by, attachments, meeting, options, appId, reactions, seenBy, chatRoom, features, appFeatures }) => {
 
     const { openPreview, setPreviewFiles } = useContext(PreviewContext);
 
@@ -38,7 +39,7 @@ const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_a
                 <div className="wy-message-content">
                     <div className="wy-message-meta">
                         {chatRoom && !me &&
-                            <span>{created_by} · </span>                            
+                            <span>{created_by} · </span>
                         }
                         <time dateTime={created_at} title={date.format('LLLL')}>{date.fromNow()}</time>
                     </div>
@@ -50,7 +51,7 @@ const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_a
                         {!temp &&
                             <>
                                 {images && !!images.length && <ImageGrid>
-                                    {images.map((a: FileType) => 
+                                    {images.map((a: FileType) =>
                                         a.download_url &&
                                         <Image onClick={(e) => handlePreviewClick(e, a.id)} key={a.id} src={a.download_url} previewSrc={a.preview_url} width={a.width} height={a.height} /> || null
                                     )}
@@ -73,15 +74,28 @@ const Message: FC<MessageProps> = ({ id, html, temp, me, avatar, name, created_a
                                     )}
                                 </div>}
                                 <div className="wy-reactions-line">
-                                    <ReactionsList id={id}  type="messages" parentId={appId} reactions={reactions} />
-                                    {!temp && <ReactionsMenu  parentId={appId}id={id} type="messages" reactions={reactions} placement={ me ? "top-end" : "top-start"} />}
+                                    {hasFeature(features, Feature.Reactions, appFeatures?.reactions) ?
+                                        <>
+                                            <ReactionsList id={id} type="messages" parentId={appId} reactions={reactions}/>
+                                            {!temp && <ReactionsMenu parentId={appId} id={id} type="messages" reactions={reactions} placement={me ? "top-end" : "top-start"} />}
+                                        </>
+                                        :
+                                        <>                                            
+                                            {!temp && <ReactionsList id={id} type="messages" parentId={appId} reactions={reactions} featureEnabled={false} />}
+                                            <ReactionsLike id={id} type="messages" parentId={appId} reactions={reactions} />
+                                        </>
+
+                                    }                                    
                                 </div>
                             </>
                         }
                     </div>
                 </div>
             </div>
-            <SeenBy id={id} parentId={appId} seenBy={seenBy} createdAt={created_at} />
+            {hasFeature(features, Feature.Receipts, appFeatures?.receipts) &&
+                <SeenBy id={id} parentId={appId} seenBy={seenBy} createdAt={created_at} />
+            }
+
         </>
     )
 

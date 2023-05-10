@@ -3,7 +3,7 @@
 @use "base/colors";
 
 .wy-messages {
-  padding: 1rem 1rem 0 .75rem;
+  padding: 1rem 1rem 1rem .75rem;
   flex: 1 1 100%;
 }
 
@@ -73,14 +73,22 @@
     flex: 1 1 100%;
   }
 
-  .wy-reactions-line {
+  .wy-likes, .wy-reactions-line {
     position: relative;
     height: 0;
     min-height: 0;
     max-height: 0;
-
     margin: 0 -.75rem -.75rem;
     flex: 0 0 0;
+  }
+
+  .wy-like-count {
+    background: var(--wy-component-background-color);
+    border-radius: vars.$border-radius-pill;
+    color: currentColor;
+  }
+
+  .wy-reactions-line {
     flex-direction: row-reverse;
     justify-content: flex-end;
   }
@@ -107,7 +115,6 @@
   align-items: center;
   max-width: 100%;
 }
-
 // override some styles for message by current user
 .wy-message-me {
   margin-right: 0;
@@ -136,14 +143,19 @@
     //border-radius: var(--wy-component-border-radius);
   }
 
+
+  .wy-likes {
+    flex-direction: row-reverse;
+  }
+
   .wy-reactions-line {
     flex-direction: row;
+
     .wy-dropdown-menu {
       right: 0;
     }
   }
 }
-
 // override some styles for message that contains only emoji
 .wy-message-emoji {
   .wy-message-bubble {
@@ -165,17 +177,13 @@
     }
   }
 }
-
 // message status indicator (sending, sent, delivered, read)
 .wy-readby-status {
   display: flex;
+  gap: .25rem;
+  height: 18px; // same height as avatar (prevents layout change when readby indicators are updated)
   justify-content: flex-end;
-  margin-top: -.5rem;
-  margin-bottom: .75rem;
-
-  > * {
-    margin-left: .25rem;
-  }
+  margin-top: -.125rem;
 }
 
 .wy-message-readmore {

@@ -42,8 +42,7 @@ const WeavyProvider = ({ children, client, options }: WeavyProviderProperties) =
 
   let defaultOptions: WeavyContextOptions = {
     zoomAuthenticationUrl: undefined,
-    teamsAuthenticationUrl: undefined,
-    enableCloudFiles: true,
+    teamsAuthenticationUrl: undefined,    
     enableScrollbarDetection: true,
     filebrowserUrl: "https://filebrowser.weavy.io/v14/",
     reactions: ['😍', '😎', '😉', '😜', '👍']

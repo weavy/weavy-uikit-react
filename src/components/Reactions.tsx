@@ -16,6 +16,7 @@ import useMutateReplaceReaction from "../hooks/useMutateReplaceReaction";
 
 import { usePopper } from 'react-popper';
 import { ReactableType, ReactionGroup, ReactionType, RealtimeReaction } from "../types/types";
+import { Feature } from "../utils/featureUtils";
 
 type ReactionMenuProps = {
     id: number,
@@ -29,13 +30,49 @@ type ReactionsProps = {
     id: number,
     type: "messages" | "posts" | "comments",
     parentId: number | null,
-    reactions: ReactableType[]
+    reactions: ReactableType[],
+    featureEnabled?: boolean
+}
+
+export const ReactionsLike = ({ id, parentId, type, reactions }: ReactionMenuProps) => {
+    const { user } = useContext(UserContext);
+
+    const [reactedEmoji, setReactedEmoji] = useState<string>('');
+    const react = useMutateReaction();
+    const unreact = useMutateDeleteReaction();
+    const replaceReact = useMutateReplaceReaction();
+    const like = '👍';
+
+    useEffect(() => {
+        var filtered = reactions?.find((e) => e.created_by_id === user.id);
+        setReactedEmoji(filtered ? filtered.content : '')
+    }, [reactions]);
+
+    const handleReaction = async (emoji: string) => {
+        const existing = reactions?.find((r) => r.created_by_id === user.id)
+
+        if (existing && existing.content !== emoji) {
+            // replace
+            await replaceReact.mutateAsync({ parentId: parentId, id: id, type: type, reaction: emoji })
+        } else if (existing) {
+            // remove
+            await unreact.mutateAsync({ parentId: parentId, id: id, type: type, reaction: emoji });
+        } else {
+            // add
+            await react.mutateAsync({ parentId: parentId, id: id, type: type, reaction: emoji });
+        }
+    }
+
+    return (
+        <Button.UI className="wy-like-button" onClick={() => handleReaction(like)}><Icon.UI name={reactedEmoji === like ? "thumb-up" : "thumb-up-outline"} size={20} /></Button.UI>
+        
+    )
 }
 
 export const ReactionsMenu = ({ id, parentId, type, placement = "top", reactions }: ReactionMenuProps) => {
     const { user } = useContext(UserContext);
     const { options } = useContext(WeavyContext);
-    
+
     const [visible, setVisible] = useState<boolean>(false);
     const [reactedEmoji, setReactedEmoji] = useState<string>('');
     const emojis = options?.reactions;
@@ -43,8 +80,8 @@ export const ReactionsMenu = ({ id, parentId, type, placement = "top", reactions
     const unreact = useMutateDeleteReaction();
     const replaceReact = useMutateReplaceReaction();
 
-    const [referenceElement, setReferenceElement] = useState<HTMLButtonElement|null>(null);
-    const [popperElement, setPopperElement] = useState<HTMLDivElement|null>(null);
+    const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
+    const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
     const { styles, attributes, update } = usePopper(referenceElement, popperElement, { placement: placement });
 
     useEffect(() => {
@@ -80,8 +117,8 @@ export const ReactionsMenu = ({ id, parentId, type, placement = "top", reactions
             // add
             await react.mutateAsync({ parentId: parentId, id: id, type: type, reaction: emoji });
         }
-        
-        
+
+
         setVisible(false);
 
     }
@@ -100,16 +137,15 @@ export const ReactionsMenu = ({ id, parentId, type, placement = "top", reactions
     )
 }
 
-export const ReactionsList = ({ id, type, reactions }: ReactionsProps) => {
+export const ReactionsList = ({ id, type, reactions, featureEnabled = true }: ReactionsProps) => {
     const { user } = useContext(UserContext);
     const [reactionsList, setReactionsList] = useState<ReactableType[]>();
     const [list, setList] = useState<ReactionGroup[]>([]);
     const [count, setCount] = useState<number>(0)
     const { data, isLoading, refetch } = useReactionList(id, type, { enabled: false });
-    const { on, off } = useEvents();
-
+    const { on, off } = useEvents();    
     const [isOpen, setIsOpen] = useState(false);
-    
+
     useEffect(() => {
         on('reaction_added_' + id, handleRealtimeReactionInserted);
         on('reaction_deleted_' + id, handleRealtimeReactionDeleted);
@@ -144,8 +180,8 @@ export const ReactionsList = ({ id, type, reactions }: ReactionsProps) => {
             setList(list);
             setCount(reactionCount);
 
-            if(isOpen){            
-                setTimeout(() => refetch(), 200) ;
+            if (isOpen) {
+                setTimeout(() => refetch(), 200);
             }
         }
 
@@ -166,7 +202,8 @@ export const ReactionsList = ({ id, type, reactions }: ReactionsProps) => {
     }, [id, reactionsList]);
 
 
-    const handleOpen = () => {
+    const handleOpen = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
         refetch();
         setIsOpen(true);
     }
@@ -174,7 +211,7 @@ export const ReactionsList = ({ id, type, reactions }: ReactionsProps) => {
 
     return (
         <>
-            {count > 0 && <>
+            {count > 0 && featureEnabled && <>
                 <Button.UI className="wy-reactions wy-button-icon" onClick={handleOpen}>
                     {!!list && list.map((r: ReactionGroup, i: number) => {
                         return <span key={i} className="wy-emoji" title={r.count.toString()}>{r.content}</span>
@@ -182,10 +219,31 @@ export const ReactionsList = ({ id, type, reactions }: ReactionsProps) => {
                     {count > 1 && <span className="wy-reaction-count">{count}</span>}
                 </Button.UI>
 
-                {<Sheet.UI title="Reactions" isOpen={isOpen} onClose={() => {setIsOpen(false);}}>
+                {<Sheet.UI title="Reactions" isOpen={isOpen} onClose={() => { setIsOpen(false); }}>
                     {isOpen && <>
                         {isLoading &&
-                            <Spinner.UI overlay={true}/>
+                            <Spinner.UI overlay={true} />
+                        }
+                        {!isLoading && data && data.data?.map((reaction: ReactionType, index: number) => {
+                            return (
+                                <div className="wy-item" key={'r' + index}>
+                                    <Avatar size={32} src={reaction.created_by.avatar_url} name={reaction.created_by.display_name} />
+                                    <div className="wy-item-body">{reaction.created_by.display_name}</div>
+                                    <span className="wy-emoji">{reaction.content}</span>
+                                </div>
+                            )
+                        })}
+                    </>}
+                </Sheet.UI>}
+            </>}
+
+            {count > 0 && !featureEnabled && <>
+                <a href="#" className="wy-like-count" onClick={(e) => handleOpen(e)}>{count} {count === 1 ? "like": "likes"}</a>
+
+                {<Sheet.UI title="Reactions" isOpen={isOpen} onClose={() => { setIsOpen(false); }}>
+                    {isOpen && <>
+                        {isLoading &&
+                            <Spinner.UI overlay={true} />
                         }
                         {!isLoading && data && data.data?.map((reaction: ReactionType, index: number) => {
                             return (

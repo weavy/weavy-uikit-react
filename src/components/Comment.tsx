@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { EmbedType, FileType, MemberType, ReactableType } from '../types/types';
+import { AppFeatures, EmbedType, FileType, MemberType, ReactableType } from '../types/types';
 import CommentEdit from './CommentEdit';
 import CommentTrashed from './CommentTrashed';
 import CommentView from './CommentView';
@@ -17,8 +17,9 @@ type Props = {
     attachments: FileType[],
     reactions: ReactableType[],
     embed: EmbedType | undefined,
-    is_trashed: boolean
-
+    is_trashed: boolean,
+    features: string[],
+    appFeatures: AppFeatures | undefined
 }
 
 

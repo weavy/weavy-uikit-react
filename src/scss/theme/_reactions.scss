@@ -3,10 +3,30 @@
 @use "buttons"; // Ensures correct order, since buttons is needed by reactions
 @use "dropdown"; // Ensures correct order, since dropdown is needed by reactions
 
+.wy-likes {
+  display: inline-flex;
+  align-items: center;
+}
+
+.wy-like-button {
+  background: var(--wy-component-background-color);
+  color: var(--wy-primary);
+  background-clip: content-box;
+}
+
+.wy-like-count {
+  padding: 0 .5rem;
+  color: var(--wy-outline);
+  font-size: var(--wy-font-size-sm);
+  
+
+
+}
+
+
 .wy-reaction-count {
   margin: 0 0.5rem 0 .125rem;
   line-height: 1;
-  //color: vars.$text-muted;
   font-size: vars.$font-size-sm;
 }
 
@@ -28,7 +48,6 @@
   display: inline-flex;
   align-items: center;
   column-gap: .125rem;
-
   // hidden when empty
   &:empty {
     display: none;
@@ -40,7 +59,6 @@
   td:first-child {
     width: 3rem;
   }
-
   // name
   td:nth-child(2) {
     width: 100%;
@@ -56,13 +74,9 @@
 }
 
 
-.wy-reactions-line {  
-  display: flex;  
+.wy-reactions-line {
+  display: flex;
   align-items: center;
-
-  /*> * {
-    position: relative;
-  }*/
 
   .wy-reactions {
     background: var(--wy-component-background-color);

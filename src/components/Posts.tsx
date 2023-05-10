@@ -7,8 +7,10 @@ import Editor from './Editor';
 import PostList from './PostList';
 import useMutatePost from '../hooks/useMutatePost';
 import { BlobType, FileType, MessageType, PollOptionType } from '../types/types';
+import { Feature, hasFeature } from '../utils/featureUtils';
+import useFeatures from '../hooks/useFeatures';
 
-const Posts = ({ uid, className }: PostsProps) => {
+const Posts = ({ uid, className, features }: PostsProps) => {
 
     const { client } = useContext(WeavyContext);
     const [appId, setAppId] = useState<number | null>(null);    
@@ -19,6 +21,8 @@ const Posts = ({ uid, className }: PostsProps) => {
 
     // init app
     const { isLoading, data } = usePosts(uid, {});
+
+    const { isLoading: isLoadingFeatures, data: dataFeatures } = useFeatures("feeds", { });
 
     useEffect(() => {
         if (data) {
@@ -43,14 +47,26 @@ const Posts = ({ uid, className }: PostsProps) => {
             {!isLoading && !data &&
                 <div>No posts app with the contextual id <strong>{uid}</strong> was found.</div>
             }
-            {appId && data &&
+            {appId && data && dataFeatures &&
                 <div className='wy-post'>
-                    <Editor editorType='posts' editorLocation='apps' appId={appId} placeholder={'Create a post'} buttonText='Post' onSubmit={handleCreate} showAttachments={true} showCloudFiles={true} showEmbeds={true} showPolls={true} useDraft={true}/>
+                    <Editor 
+                        editorType='posts' 
+                        editorLocation='apps' 
+                        appId={appId} 
+                        placeholder={'Create a post'} 
+                        buttonText='Post' 
+                        onSubmit={handleCreate} 
+                        showMention={hasFeature(dataFeatures, Feature.Mentions, features?.mentions)} 
+                        showAttachments={hasFeature(dataFeatures, Feature.Attachments, features?.attachments)} 
+                        showCloudFiles={hasFeature(dataFeatures, Feature.CloudFiles, features?.cloudFiles)} 
+                        showEmbeds={hasFeature(dataFeatures, Feature.Embeds, features?.embeds)} 
+                        showPolls={hasFeature(dataFeatures, Feature.Polls, features?.polls)} 
+                        useDraft={true}/>
                 </div>
             }        
             
-            {appId &&
-                <PostList appId={appId} />
+            {appId && dataFeatures &&
+                <PostList appId={appId} features={dataFeatures} appFeatures={features}/>
             }
         
         </div>

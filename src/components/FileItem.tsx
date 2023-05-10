@@ -7,7 +7,8 @@ import { fileSizeAsString, getExtension, getIcon, isOfficeDocument } from "../ut
 import { toKebabCase } from "../utils/utils";
 import Spinner from "../ui/Spinner";
 import openUrl from "../utils/openUrl";
-import { FileType } from "../types/types";
+import { AppFeatures, FileType } from "../types/types";
+import { Feature, hasFeature } from "../utils/featureUtils";
 
 type FileProps = {
     file: FileType,
@@ -23,6 +24,8 @@ type FileProps = {
     onHandleError?: (file: FileType) => void,
     statusText?: string,
     title?: string,
+    features: string[],
+    appFeatures: AppFeatures | undefined,
     children?: React.ReactNode
 }
 
@@ -50,10 +53,12 @@ type FileMenuProps = {
     onDeleteForever?: (e: any) => void,
     children?: ReactNode,
     noWrapper?: boolean,
+    features: string[],
+    appFeatures: AppFeatures | undefined,
     props?: React.HTMLAttributes<HTMLSpanElement>
 }
 
-export const FileMenu = ({ file, className, onRename, onSubscribe, onUnsubscribe, onTrash, onRestore, onDeleteForever, children, noWrapper, ...props }: FileMenuProps) => {
+export const FileMenu = ({ file, className, onRename, onSubscribe, onUnsubscribe, onTrash, onRestore, onDeleteForever, children, noWrapper, features, appFeatures, ...props }: FileMenuProps) => {
     let { icon } = getIcon(file.name);
 
     let isNotTemp = file.id >= 1;
@@ -66,7 +71,7 @@ export const FileMenu = ({ file, className, onRename, onSubscribe, onUnsubscribe
                 {onDeleteForever && <Dropdown.Item onClick={onDeleteForever}><Icon.UI name="delete-forever"/>Delete</Dropdown.Item>}
             </>}
             {!file.is_trashed && <>
-                {file.external_url ?
+                {(file.external_url && hasFeature(features, Feature.WebDAV, appFeatures?.webDAV)) ?
                     <Dropdown.Item onClick={() => triggerExternal(file)}><Icon.UI name={icon} /> {`Open in ${file.provider}`}</Dropdown.Item>
                 : <>
                     { file.application_url &&
@@ -95,7 +100,7 @@ const clickBlock = (callback: React.EventHandler<React.SyntheticEvent>) => {
         e.preventDefault();
         
         const onClickBlock = (e: Event) => {
-            console.log("Blocked event", e.type);
+            console.debug("Blocked event", e.type);
             e.preventDefault();
             e.stopImmediatePropagation();
         }
@@ -111,7 +116,7 @@ const clickBlock = (callback: React.EventHandler<React.SyntheticEvent>) => {
     }
 }
 
-const FileRow = ({ file, className, onClick, onRename, isRenaming, onSubscribe, onUnsubscribe, onTrash, onRestore, onDeleteForever, onHandleError, statusText, title, children }: FileProps) => {
+const FileRow = ({ file, className, onClick, onRename, isRenaming, onSubscribe, onUnsubscribe, onTrash, onRestore, onDeleteForever, onHandleError, statusText, title, features, appFeatures, children }: FileProps) => {
     const [renaming, setRenaming] = useState<boolean>(false);
 
     useEffect(() => {
@@ -203,6 +208,8 @@ const FileRow = ({ file, className, onClick, onRename, isRenaming, onSubscribe, 
                         onRestore={onRestore?.bind(FileRow, file)}
                         onDeleteForever={onDeleteForever?.bind(FileRow, file)}
                         noWrapper={true}
+                        features={features}
+                        appFeatures={appFeatures}
                     /> 
                 </>}
             </td>
@@ -210,7 +217,7 @@ const FileRow = ({ file, className, onClick, onRename, isRenaming, onSubscribe, 
     )
 }
 
-const FileCard = ({ file, className, onClick, onRename, isRenaming, onSubscribe, onUnsubscribe, onTrash, onRestore, onDeleteForever, onHandleError, statusText, title, children }: FileProps) => {
+const FileCard = ({ file, className, onClick, onRename, isRenaming, onSubscribe, onUnsubscribe, onTrash, onRestore, onDeleteForever, onHandleError, statusText, title, features, appFeatures, children }: FileProps) => {
     const [renaming, setRenaming] = useState<boolean>(false);
 
     useEffect(() => {
@@ -268,6 +275,8 @@ const FileCard = ({ file, className, onClick, onRename, isRenaming, onSubscribe,
                         onTrash={onTrash?.bind(FileRow, file)}
                         onRestore={onRestore?.bind(FileRow, file)}
                         onDeleteForever={onDeleteForever?.bind(FileRow, file)}
+                        features={features}
+                        appFeatures={appFeatures}
                     /> 
                 </>}
             </div>
@@ -304,7 +313,7 @@ const FileCard = ({ file, className, onClick, onRename, isRenaming, onSubscribe,
     )
 }
 
-const FileItem = ({ file, className, onClick, onRename, isRenaming, onSubscribe, onUnsubscribe, onTrash, onRestore, onDeleteForever, onHandleError, statusText, title, children }: FileProps) => {
+const FileItem = ({ file, className, onClick, onRename, isRenaming, onSubscribe, onUnsubscribe, onTrash, onRestore, onDeleteForever, onHandleError, statusText, title, features, appFeatures, children }: FileProps) => {
     const [renaming, setRenaming] = useState<boolean>(false);
 
     useEffect(() => {
@@ -383,6 +392,8 @@ const FileItem = ({ file, className, onClick, onRename, isRenaming, onSubscribe,
                     onTrash={onTrash?.bind(FileRow, file)}
                     onRestore={onRestore?.bind(FileRow, file)}
                     onDeleteForever={onDeleteForever?.bind(FileRow, file)}
+                    features={features}
+                    appFeatures={appFeatures}
                 /> 
             </>}
         </div>

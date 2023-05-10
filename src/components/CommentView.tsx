@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import dayjs from 'dayjs';
 import Dropdown from '../ui/Dropdown';
 import Icon from '../ui/Icon';
-import { ReactionsList, ReactionsMenu } from './Reactions';
+import { ReactionsLike, ReactionsList, ReactionsMenu } from './Reactions';
 import Image, { ImageGrid } from './Image';
 import Attachment from './Attachment';
 import Avatar from './Avatar';
@@ -12,7 +12,8 @@ import { PreviewContext } from "../contexts/PreviewContext";
 import useMutateTrashComment from '../hooks/useMutateTrashComment';
 import { useQueryClient } from 'react-query';
 import { updateCacheItem } from '../utils/cacheUtils';
-import { EmbedType, FileType, MemberType, MessageType, ReactableType } from '../types/types';
+import { AppFeatures, EmbedType, FileType, MemberType, MessageType, ReactableType } from '../types/types';
+import { Feature, hasFeature } from '../utils/featureUtils';
 
 type Props = {
     appId: number,
@@ -27,10 +28,12 @@ type Props = {
     attachments: FileType[],
     reactions: ReactableType[],
     embed: EmbedType | undefined,
+    features: string[],
+    appFeatures: AppFeatures | undefined,
     onEdit: (e: any) => void
 }
 
-const CommentView = ({ appId, id, parentId, html, created_at, modified_at, created_by, attachments, reactions, embed, onEdit }: Props) => {
+const CommentView = ({ appId, id, parentId, html, created_at, modified_at, created_by, attachments, reactions, embed, features, appFeatures, onEdit }: Props) => {
     const { user } = useContext(UserContext);
     const queryClient = useQueryClient();
     const { openPreview, setPreviewFiles } = useContext(PreviewContext);
@@ -49,9 +52,9 @@ const CommentView = ({ appId, id, parentId, html, created_at, modified_at, creat
     const handleDelete = () => {
         trashComment.mutate({ id: id, appId: appId, parentId: parentId }, {
             onSuccess: () => {
-                updateCacheItem(queryClient, ['posts', appId], parentId, (item: MessageType) => {                
+                updateCacheItem(queryClient, ['posts', appId], parentId, (item: MessageType) => {
                     item.comment_count = (item.comment_count || 1) - 1;
-                });                
+                });
             }
         });
     }
@@ -98,7 +101,7 @@ const CommentView = ({ appId, id, parentId, html, created_at, modified_at, creat
                     {/* image grid */}
                     {images && !!images.length && <ImageGrid>
                         {images.map((a: FileType) =>
-                             <React.Fragment key={a.id} >
+                            <React.Fragment key={a.id} >
                                 {a.download_url &&
                                     <Image onClick={(e) => handlePreviewClick(e, a.id)} key={a.id} src={a.download_url} previewSrc={a.preview_url} width={a.width} height={a.height} />
                                 }
@@ -129,13 +132,25 @@ const CommentView = ({ appId, id, parentId, html, created_at, modified_at, creat
                 </div>
             </div>
 
-            
+
             <div className='wy-reactions-line'>
                 {/* reactions */}
-                <ReactionsList id={id} type="comments" parentId={parentId} reactions={reactions} />
-                <ReactionsMenu id={id} type="comments" parentId={parentId} reactions={reactions} placement="top-end" />
+
+                {hasFeature(features, Feature.Reactions, appFeatures?.reactions) ?
+                    <>
+                        <ReactionsList id={id} type="comments" parentId={parentId} reactions={reactions} />
+                        <ReactionsMenu id={id} type="comments" parentId={parentId} reactions={reactions} placement="top-end" />
+                    </>
+                    :
+                    <>
+                        <ReactionsLike id={id} type="comments" parentId={parentId} reactions={reactions} />
+                        <ReactionsList id={id} type="comments" parentId={parentId} reactions={reactions} featureEnabled={false} />
+                    </>
+
+                }
+
             </div>
-        
+
         </>
     )
 }
