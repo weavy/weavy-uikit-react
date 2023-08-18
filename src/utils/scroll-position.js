@@ -49,12 +49,12 @@ export function getScrollParent(element, includeHidden) {
 /**
  * Checks if a parent scroll container is scrolled to bottom
  * @param {Element?} element 
- * @param {number} [bottomThreshold=32] - Nearby limit for the bottom. Needs to be at least 1 to catch float calculation errors.
+ * @param {number} [bottomThreshold=128] - Nearby limit for the bottom. Needs to be at least 1 to catch float calculation errors.
  * @returns boolean
  */
 export function isParentAtBottom(element, bottomThreshold) {
     if (element) {
-        bottomThreshold ??= 32; // Minimum 1 to catch float errors
+        bottomThreshold ??= 128; // Minimum 1 to catch float errors
 
         let area = getScrollParent(element);
         

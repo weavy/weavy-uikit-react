@@ -419,24 +419,28 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
 
         setDisabled(true);
 
+        queueMicrotask(() => {
+            // clear visual state in a moment
+            setValue("");
+            setFiles("");
+            setBlobs([]);
+            setAttachments([]);
+            setEmbeds([]);
+            setPollOptions([]);
+            setPollVisible(false);
+            clearEmbeds();
+            setMeeting(null);
+            editorRef.current?.view?.dispatch({ changes: { from: 0, to: editorRef.current?.view?.state.doc.length, insert: "" } });
+            setEditorError(false);
+            clearMutatingFileUpload();
+        })
+        
         // create post/comment/message
         await onSubmit(text, allBlobs, attachments, meeting?.id || null, embeds.length > 0 ? embeds[0].id : null, pollOptions);
 
-        // clean up
-        editorRef.current?.view?.dispatch({ changes: { from: 0, to: editorRef.current?.view?.state.doc.length, insert: "" } });
-        setValue("");
-        setFiles("");
-        setBlobs([]);
-        setAttachments([]);
-        setEmbeds([]);
-        setPollOptions([]);
-        setPollVisible(false);
-        clearEmbeds();
-        setMeeting(null);
-        setDisabled(false);
-        setEditorError(false);
-        clearMutatingFileUpload();
+        // ready
 
+        setDisabled(false);
     }
 
     let editorInputs = (

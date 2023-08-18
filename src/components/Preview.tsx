@@ -65,8 +65,8 @@ type DocumentProps = {
 }
 
 export const PreviewDocument = ({ src, client }: DocumentProps) => {
-    let pdfWorkerUrl = (new URL("/js/preview.worker.js", client.url)).toString();
-    let pdfCMapsUrl = (new URL("/js/cmaps/", client.url)).toString();
+    let pdfWorkerUrl = (new URL("/js/pdf.worker.min.js", client.url)).toString();
+    let pdfCMapsUrl = (new URL("/cmaps/", client.url)).toString();
     
     return (
         <PdfViewer src={src} pdfWorkerUrl={pdfWorkerUrl} pdfCMapsUrl={pdfCMapsUrl} />
