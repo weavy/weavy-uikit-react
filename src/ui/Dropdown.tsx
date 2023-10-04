@@ -28,7 +28,7 @@ const Dropdown = ({ directionX = "right", directionY = "down", icon = "dots-vert
 
     const [referenceElement, setReferenceElement] = useState<HTMLButtonElement|null>(null);
     const [popperElement, setPopperElement] = useState<HTMLDivElement|null>(null);
-    const { styles, attributes, update } = usePopper(referenceElement, popperElement, { placement: placement, modifiers: [{ name: "offset", options: {offset: [0, 5]}}] });
+    const { styles, attributes, update } = usePopper(visible ? referenceElement : undefined, visible ? popperElement : undefined, { placement: placement, modifiers: [{ name: "offset", options: {offset: [0, 5]}}] });
 
     const documentClickHandler = () => { 
         setVisible(false);

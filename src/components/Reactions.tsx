@@ -82,7 +82,7 @@ export const ReactionsMenu = ({ id, parentId, type, placement = "top", reactions
 
     const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
     const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
-    const { styles, attributes, update } = usePopper(referenceElement, popperElement, { placement: placement });
+    const { styles, attributes, update } = usePopper(visible ? referenceElement : undefined, visible ? popperElement : undefined, { placement: placement });
 
     useEffect(() => {
         update?.();
