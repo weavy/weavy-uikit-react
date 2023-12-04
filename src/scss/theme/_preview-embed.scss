@@ -18,7 +18,7 @@
     background-color: var(--wy-component-background-color);
     color: var(--wy-component-color);
 
-    ~ .wy-content-iframe-fallback, ~ .wy-spinner {
+    ~ .wy-content-iframe-fallback, ~ .wy-spinner, ~ wy-spinner {
       display: none;
     }
   }
@@ -33,12 +33,12 @@
       display: none;
     }
 
-    &.wy-fallback ~ .wy-spinner {
+    &.wy-fallback ~ .wy-spinner, &.wy-fallback ~ wy-spinner {
       display: none;
     }
   }
 
-  ~ .wy-spinner {
+  ~ .wy-spinner, ~ wy-spinner {
     margin: auto;
   }
 }

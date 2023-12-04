@@ -119,24 +119,7 @@ export type ConversationType = {
     type: string,
     avatar_url: string,
     user_id?: number,
-    member_count?: number
-}
-
-export type MemberType = {
-    id: number,
-    name: string,
-    display_name: string,
-    avatar_url: string,    
-    delivered_at?: string,
-    read_at?: string,
-    presence: string,
-    marked_id?: number,
-    marked_at?: string
-
-}
-
-export type MemberTypingType =  MemberType & {
-    time: number
+    members: MembersResult
 }
 
 export type MessageType = {
@@ -172,17 +155,30 @@ export type PollOptionType = {
     has_voted?: boolean,
     vote_count?: number
 }
- 
+
 export type UserType = {
-    id: number,
-    uid: string,
-    name: string,
-    username: string, 
-    email: string,
-    display_name: string,    
-    avatar_url: string,
+    id: number;
+    uid?: string;
+    name: string;
+    username?: string;
+    email?: string;
+    display_name: string;
+    avatar_url?: string;
     presence: string
 }
+
+export type MemberType = UserType & {  
+    delivered_at?: string,
+    read_at?: string,
+    marked_id?: number,
+    marked_at?: string
+    presence: string,
+}
+
+export type MemberTypingType =  MemberType & {
+    time: number
+}
+
 
 export type FileKindType = "archive"|"audio"|"code"|"document"|"email"|"presentation"|"spreadsheet"|"image"|"text"|"video"|"file";
 

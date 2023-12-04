@@ -124,6 +124,9 @@ $footerbar-height: 4rem;
     --wy-surface-4-mix:             12%;
     --wy-surface-5-mix:             14%;
 
+    // Avatars
+    --wy-avatar-font-size:          .382em; // Golden section
+    --wy-avatar-font-weight:        #{$font-weight-semibold};
 }
   
 // Rounded corners
@@ -201,3 +204,7 @@ $surface-2-mix: var(--wy-surface-2-mix);
 $surface-3-mix: var(--wy-surface-3-mix);
 $surface-4-mix: var(--wy-surface-4-mix);
 $surface-5-mix: var(--wy-surface-5-mix);
+
+// Avatars
+$avatar-font-size: var(--wy-avatar-font-size);
+$avatar-font-weight: var(--wy-avatar-font-weight);

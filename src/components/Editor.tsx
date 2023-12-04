@@ -11,6 +11,7 @@ import { mentions } from '../utils/mentions';
 import { WeavyContext } from '../contexts/WeavyContext';
 import useEmbeds from '../hooks/useEmbeds';
 import Blob from './Blob';
+import Avatar from './Avatar'
 import Icon from '../ui/Icon';
 import Button from '../ui/Button';
 import Dropdown from '../ui/Dropdown';
@@ -26,6 +27,7 @@ import { FileMutation, useClearMutatingFileUpload, useMutateFileUpload, useMutat
 import FileItem from './FileItem';
 import Dropzone from './Dropzone';
 import { BlobType, EmbedType, FileType, MeetingType, PollOptionType } from '../types/types';
+import { getInitials } from '../utils/strings';
 
 type Props = {
     id?: number,
@@ -76,12 +78,12 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
     const removeMutatingFileUpload = useRemoveMutatingFileUpload(cacheKey);
     const clearMutatingFileUpload = useClearMutatingFileUpload(cacheKey);
 
-    const throttledTyping = useCallback(throttle(function () { sendTyping.mutate({ id: appId, type: editorType, location: editorLocation }) }, 2000), [appId]);
+    const throttledTyping = useCallback(throttle(function () { sendTyping.mutate({ id: appId, type: editorType, location: editorLocation }) }, 2000, { trailing: false}), [appId]);
     const throttledDrafting = useCallback(throttle(function () { saveDraft() }, 500), [appId, blobs, meeting, value, pollOptions]);
 
     const extensions: any[] = [
         keymap.of([{
-            key: "Ctrl-Enter",
+            key: editorType == "messages" ? "Enter" : "Ctrl-Enter",
             preventDefault: true,
             run: () => {
                 handleCreate();
@@ -105,15 +107,19 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
                             div.classList.add("wy-disabled");
                         }
 
-                        let img = document.createElement("img");
-                        img.classList.add("wy-avatar");
-                        img.src = completion.item?.avatar_url || "";
+                        let avatarDiv = document.createElement("div");
+                        avatarDiv.classList.add("wy-avatar");
+                        avatarDiv.classList.add("wy-avatar-initials");
+                        avatarDiv.title = completion.item?.display_name || "";
+                        let avatarSpan = document.createElement("span");
+                        avatarSpan.innerHTML = getInitials((completion.item?.display_name || ""))|| ""
+                        avatarDiv.appendChild(avatarSpan);
 
                         let name = document.createElement("div");
                         name.classList.add("wy-item-body");
                         name.innerText = (completion.item?.display_name) || "";
 
-                        div.appendChild(img);
+                        div.appendChild(avatarDiv);
                         div.appendChild(name);
                         return div;
                     },
@@ -303,7 +309,7 @@ const Editor = ({ id, appId, parentId, placeholder, text, buttonText, embed, att
             handleEmbeds(value);
         }
 
-        if (showTyping) {
+        if (showTyping && viewUpdate.state.doc.toString() !== "") {
             throttledTyping();
         }
 

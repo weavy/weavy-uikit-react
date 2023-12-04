@@ -137,24 +137,24 @@ $dropdown-item-padding-x: 1rem;
   display: flex;
   align-items: center;
 
-  > img, .wy-icon {
+  > img, .wy-icon, wy-icon {
     margin-right: .5rem;
     color: inherit;
   }
 
   &:active {
-    > .wy-icon {
+    > .wy-icon, > wy-icon {
       color: inherit;
     }
   }
 
   // dropdown item with icon for marking selection option
   &.wy-option {
-    .wy-icon {
+    .wy-icon, wy-icon {
       visibility: hidden;
     }
     &.wy-selected {
-      .wy-icon {
+      .wy-icon, wy-icon {
         visibility: visible;
       } 
     }

@@ -58,7 +58,7 @@ const ConversationList = () => {
 
                 {data && data.pages && data.pages.map((group, i) => {
                     return group.data?.map((item: ConversationType) => {
-                        return <ConversationListItem key={item.id} refetchConversations={refetch} item={item} userId={user.id} />
+                        return <ConversationListItem key={item.id} members={item.members} refetchConversations={refetch} item={item} userId={user.id} />
                     })
 
                 }

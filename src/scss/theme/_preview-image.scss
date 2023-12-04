@@ -32,8 +32,10 @@
     width: 100%;
     height: 100%;
 
-    &:not(.wy-loading-transition):not([data-controller~="image"]) ~ .wy-spinner {
-      display: none;
+    &:not(.wy-loading-transition):not([data-controller~="image"]) {
+       ~ .wy-spinner, ~ wy-spinner {
+         display: none;
+       }
     }
 
     &.wy-loading, &[data-controller~="image"] {
@@ -50,7 +52,7 @@
           opacity: 0;
         }
 
-        ~ .wy-spinner {
+        ~ .wy-spinner, ~ wy-spinner {
           display: none;
         }
       }
@@ -61,7 +63,7 @@
       z-index: -1;
     }
 
-    ~ .wy-spinner {
+    ~ .wy-spinner, ~ wy-spinner {
       position: absolute;
     }
   }

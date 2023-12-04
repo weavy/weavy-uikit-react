@@ -16,7 +16,7 @@ npm install @weavy/uikit-react
 - `React` >= 18.0.0
 - `Weavy Backend` >= 11.0.0
 
-## Gettting started
+## Getting started
 
 
 > Make sure you have a Weavy backend up and running in order to test any of the frontend examples. To quickly get a backend up and running you can register for a free account on <a href="https://get.weavy.io">get.weavy.io</a>. <br>That is the easiest and quickest way to get started and does not require you to deploy your own backend.

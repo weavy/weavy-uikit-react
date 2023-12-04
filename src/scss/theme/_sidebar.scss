@@ -53,7 +53,7 @@
     &:not([hidden]) {
       margin-top: calc(-1 * var(--wy-border-radius-lg));
 
-      /*&.wy-maximized {
+      &.wy-maximized {
         flex-basis: calc(100vh - #{vars.$appbar-height} * 1.5);
         margin-top: calc(-50vh + #{vars.$appbar-height} * 1.5 - var(--wy-border-radius-lg));
 
@@ -61,7 +61,7 @@
         ~ * .wy-nav-next {
           display: none;
         }
-      }*/
+      }
     }
 
     > * {

@@ -71,10 +71,10 @@ export const FileMenu = ({ file, className, onRename, onSubscribe, onUnsubscribe
                 {onDeleteForever && <Dropdown.Item onClick={onDeleteForever}><Icon.UI name="delete-forever"/>Delete</Dropdown.Item>}
             </>}
             {!file.is_trashed && <>
-                {(file.external_url && hasFeature(features, Feature.WebDAV, appFeatures?.webDAV)) ?
+                {file.external_url ?
                     <Dropdown.Item onClick={() => triggerExternal(file)}><Icon.UI name={icon} /> {`Open in ${file.provider}`}</Dropdown.Item>
                 : <>
-                    { file.application_url &&
+                    { (file.application_url && hasFeature(features, Feature.WebDAV, appFeatures?.webDAV)) &&
                         <Dropdown.Item onClick={() => triggerApplication(file)}><Icon.UI name={file.provider ? toKebabCase(file.provider) : icon } /> {`Open in ${file.provider || 'app'}`}</Dropdown.Item>
                     }
                     <Dropdown.Item onClick={() => triggerDownload(file)}><Icon.UI name="download" size={24} /> Download</Dropdown.Item>

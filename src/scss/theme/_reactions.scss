@@ -42,6 +42,12 @@
   .wy-reaction-button {
     color: unset;
   }
+
+  // button{
+  //   span{
+  //     font-size: 2rem;
+  //   }
+  // }
 }
 
 .wy-reactions {
@@ -73,6 +79,13 @@
   font-size: 1.125rem;
 }
 
+.wy-reaction-menu-button {
+  background: var(--wy-component-background-color);
+  color: currentColor;
+  border-radius: vars.$border-radius-pill;
+  background-clip: content-box;
+}
+
 
 .wy-reactions-line {
   display: flex;
@@ -97,10 +110,5 @@
     }
   }
 
-  .wy-reaction-menu-button {
-    background: var(--wy-component-background-color);
-    color: currentColor;
-    border-radius: vars.$border-radius-pill;
-    background-clip: content-box;
-  }
+ 
 }

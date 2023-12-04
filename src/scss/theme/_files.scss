@@ -31,6 +31,8 @@
   }
 } 
 
+// Deprecated table styles
+
 .wy-table-files {
   thead {
     display: none;
@@ -90,5 +92,55 @@
     th:nth-child(4) {
       display: table-cell;
     }
+  }
+}
+
+// NEW (preferred) table styles
+// TODO: Remove deprecated styles
+
+.wy-files-thead {
+  text-align: left;
+  @include breakpoints.media-breakpoint-down(md) {
+      display: none;
+  }
+}
+
+.wy-files-td-filename {
+  // make room for rename form
+  padding: 0 vars.$table-cell-padding-x;
+}
+// filename
+.wy-files-td-filename,
+.wy-files-th-filename {
+  width: 100%;
+  @include text.truncate;
+}
+// modified
+.wy-files-td-modified,
+.wy-files-th-modified {
+  width: 7rem;
+  @include text.truncate;
+  @include breakpoints.media-breakpoint-down(lg) {
+    display: none;
+  }
+}
+// kind
+.wy-files-td-kind,
+.wy-files-th-kind {
+  width: 7.5rem;
+  text-align: right;
+  @include text.truncate;
+  @include breakpoints.media-breakpoint-down(lg) {
+      display: none;
+  }
+}
+// size
+.wy-files-td-size,
+.wy-files-th-size {
+  width: 7rem;
+  text-align: right;
+  @include text.truncate;
+  @include breakpoints.media-breakpoint-up(md) {
+      display: none;
   }
 }

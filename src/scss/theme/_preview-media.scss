@@ -17,7 +17,7 @@
     }
 
     &.wy-loaded {
-      ~ .wy-spinner {
+      ~ .wy-spinner, ~ wy-spinner {
         display: none;
       }
     }

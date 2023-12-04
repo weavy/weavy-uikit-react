@@ -14,7 +14,7 @@ import useMutateMembers from '../hooks/useMutateMembers';
 import useConversation from '../hooks/useConversation';
 import useMutateConversationName from '../hooks/useMutateConversationName';
 import useMutateRemoveMembers from '../hooks/useMutateRemoveMembers';
-import Avatar from './Avatar';
+import Avatar, { AvatarGroup } from './Avatar';
 import { UserContext } from '../contexts/UserContext';
 import Messages from './Messages';
 import useMutateLeaveConversation from '../hooks/useMutateLeaveConversation';
@@ -160,7 +160,7 @@ const Conversation = ({ id, showBackButton, features }: ConversationProps) => {
                         <>
                             <div className="wy-appbar-text">
                                 <Typing id={selectedConversationId} context="conversation">
-                                <div className="wy-appbar-text wy-typing-hide">
+                                    <div className="wy-appbar-text wy-typing-hide">
                                         {!isRoomOrChat && dataConversation.user_id &&
                                             <Presence id={dataConversation.user_id} status="away" />
                                         }
@@ -203,7 +203,7 @@ const Conversation = ({ id, showBackButton, features }: ConversationProps) => {
             }
             {selectedConversationId && dataMembers && dataConversation && dataFeatures &&
                 <div className="wy-pane-body">
-                    <Messages id={selectedConversationId} chatRoom={isRoomOrChat} members={dataMembers} displayName={dataConversation?.display_name} avatarUrl={dataConversation?.avatar_url} lastMessageId={dataConversation?.last_message?.id} features={dataFeatures} appFeatures={features}/>
+                    <Messages id={selectedConversationId} chatRoom={isRoomOrChat} members={dataMembers} displayName={dataConversation?.display_name} avatarUrl={dataConversation?.avatar_url} lastMessageId={dataConversation?.last_message?.id} features={dataFeatures} appFeatures={features} />
                 </div>
             }
 
@@ -229,7 +229,10 @@ const Conversation = ({ id, showBackButton, features }: ConversationProps) => {
                 </header>
                 <div className='wy-scroll-y'>
                     {dataConversation && <div className="wy-avatar-header">
-                        <Avatar src={dataConversation?.avatar_url} name={title} size={128} />
+                        {dataConversation?.type === ChatRoom && user ? (
+                            <AvatarGroup size={128} members={dataMembers} user={user} name={title} />
+                        ) : (<Avatar src={dataConversation?.avatar_url} name={dataConversation?.display_name} size={128} />)}
+
                         {dataConversation?.type !== ChatRoom &&
                             <h3 className="wy-headline">{dataConversation?.display_name}</h3>
                         }
