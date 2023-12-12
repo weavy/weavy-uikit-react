@@ -147,12 +147,19 @@ const PdfViewer = ({ src, pdfCMapsUrl, pdfWorkerUrl }: Props) => {
 
             return () => {
                 if (loadingTask) {
-                    loadingTask.destroy(); 
-                    //console.debug("loadingtask cleanup", loadingTask);
+                    try {
+                        loadingTask?.destroy(); 
+                        //console.debug("loadingTask cleanup", loadingTask);
+                    } catch(e) { /* No worries */ }
                     
-                    // @ts-ignore due to incorrect param type def
-                    pdfViewer.setDocument(null);
-                    pdfLinkService.setDocument(null, null);
+                    try {
+                        // @ts-ignore due to incorrect param type def
+                        pdfViewer.setDocument(null);
+                    } catch(e) { /* No worries */ }
+
+                    try {
+                        pdfLinkService.setDocument(null, null);
+                    } catch(e) { /* No worries */ }
                 }
             }
         }

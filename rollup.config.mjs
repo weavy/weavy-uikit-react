@@ -38,11 +38,13 @@ export default [
             typescript({ tsconfig: "./tsconfig.json" }),
             terser(),
         ],
-        external: ["react", "react-dom"]
+        external: ["react", "react-dom"],
+        strictDeprecations: false,
     },
     {
         input: "dist/esm/types/index.d.ts",
         output: [{ file: "dist/index.d.ts", format: "esm" }],
         plugins: [dts()],
+        strictDeprecations: false,
     },
 ];

@@ -218,23 +218,17 @@ const Files = ({
                     <header className="wy-appbars">
                         <nav className="wy-toolbar">
 
-                            <div className="wy-toolbar-buttons">
-                                {(hasFeature(dataFeatures, Feature.Attachments, features?.attachments) || hasFeature(dataFeatures, Feature.CloudFiles, features?.cloudFiles)) &&
-                                    <Dropdown.UI title="Add files" disabled={!appId} buttonContent={
-                                        <><span>Add files</span><Icon.UI name="plus" /></>
-                                    }>
-                                        {hasFeature(dataFeatures, Feature.Attachments, features?.attachments) &&
-                                            <>
-                                                <Dropdown.Item onClick={openFileInput}><Icon.UI name="attachment" /> From device</Dropdown.Item>
-                                                <input type="file" value={selectedFiles} ref={input => fileInput = input} onChange={handleFileUpload} multiple hidden tabIndex={-1} />
-                                            </>
-                                        }
-                                        {hasFeature(dataFeatures, Feature.CloudFiles, features?.cloudFiles) &&
-                                            <Dropdown.Item onClick={openCloudFiles}><Icon.UI name="cloud" /> From cloud</Dropdown.Item>
-                                        }
-                                    </Dropdown.UI>
-                                }
+                            <div className="wy-toolbar-buttons">  
+                                <Dropdown.UI title="Add files" disabled={!appId} buttonContent={
+                                    <><span>Add files</span><Icon.UI name="plus" /></>
+                                }>
+                                    <Dropdown.Item onClick={openFileInput}><Icon.UI name="attachment" /> From device</Dropdown.Item>
+                                    <input type="file" value={selectedFiles} ref={input => fileInput = input} onChange={handleFileUpload} multiple hidden tabIndex={-1} />
 
+                                    {hasFeature(dataFeatures, Feature.CloudFiles, features?.cloudFiles) &&
+                                        <Dropdown.Item onClick={openCloudFiles}><Icon.UI name="cloud" /> From cloud</Dropdown.Item>
+                                    }
+                                </Dropdown.UI>
                             </div>
 
                             <div className="wy-toolbar-buttons wy-toolbar-buttons-last">

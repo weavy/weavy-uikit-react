@@ -72,7 +72,7 @@ import {
     mdiViewListOutline,
     mdiViewModuleOutline
 } from "@mdi/js";
-import MdiIcon from '@mdi/react/Icon';
+import MdiIcon from '@mdi/react';
 import classNames from "classnames";
 
 // Custom mapping to MDI instead of symbols
@@ -197,17 +197,15 @@ const Icon = ({ name, color = "", size, className, title = "", ...props }: Props
     let mdiSize = remSize ? remSize / 1.5 : undefined;
 
     if (iconPath) {
-        if (overlayPath) { 
+        if (overlayPath) {
             return (
                 <span className={'wy-icon-stack'} style={{width: remSize && (remSize + "rem"), height: remSize && (remSize + "rem")}} title={title}>
-                    <MdiIcon.Icon className={classNames('wy-icon', (color ? 'wy-icon-' + color : ''), className)} color={nativeIconColor} path={iconPath} size={mdiSize || ""} data-icon={iconName} { ...props } />
-                    <MdiIcon.Icon color={nativeOverlayColor} path={overlayPath} className={classNames("wy-icon", "wy-icon-overlay", `wy-icon-${overlayName}`)} size={(mdiSize || 1) / 2} data-icon={overlayName}  />
+                    <MdiIcon className={classNames('wy-icon', (color ? 'wy-icon-' + color : ''), className)} color={nativeIconColor} path={iconPath} size={mdiSize || ""} data-icon={iconName} { ...props } />
+                    <MdiIcon color={nativeOverlayColor} path={overlayPath} className={classNames("wy-icon", "wy-icon-overlay", `wy-icon-${overlayName}`)} size={(mdiSize || 1) / 2} data-icon={overlayName}  />
                 </span>
             );
         } else {
-            return (
-                <MdiIcon.Icon className={classNames('wy-icon', (color ? 'wy-icon-' + color : ''), className)} color={nativeIconColor} path={iconPath} size={mdiSize || ""} title={title} data-icon={iconName} { ...props } />
-            );
+            return <MdiIcon className={classNames('wy-icon', (color ? 'wy-icon-' + color : ''), className)} color={nativeIconColor} path={iconPath} size={mdiSize || ""} title={title} data-icon={iconName} { ...props } />;
         }
     } else {
         // Fallback
@@ -225,6 +223,7 @@ const IconActiveStack = ({ className, children }: IconActiveStackProps) => {
     return <div className={classNames("wy-icon-active-stack", className)}>{children}</div>
 }
 
-// Export as replacable UI component
+// Export as replaceable UI component
+
 const UIIcon = { UI: Icon, ActiveStack: IconActiveStack };
 export default UIIcon;
