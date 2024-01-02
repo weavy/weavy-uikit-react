@@ -1,6 +1,6 @@
 {
   "name": "@weavy/uikit-react",
-  "version": "19.0.3",
+  "version": "19.0.4",
   "author": "Weavy",
   "description": "React UI-kit for Weavy",
   "homepage": "https://github.com/weavy/weavy-uikit-react",
@@ -16,8 +16,8 @@
     "@rollup/plugin-typescript": "^11.1.5",
     "@types/lodash.debounce": "^4.0.9",
     "@types/lodash.throttle": "^4.1.9",
-    "@types/react": "^18.2.43",
-    "@types/react-dom": "^18.2.17",
+    "@types/react": "^16.14.55",
+    "@types/react-dom": "^16.9.24",
     "@types/react-modal": "^3.16.3",
     "npm-run-all": "^4.1.5",
     "rimraf": "^5.0.5",
@@ -29,8 +29,8 @@
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0"
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0"
   },
   "scripts": {
     "clean": "rimraf --glob dist/*",
