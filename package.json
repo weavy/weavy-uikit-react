@@ -1,15 +1,30 @@
 {
   "name": "@weavy/uikit-react",
-  "version": "19.0.5",
+  "version": "19.0.6",
   "author": "Weavy",
   "description": "React UI-kit for Weavy",
   "homepage": "https://github.com/weavy/weavy-uikit-react",
   "license": "MIT",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/cjs/index.es5.js",
+  "module": "dist/esm/index.es5.js",
   "types": "dist/index.d.ts",
-  "style": "dist/css/weavy-react.css",
+  "style": "dist/css/weavy.css",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/index.d.ts",
+      "style": "./dist/css/weavy.css"
+    },
+    "./dist/css/": {
+      "default": "./dist/css/"
+    }
+  },
   "devDependencies": {
+    "@babel/core": "^7.23.7",
+    "@babel/preset-env": "^7.23.7",
+    "@babel/preset-react": "^7.23.3",
+    "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",

@@ -4,7 +4,6 @@
 
 React based UI kit for Weavy.
 
-
 ## Installation
 
 ```shell
@@ -13,21 +12,14 @@ npm install @weavy/uikit-react
 
 ## Minimum requirements
 
-- `React` >= 18.0.0
-- `Weavy Backend` >= 11.0.0
+- `React` >= 16.0.0
+- `Weavy Backend` >= 19.0.0
 
 ## Getting started
 
-
-> Make sure you have a Weavy backend up and running in order to test any of the frontend examples. To quickly get a backend up and running you can register for a free account on <a href="https://get.weavy.io">get.weavy.io</a>. <br>That is the easiest and quickest way to get started and does not require you to deploy your own backend.
+> Make sure you have a Weavy backend up and running in order to test any of the frontend examples. To quickly get a backend up and running you can register for a free account on <a href="https://get.weavy.com">get.weavy.com</a>. <br>That is the easiest and quickest way to get started and does not require you to deploy your own backend.
  
-The React UI kit is dependant of the theme library that are shared by all our ui kits.
-
-In your project directory, run:
-
-```shell
-npm install @weavy/themes
-```
+The React UI kit is dependant of styles included in the `./dist/css/weavy.css`.
 
 The Weavy UI kit components that you decide to use must be wrapped in the `WeavyProvider` component. The `WeavyProvider` handles all the common functionality for all the Weavy React UI components.
 
@@ -67,7 +59,7 @@ const getToken = () => {
     });
 }
 
-const weavyClient = new WeavyClient({ url: "https://url-to-weavy.backend", tokenFactory: getToken})
+const weavyClient = new WeavyClient({ url: "https://url-to-environment.weavy.io", tokenFactory: getToken})
 
 function App() {
     return (
@@ -82,7 +74,6 @@ function App() {
 export default App;
 ```
 
-
 ## Add the stylesheet
 
 In your index.tsx (or index.js if you are not using TypeScript) file, add the following
@@ -92,7 +83,7 @@ In your index.tsx (or index.js if you are not using TypeScript) file, add the fo
 // ---------------------------------------------------------
 // add the following line of code
 // ---------------------------------------------------------
-import "@weavy/themes/dist/weavy-default.css";  
+import "@weavy/uikit-react/dist/css/weavy.css";  
 // ---------------------------------------------------------
 
 const container = document.getElementById('root');
@@ -100,11 +91,9 @@ const root = createRoot(container!);
 root.render(<App />);
 ```
 
-
 ## Run the app
 
 Start your React app. You should see the Weavy Messenger component rendering a Conversation list and a Conversation with the currently selected conversation.
-
 
 ## Documentation
 
