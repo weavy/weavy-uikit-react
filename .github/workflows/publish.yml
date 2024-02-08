@@ -10,7 +10,6 @@ jobs:
           node-version: '^19.3.0'
           registry-url: 'https://registry.npmjs.org'      
       - run: npm ci
-      - run: npm run build
       - run: npm publish --access public
         if: github.ref_name == 'main'
         env:

@@ -2,7 +2,9 @@
 
 <img src="https://img.shields.io/badge/Platform-React-orange"/> <img src="https://img.shields.io/badge/Language-TypeScript-orange"/>
 
-React based UI kit for Weavy.
+React components based UIKit for Weavy powered by `@weavy/uikit-web` web components under the hood. It comes with regular React components for Weavy Blocks and React hooks for simplified configuration and usage.
+
+> See [UIKit React documentation](https://weavy.com/docs/frameworks/react).
 
 ## Installation
 
@@ -10,91 +12,54 @@ React based UI kit for Weavy.
 npm install @weavy/uikit-react
 ```
 
-## Minimum requirements
-
-- `React` >= 16.0.0
-- `Weavy Backend` >= 19.0.0
-
 ## Getting started
 
-> Make sure you have a Weavy backend up and running in order to test any of the frontend examples. To quickly get a backend up and running you can register for a free account on <a href="https://get.weavy.com">get.weavy.com</a>. <br>That is the easiest and quickest way to get started and does not require you to deploy your own backend.
- 
-The React UI kit is dependant of styles included in the `./dist/css/weavy.css`.
+You need a Weavy server in order to test any of the frontend examples. If you don't have one, you can create one for free after signing up for an account on <a href="https://get.weavy.com">get.weavy.com</a>.
 
-The Weavy UI kit components that you decide to use must be wrapped in the `WeavyProvider` component. The `WeavyProvider` handles all the common functionality for all the Weavy React UI components.
+You also need an application with a user system and a token endpoint. See [Weavy Authentication](https://weavy.com/docs) for more info about configuring authentication and single sign-on between your application and Weavy.
 
+> [Weavy docs](https://weavy.com/docs)
 
- ```js
- import React from 'react';
- import { WeavyProvider } from '@weavy/uikit-react';
+### Use Weavy React Components
 
-export default function App() {
-    return (        
-        <WeavyProvider>
-            <!-- Weavy components goes here -->
-        </WeavyProvider>        
-    )
+To use any block you must first configure Weavy with an `url` and a `tokenUrl` or `tokenFactory`. This can be done using the `useWeavy` hook or alternatively use the `<WyContext />` provider.
+
+```jsx
+import { useWeavy, WyMessenger } from "@weavy/uikit-react";
+
+export function App() {
+  const weavy = useWeavy({
+    url: "https://myenvironment.weavy.io",
+    tokenUrl: "https://myserver.test/api/token",
+  });
+
+  return (
+    <>
+      ...
+      <WyMessenger />
+    </>
+  );
 }
 ```
 
-## Adding the `Messenger` component
+## Run the React components demo in developer mode
 
-In your app.tsx or wherever you would like to add the Weavy Messenger:
+The developer mode compiles and starts up a developer server that also provides authentication for a single _developer_ user.
 
-> If you registered for a free account on <a href="https://get.weavy.io">get.weavy.io</a>, you can use the demo/test JWT token generated for you and use it in the `getToken` below and just return it as a string. But in a real application, this is typically fetched from a backend enpoint or similar that returns a valid JWT for your currently signed in user.
+### .env
 
- ```js
-import React from 'react';
-import { WeavyClient, WeavyProvider, Messenger } from '@weavy/uikit-react';
+You must provide an `.env` file with your _WEAVY_URL_ and _WEAVY_APIKEY_ to run the development test server. See the [.env.example](./.env.example) for an example configuration.
 
-const getToken = () => {
-    return new Promise(function (resolve, reject) {
-        // typically an api call to your backend which returns a JWT
-        var token = getTokenFromSomewhere();
-        if (token) {
-            resolve(token);
-        } else {
-            reject("Failed to retrieve token");
-        }
-    });
-}
-
-const weavyClient = new WeavyClient({ url: "https://url-to-environment.weavy.io", tokenFactory: getToken})
-
-function App() {
-    return (
-        <div className="App">
-            <WeavyProvider client={weavyClient}>
-                <Messenger />
-            </WeavyProvider>
-        </div>
-    )
-}
-
-export default App;
+```ini
+WEAVY_URL="https://mysite.weavy.io"
+WEAVY_APIKEY=""
 ```
 
-## Add the stylesheet
+### Dev server
 
-In your index.tsx (or index.js if you are not using TypeScript) file, add the following
+Once you have configured you `.env` you can start up the auth server and dev server. The dev server runs in watch mode.
 
-
-```js
-// ---------------------------------------------------------
-// add the following line of code
-// ---------------------------------------------------------
-import "@weavy/uikit-react/dist/css/weavy.css";  
-// ---------------------------------------------------------
-
-const container = document.getElementById('root');
-const root = createRoot(container!);
-root.render(<App />);
+```bash
+npm install
+npm start
 ```
-
-## Run the app
-
-Start your React app. You should see the Weavy Messenger component rendering a Conversation list and a Conversation with the currently selected conversation.
-
-## Documentation
-
-To learn more about all the different components that you can use and how to setup the authentication flow, head over to our [Documentation site](https://weavy.com/docs/frontend/uikit-react)
