@@ -1,6 +1,6 @@
 {
   "name": "@weavy/uikit-react",
-  "version": "20.0.0",
+  "version": "21.0.0",
   "author": "Weavy",
   "description": "React components UI-kit for Weavy",
   "homepage": "https://github.com/weavy/weavy-uikit-react",
@@ -23,7 +23,6 @@
     }
   },
   "scripts": {
-    "prepare": "run-p build",
     "start": "run-p auth dev",
     "dev": "vite --open",
     "auth": "weavy auth-server",
@@ -33,7 +32,7 @@
   },
   "dependencies": {
     "@lit/react": "^1.0.2",
-    "@weavy/uikit-web": "^20.0.0"
+    "@weavy/uikit-web": "^21.0.0"
   },
   "peerDependencies": {
     "react": ">=16",
@@ -43,7 +42,7 @@
     "@babel/preset-env": "^7.23.8",
     "@babel/preset-react": "^7.23.3",
     "@rollup/plugin-babel": "^6.0.4",
-    "@types/node": "^20.11.5",
+    "@types/node": "^20.11.20",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^6.14.0",

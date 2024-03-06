@@ -4,7 +4,7 @@
     "useDefineForClassFields": true,
     "lib": ["ES2017", "DOM", "DOM.Iterable"],
     "module": "ES2015",
-    "skipLibCheck": false,
+    "skipLibCheck": true,
 
     /* Bundler mode */
     "moduleResolution": "Node",

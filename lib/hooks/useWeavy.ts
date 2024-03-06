@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { Weavy } from "@weavy/uikit-web";
+import type { WeavyContext } from "@weavy/uikit-web/dist/types/index";
 import { WeavyOptions } from "@weavy/uikit-web/dist/types/types/weavy.types";
 
 export function useWeavy(options: WeavyOptions) {
-  const [weavy, setWeavy] = useState<Weavy>();
+  const [weavy, setWeavy] = useState<WeavyContext>();
 
   const cacheSafeOptions: WeavyOptions = {
     ...options,
     cloudFilePickerUrl: options.cloudFilePickerUrl?.toString(),
-    localesUrl: options.localesUrl?.toString(),
-    localizedTemplates: useMemo(() => options.localizedTemplates, [options.localizedTemplates?.size]),
+    locales: useMemo(() => options.locales, [options.locales?.length]),
     tokenUrl: options.tokenUrl?.toString(),
     tokenFactory: useMemo(() => options.tokenFactory, [options.tokenFactory?.toString()]),
     url: options.url?.toString(),
