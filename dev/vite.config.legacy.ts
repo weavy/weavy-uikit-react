@@ -1,9 +1,8 @@
 import "dotenv/config";
-import { defineConfig } from "vite";
+import { PluginOption, defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import packageJson from "./package.json" assert { type: "json" };
+import packageJson from "../package.json" assert { type: "json" };
 import { resolve } from "path";
-import dts from 'vite-plugin-dts'
 import { getBabelOutputPlugin } from "@rollup/plugin-babel";
 
 const sourceName =
@@ -15,15 +14,32 @@ const version =
 
 console.log(sourceName, version);
 
+function utf8BomPlugin(){
+  const options: PluginOption = {
+    name: "utf-8-bom",
+    generateBundle(options, bundle, _isWrite) {
+      Object.keys(bundle).forEach(chunkId => {
+        const chunk = bundle[chunkId]
+        // @ts-expect-error chunk type
+        if (typeof chunk.code === "string") { 
+          // @ts-expect-error chunk type
+          if (!chunk.code.startsWith("\ufeff")) {
+            // @ts-expect-error chunk type
+            chunk.code = "\ufeff" + chunk.code;
+          }
+        }
+      })
+    }
+  }
+
+  return options;
+}
+
 // https://vitejs.dev/config/
 
 export default defineConfig({
   plugins: [
     react(), 
-    dts({
-      outDir: "dist/types",
-      include: ['lib'] 
-    })
   ],
   define: {
     WEAVY_SOURCE_NAME: JSON.stringify(sourceName),
@@ -31,35 +47,63 @@ export default defineConfig({
     WEAVY_URL: JSON.stringify(process.env.WEAVY_URL),
     WEAVY_TOKEN_URL: JSON.stringify(process.env.WEAVY_TOKEN_URL),
   },
+  resolve: {
+    alias: [
+      {
+        find: '@weavy/uikit-web',
+        replacement: '@weavy/uikit-web/dist/weavy.js',
+      },
+    ],
+  },
   build: {
+    emptyOutDir: false,
     lib: {
       // Could also be a dictionary or array of multiple entry points
-      entry: resolve(__dirname, "lib/index.ts"),
+      entry: resolve(__dirname, "../lib/index.ts"),
       name: "WeavyLib",
       // the proper extensions will be added
       fileName: "weavy",
     },
     sourcemap: false,
     rollupOptions: {
+      plugins:[
+        utf8BomPlugin(),
+      ],
       // make sure to externalize deps that shouldn't be bundled
       // into your library
       external: ["react", "react-dom"],
       output: [
         {
-          format: "esm",
-        },
-        {
           format: "umd",
           name: "WeavyLib",
+          dynamicImportInCjs: false,
+          //interop: "esModule",
           globals: {
             "react": "React",
             "react-dom": "ReactDOM"
-          }
+          },
+        },
+        {
+          format: "esm",
+          entryFileNames: "weavy.es5.esm.js",
+          inlineDynamicImports: true,
+          plugins: [
+            getBabelOutputPlugin({
+              presets: [['@babel/preset-env', { modules: "auto" }], "@babel/preset-react"],
+              minified: true,
+              comments: false,
+            }),
+          ],
+          globals: {
+            "react": "React",
+            "react-dom": "ReactDOM"
+          },
         },
         {
           format: "esm",
           name: "WeavyLib",
           entryFileNames: "weavy.es5.umd.cjs",
+          inlineDynamicImports: true,
           plugins: [
             getBabelOutputPlugin({
               presets: [['@babel/preset-env', { modules: "umd" }], "@babel/preset-react"],
@@ -70,18 +114,7 @@ export default defineConfig({
           globals: {
             "react": "React",
             "react-dom": "ReactDOM"
-          }
-        },
-        {
-          format: "es",
-          entryFileNames: "weavy.es5.esm.js",
-          plugins: [
-            getBabelOutputPlugin({
-              presets: [['@babel/preset-env', { modules: "auto" }], "@babel/preset-react"],
-              minified: true,
-              comments: false,
-            }),
-          ],
+          },
         },
       ],
     },
