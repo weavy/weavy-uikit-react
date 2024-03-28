@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from "react";
 import { Weavy } from "@weavy/uikit-web";
 import type { WeavyContext } from "@weavy/uikit-web/dist/types/index";
@@ -25,7 +26,6 @@ export function useWeavy(options: WeavyOptions) {
     return () => {
       wy?.destroy();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -45,7 +45,6 @@ export function useWeavy(options: WeavyOptions) {
         Object.assign(weavy, validProperties);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cacheSafeOptions]);
 
   return weavy;
