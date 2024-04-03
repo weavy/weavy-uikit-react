@@ -10,7 +10,7 @@ export function App() {
 
   useWeavy({
     url: new URL(WEAVY_URL),
-    tokenUrl: WEAVY_TOKEN_URL || "http://localhost:3001/api/token",
+    tokenUrl: "/api/token",
     //disableEnvironmentImports: true
   })
 

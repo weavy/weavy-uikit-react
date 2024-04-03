@@ -51,7 +51,13 @@ export default defineConfig({
     WEAVY_SOURCE_NAME: JSON.stringify(sourceName),
     WEAVY_VERSION: JSON.stringify(version),
     WEAVY_URL: JSON.stringify(process.env.WEAVY_URL),
-    WEAVY_TOKEN_URL: JSON.stringify(process.env.WEAVY_TOKEN_URL),
+    //WEAVY_TOKEN_URL: JSON.stringify(process.env.WEAVY_TOKEN_URL),
+  },
+  server: {
+    proxy: {
+      "/api": "http://localhost:3001/",
+    },
+    //https: httpsConfig,
   },
   build: {
     lib: {
