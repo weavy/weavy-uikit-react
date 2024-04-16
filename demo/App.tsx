@@ -8,11 +8,14 @@ import { WyAvatar } from '../lib';
 
 export function App() {
 
-  useWeavy({
+  const weavy = useWeavy({
     url: new URL(WEAVY_URL),
     tokenUrl: "/api/token",
     //disableEnvironmentImports: true
   })
+
+  // @ts-expect-error globalThis
+  globalThis.weavy = weavy
 
   return (
     <>
@@ -28,7 +31,7 @@ export function App() {
       <h1>Vite + React</h1>
       <h3>Powered by uikit-web</h3>
 
-        <WyMessenger></WyMessenger>
+        <WyMessenger childModals={true}></WyMessenger>
 
     </>
   )

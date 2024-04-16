@@ -77,6 +77,7 @@ export default defineConfig({
           format: "umd",
           name: "WeavyLib",
           dynamicImportInCjs: false,
+          minifyInternalExports: false,
           //interop: "esModule",
           globals: {
             "react": "React",
@@ -86,6 +87,7 @@ export default defineConfig({
         {
           format: "esm",
           entryFileNames: "weavy.es5.esm.js",
+          minifyInternalExports: false,
           inlineDynamicImports: true,
           plugins: [
             getBabelOutputPlugin({
@@ -103,6 +105,7 @@ export default defineConfig({
           format: "esm",
           name: "WeavyLib",
           entryFileNames: "weavy.es5.umd.cjs",
+          minifyInternalExports: false,
           inlineDynamicImports: true,
           plugins: [
             getBabelOutputPlugin({

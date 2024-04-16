@@ -59,6 +59,12 @@ export default defineConfig({
     },
     //https: httpsConfig,
   },
+  esbuild: {
+    legalComments: "none",
+    charset: "utf8",
+    //banner: "\ufeff", // UTF-8 BOM
+    keepNames: true
+  },
   build: {
     lib: {
       // Could also be a dictionary or array of multiple entry points
@@ -78,6 +84,7 @@ export default defineConfig({
       output: [
         {
           format: "esm",
+          minifyInternalExports: false,
         },
       ],
     },

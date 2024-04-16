@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from "react";
-import { Weavy } from "@weavy/uikit-web";
+import { Weavy } from "../weavy";
 import type { WeavyContext } from "@weavy/uikit-web/dist/types/index";
 import { WeavyOptions } from "@weavy/uikit-web/dist/types/types/weavy.types";
 
