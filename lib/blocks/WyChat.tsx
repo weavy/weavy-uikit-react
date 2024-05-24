@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import { WyChat as WyChatWC } from "@weavy/uikit-web";

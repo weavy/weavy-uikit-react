@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import { WyPosts as WyPostsWC } from "@weavy/uikit-web";

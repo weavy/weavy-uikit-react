@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { createComponent } from '@lit/react';
 import { WyContext as WyContextWC } from '@weavy/uikit-web';

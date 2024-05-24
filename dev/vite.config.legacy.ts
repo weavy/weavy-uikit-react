@@ -4,6 +4,7 @@ import react from "@vitejs/plugin-react";
 import packageJson from "../package.json" assert { type: "json" };
 import { resolve } from "path";
 import { getBabelOutputPlugin } from "@rollup/plugin-babel";
+import preserveDirectives from 'rollup-preserve-directives';
 
 const sourceName =
   process.argv.find((s) => s.startsWith("--source-name="))?.split("=")[1] ||
@@ -68,6 +69,7 @@ export default defineConfig({
     rollupOptions: {
       plugins:[
         utf8BomPlugin(),
+        preserveDirectives(),
       ],
       // make sure to externalize deps that shouldn't be bundled
       // into your library
