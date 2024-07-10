@@ -7,6 +7,9 @@ import { WeavyOptions } from "@weavy/uikit-web/dist/types/types/weavy.types";
 export function useWeavy(options: WeavyOptions) {
   const [weavy, setWeavy] = useState<WeavyContext>();
 
+  /**
+   * Any option that is an instance/object needs to be memoized or converted.
+   */
   const cacheSafeOptions: WeavyOptions = {
     ...options,
     cloudFilePickerUrl: options.cloudFilePickerUrl?.toString(),

@@ -2,6 +2,8 @@ import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import { 
   WyConversation as WyConversationWC,
+  WyConversationExtended as WyConversationExtendedWC,
+  WyConversationAppbar as WyConversationAppbarWC,
   WyConversationNew as WyConversationNewWC,
 } from "@weavy/uikit-web"
 
@@ -10,6 +12,24 @@ export const WyConversation = createComponent({
   react: React,
   tagName: "wy-conversation",
   elementClass: WyConversationWC,
+  events: {
+    onReleaseFocus: "release-focus" as EventName<CustomEvent>
+  }
+});
+
+export const WyConversationExtended = createComponent({
+  react: React,
+  tagName: "wy-conversation-extended",
+  elementClass: WyConversationExtendedWC,
+  events: {
+    onReleaseFocus: "release-focus" as EventName<CustomEvent>
+  }
+});
+
+export const WyConversationAppbar = createComponent({
+  react: React,
+  tagName: "wy-conversation-appbar",
+  elementClass: WyConversationAppbarWC,
   events: {
     onReleaseFocus: "release-focus" as EventName<CustomEvent>
   }

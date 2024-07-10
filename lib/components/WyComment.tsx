@@ -1,7 +1,7 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import {
-  WyComments as WyCommentsWC,
+  WyCommentList as WyCommentListWC,
   WyComment as WyCommentWC,
   WyCommentView as WyCommentViewWC,
   WyCommentEdit as WyCommentEditWC,
@@ -11,10 +11,10 @@ import {
 import { PollOptionType } from "@weavy/uikit-web/dist/types/types/polls.types";
 
 // Creates a React component from a Lit component
-export const WyComments = createComponent({
+export const WyCommentList = createComponent({
   react: React,
-  tagName: "wy-comments",
-  elementClass: WyCommentsWC,
+  tagName: "wy-comment-list",
+  elementClass: WyCommentListWC,
 });
 
 export const WyComment = createComponent({

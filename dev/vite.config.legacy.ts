@@ -52,7 +52,7 @@ export default defineConfig({
     alias: [
       {
         find: '@weavy/uikit-web',
-        replacement: '@weavy/uikit-web/dist/weavy.js',
+        replacement: '@weavy/uikit-web/dist/weavy.esm.bundle.js',
       },
     ],
   },

@@ -2,6 +2,7 @@ import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import { WyFilesList as WyFilesListWC } from "@weavy/uikit-web";
 import {
+  FileOpenEventType,
   FileOrderType,
   FileType,
 } from "@weavy/uikit-web/dist/types/types/files.types";
@@ -12,11 +13,7 @@ export const WyFilesList = createComponent({
   tagName: "wy-files-list",
   elementClass: WyFilesListWC,
   events: {
-    onFileOpen: "file-open" as EventName<
-      CustomEvent<{
-        file: FileType;
-      }>
-    >,
+    onFileOpen: "file-open" as EventName<FileOpenEventType>,
     onOrder: "order" as EventName<
       CustomEvent<{
         order: FileOrderType;

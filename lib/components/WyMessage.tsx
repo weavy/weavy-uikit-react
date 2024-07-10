@@ -3,7 +3,8 @@ import { EventName, createComponent } from "@lit/react";
 import { 
   WyMessage as WyMessageWC,
   WyMessages as WyMessagesWC,
-  WyMessageEditor as WyMessageEditorWC  
+  WyMessageEditor as WyMessageEditorWC,
+  WyMessageTyping as WyMessageTypingWC
 } from "@weavy/uikit-web";
 import { PollOptionType } from "@weavy/uikit-web/dist/types/types/polls.types";
 
@@ -39,4 +40,10 @@ export const WyMessageEditor = createComponent({
       }>
     >,
   },
+});
+
+export const WyMessageTyping = createComponent({
+  react: React,
+  tagName: "wy-message-typing",
+  elementClass: WyMessageTypingWC,
 });

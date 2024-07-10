@@ -9,6 +9,6 @@ export const WyOverlay = createComponent({
   elementClass: WyOverlayWC,
   events: {
     onReleaseFocus: "release-focus" as EventName<CustomEvent>,
-    onRemoveModal: "removeModal" as EventName<Event>
+    onClose: "close" as EventName<CustomEvent>
   }
 });
