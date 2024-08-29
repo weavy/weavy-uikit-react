@@ -1,3 +1,5 @@
+'use client';
+
 import { Weavy, WeavyContextBase } from "@weavy/uikit-web";
 
 /* @ts-expect-error Override Weavy version */

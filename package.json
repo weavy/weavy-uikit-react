@@ -1,6 +1,6 @@
 {
   "name": "@weavy/uikit-react",
-  "version": "24.0.4",
+  "version": "24.1.0",
   "author": "Weavy",
   "description": "React components UI-kit for Weavy",
   "homepage": "https://github.com/weavy/weavy-uikit-react",
@@ -12,13 +12,19 @@
     "*.json",
     "*.md"
   ],
-  "main": "./dist/weavy.es5.umd.cjs",
+  "main": "./dist/weavy.es5.umd.js",
   "module": "./dist/weavy.es5.esm.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/weavy.esm.js",
-      "require": "./dist/weavy.umd.cjs",
+      "import": "./dist/weavy.mjs",
+      "require": "./dist/weavy.cjs",
+      "node": {
+        "import": "./dist/weavy.mjs",
+        "require": "./dist/weavy.bundle.js"
+      },
+      "browser": "./dist/weavy.umd.js",
+      "default": "./dist/weavy.umd.js",
       "types": "./dist/types/index.d.ts"
     }
   },
@@ -36,7 +42,7 @@
   },
   "dependencies": {
     "@lit/react": "^1.0.5",
-    "@weavy/uikit-web": "^24.0.4"
+    "@weavy/uikit-web": "^24.1.0"
   },
   "peerDependencies": {
     "react": ">=16",

@@ -1,13 +1,6 @@
-'use client';
-
-import React from 'react';
-import { createComponent } from '@lit/react';
-import { WyContext as WyContextWC } from '@weavy/uikit-web';
-import "../weavy"
+"use client";
 
 // Creates a React component from a Lit component
-export const WyContext = createComponent({
-  react: React,
-  tagName: 'wy-context',
-  elementClass: WyContextWC,
-});
+import WyContext from "../client/WyContext";
+
+export { WyContext }

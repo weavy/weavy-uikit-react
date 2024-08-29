@@ -18,7 +18,7 @@ console.log(sourceName, version);
 function utf8BomPlugin(){
   const options: PluginOption = {
     name: "utf-8-bom",
-    generateBundle(options, bundle, _isWrite) {
+    generateBundle(_options, bundle, _isWrite) {
       Object.keys(bundle).forEach(chunkId => {
         const chunk = bundle[chunkId]
         // @ts-expect-error chunk type
@@ -75,6 +75,17 @@ export default defineConfig({
       // into your library
       external: ["react", "react-dom"],
       output: [
+        {
+          format: "cjs",
+          entryFileNames: "weavy.bundle.js",
+          dynamicImportInCjs: false,
+          minifyInternalExports: false,
+          inlineDynamicImports: true,
+          globals: {
+            "react": "React",
+            "react-dom": "ReactDOM"
+          },
+        },
         {
           format: "umd",
           name: "WeavyLib",

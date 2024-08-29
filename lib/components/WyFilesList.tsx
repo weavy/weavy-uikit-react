@@ -5,7 +5,7 @@ import {
   FileOpenEventType,
   FileOrderType,
   FileType,
-} from "@weavy/uikit-web/dist/types/types/files.types";
+} from "@weavy/uikit-web/dist/types/types/files.types.d.ts";
 
 // Creates a React component from a Lit component
 export const WyFilesList = createComponent({

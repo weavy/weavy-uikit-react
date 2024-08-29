@@ -18,7 +18,7 @@ console.log(sourceName, version);
 function utf8BomPlugin(){
   const options: PluginOption = {
     name: "utf-8-bom",
-    generateBundle(options, bundle, _isWrite) {
+    generateBundle(_options, bundle, _isWrite) {
       Object.keys(bundle).forEach(chunkId => {
         const chunk = bundle[chunkId]
         // @ts-expect-error chunk type
@@ -85,7 +85,14 @@ export default defineConfig({
       output: [
         {
           format: "esm",
+          entryFileNames: "weavy.mjs",
           minifyInternalExports: false,
+        },
+        {
+          format: "cjs",
+          entryFileNames: "weavy.cjs",
+          minifyInternalExports: false,
+          dynamicImportInCjs: true
         },
       ],
     },

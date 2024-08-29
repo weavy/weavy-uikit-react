@@ -4,7 +4,7 @@ import {
   WyAttachment as WyAttachmentWC,
   WyAttachmentsList as WyAttachmentsListWC,
 } from "@weavy/uikit-web";
-import { FileOpenEventType } from "@weavy/uikit-web/dist/types/types/files.types";
+import { FileOpenEventType } from "@weavy/uikit-web/dist/types/types/files.types.d.ts";
 
 // Creates a React component from a Lit component
 export const WyAttachment = createComponent({

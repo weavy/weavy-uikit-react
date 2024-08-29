@@ -6,7 +6,7 @@ import {
   WyMessageEditor as WyMessageEditorWC,
   WyMessageTyping as WyMessageTypingWC
 } from "@weavy/uikit-web";
-import { PollOptionType } from "@weavy/uikit-web/dist/types/types/polls.types";
+import { PollOptionType } from "@weavy/uikit-web/dist/types/types/polls.types.d.ts";
 
 // Creates a React component from a Lit component
 export const WyMessage = createComponent({

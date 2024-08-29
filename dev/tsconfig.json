@@ -1,4 +1,6 @@
 {
+  "extends": "../tsconfig.json",
+  "#comment": "Configuration used for coding in dev files",
   "compilerOptions": {
     "composite": true,
     "skipLibCheck": true,
@@ -6,5 +8,5 @@
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["./*.ts"]
 }
