@@ -16,3 +16,5 @@ export const WyNotificationToasts = createComponent({
     >,
   },
 });
+
+export type { WyLinkEventType }

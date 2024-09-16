@@ -1,11 +1,17 @@
 'use client';
 
-import { Weavy, WeavyContextBase, AppTypes, ConversationTypes } from "@weavy/uikit-web";
+import { Weavy, WeavyClient, AppTypes, ConversationTypes } from "@weavy/uikit-web";
+import { WyNotificationsEventType } from "@weavy/uikit-web/dist/types/types/notifications.types.js";
+import { createContext } from "react";
 
 /* @ts-expect-error Override Weavy version */
-WeavyContextBase.version = WEAVY_VERSION;
+WeavyClient.version = WEAVY_VERSION;
 
 /* @ts-expect-error Override Weavy sourceName */
-WeavyContextBase.sourceName = WEAVY_SOURCE_NAME;
+WeavyClient.sourceName = WEAVY_SOURCE_NAME;
+
+// React context provider
+export const WeavyContext = createContext<Weavy | null>(null);
 
 export { Weavy, AppTypes, ConversationTypes }
+export type { WyNotificationsEventType }

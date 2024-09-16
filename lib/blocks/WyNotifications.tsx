@@ -16,3 +16,5 @@ export const WyNotifications = createComponent({
     >,
   },
 });
+
+export type { WyLinkEventType }

@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from "react";
 import { Weavy } from "../client/weavy";
-import type { WeavyContext } from "@weavy/uikit-web/dist/types/index.d.ts";
 import { WeavyOptions } from "@weavy/uikit-web/dist/types/types/weavy.types.d.ts";
 
 export function useWeavy(options: WeavyOptions) {
-  const [weavy, setWeavy] = useState<WeavyContext>();
+  const [weavy, setWeavy] = useState<Weavy>();
 
   /**
    * Any option that is an instance/object needs to be memoized or converted.
