@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from "react";
-import { Weavy } from "../client/weavy";
-import { WeavyOptions } from "@weavy/uikit-web/dist/types/types/weavy.types.d.ts";
+import { Weavy, WeavyOptions, WeavyType } from "../client/weavy";
 
 export function useWeavy(options: WeavyOptions) {
-  const [weavy, setWeavy] = useState<Weavy>();
+  const [weavy, setWeavy] = useState<WeavyType>();
 
   /**
    * Any option that is an instance/object needs to be memoized or converted.
@@ -15,8 +14,7 @@ export function useWeavy(options: WeavyOptions) {
     locales: useMemo(() => options.locales, [options.locales?.length]),
     tokenUrl: options.tokenUrl?.toString(),
     tokenFactory: useMemo(() => options.tokenFactory, [options.tokenFactory?.toString()]),
-    url: options.url?.toString(),
-    zoomAuthenticationUrl: options.url?.toString(),
+    url: options.url?.toString()
   };
 
   const [prevOptions, setPrevOptions] = useState<WeavyOptions>(cacheSafeOptions);

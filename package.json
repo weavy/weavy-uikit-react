@@ -1,6 +1,6 @@
 {
   "name": "@weavy/uikit-react",
-  "version": "24.4.1",
+  "version": "25.0.0",
   "author": "Weavy",
   "description": "React components UI-kit for Weavy",
   "homepage": "https://github.com/weavy/weavy-uikit-react",
@@ -31,44 +31,45 @@
   "scripts": {
     "clean": "rimraf dist/**/* --glob",
     "prepack": "run-s clean build",
-    "start": "run-p auth dev",
+    "start": "run-p dev",
     "dev": "vite  --config=dev/vite.config.ts --open",
-    "auth": "weavy auth-server",
     "prebuild": "tsc --p ./dev/tsconfig.build.json",
     "build": "run-s build:*",
     "build:esm": "vite build --config=dev/vite.config.ts",
     "build:legacy": "vite build --config=dev/vite.config.legacy.ts",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint lib"
   },
   "dependencies": {
-    "@lit/react": "^1.0.5",
-    "@weavy/uikit-web": "^24.4.1"
+    "@lit/react": "^1.0.6",
+    "@weavy/uikit-web": "^25.0.0"
   },
   "peerDependencies": {
     "react": ">=16",
     "react-dom": ">=16"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.25.4",
-    "@babel/preset-react": "^7.24.7",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.25.9",
+    "@eslint/js": "^9.13.0",
     "@rollup/plugin-babel": "^6.0.4",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@types/node": "^22.5.5",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "^8.1.0",
-    "@typescript-eslint/parser": "^8.1.0",
-    "@vitejs/plugin-react": "^4.3.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@types/node": "^22.8.2",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
     "dotenv": "^16.3.2",
-    "eslint": "^8.55.0",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.12",
+    "eslint": "^9.13.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "globals": "^15.11.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^6.0.1",
-    "rollup-preserve-directives": "^1.1.1",
-    "sass": "^1.78.0",
-    "typescript": "^5.6.2",
-    "vite": "^5.4.5",
-    "vite-plugin-dts": "^4.2.1"
+    "rollup-preserve-directives": "^1.1.2",
+    "sass": "^1.80.4",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.12.1",
+    "vite": "^5.4.10",
+    "vite-plugin-dts": "^4.3.0"
   }
 }

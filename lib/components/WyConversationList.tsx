@@ -1,15 +1,12 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
-import {
-  WyConversationList as WyConversationListWC,
-  WyConversationListItem as WyConversationListItemWC,
-} from "@weavy/uikit-web";
+import { WeavyComponents } from "@weavy/uikit-web";
 
 // Creates a React component from a Lit component
 export const WyConversationList = createComponent({
   react: React,
   tagName: "wy-conversation-list",
-  elementClass: WyConversationListWC,
+  elementClass: WeavyComponents.WyConversationList,
   events: {
     onConversationSelected: "conversation-selected" as EventName<
       CustomEvent<{
@@ -22,7 +19,7 @@ export const WyConversationList = createComponent({
 export const WyConversationListItem = createComponent({
   react: React,
   tagName: "wy-conversation-list-item",
-  elementClass: WyConversationListItemWC,
+  elementClass: WeavyComponents.WyConversationListItem,
   events: {
     onRefetch: "refetch" as EventName<CustomEvent>,
     onSelected: "selected" as EventName<

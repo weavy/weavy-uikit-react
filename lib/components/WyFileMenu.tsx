@@ -1,13 +1,13 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
-import { WyFileMenu as WyFileMenuWC } from "@weavy/uikit-web";
+import { WeavyComponents } from "@weavy/uikit-web";
 import { FileType } from "@weavy/uikit-web/dist/types/types/files.types.d.ts";
 
 // Creates a React component from a Lit component
 export const WyFileMenu = createComponent({
   react: React,
   tagName: "wy-file-menu",
-  elementClass: WyFileMenuWC,
+  elementClass: WeavyComponents.WyFileMenu,
   events: {
     onEditName: "edit-name" as EventName<
       CustomEvent<{

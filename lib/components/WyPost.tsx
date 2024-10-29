@@ -1,17 +1,12 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
-import {
-  WyPost as WyPostWC,
-  WyPostView as WyPostViewWC,
-  WyPostEdit as WyPostEditWC,
-  WyPostTrashed as WyPostTrashedWC,
-} from "@weavy/uikit-web";
+import { WeavyComponents } from "@weavy/uikit-web";
 
 // Creates a React component from a Lit component
 export const WyPost = createComponent({
   react: React,
   tagName: "wy-post",
-  elementClass: WyPostWC,
+  elementClass: WeavyComponents.WyPost,
   events: {
     onVote: "vote" as EventName<
       CustomEvent<{
@@ -42,7 +37,7 @@ export const WyPost = createComponent({
 export const WyPostView = createComponent({
   react: React,
   tagName: "wy-post-view",
-  elementClass: WyPostViewWC,
+  elementClass: WeavyComponents.WyPostView,
   events: {
     onVote: "vote" as EventName<
       CustomEvent<{
@@ -71,7 +66,7 @@ export const WyPostView = createComponent({
 export const WyPostEdit = createComponent({
   react: React,
   tagName: "wy-post-edit",
-  elementClass: WyPostEditWC,
+  elementClass: WeavyComponents.WyPostEdit,
   events: {
     onEdit: "edit" as EventName<
       CustomEvent<{
@@ -84,7 +79,7 @@ export const WyPostEdit = createComponent({
 export const WyPostTrashed = createComponent({
   react: React,
   tagName: "wy-post-trashed",
-  elementClass: WyPostTrashedWC,
+  elementClass: WeavyComponents.WyPostTrashed,
   events: {
     onRestore: "restore" as EventName<CustomEvent>,
   },

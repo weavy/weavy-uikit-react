@@ -1,4 +1,6 @@
 export * from "./client/weavy";
 export * from "./hooks";
 export * from "./blocks";
-export * from "./components";
+export * as WeavyComponents from "./components";
+
+export type * as WeavyTypes from "@weavy/uikit-web";

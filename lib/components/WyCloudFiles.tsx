@@ -1,13 +1,13 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
-import { WyCloudFiles as WyCloudFilesWC } from "@weavy/uikit-web";
+import { WeavyComponents } from "@weavy/uikit-web";
 import { ExternalBlobType } from "@weavy/uikit-web/dist/types/types/files.types.d.ts";
 
 // Creates a React component from a Lit component
 export const WyCloudFiles = createComponent({
   react: React,
   tagName: "wy-cloud-files",
-  elementClass: WyCloudFilesWC,
+  elementClass: WeavyComponents.WyCloudFiles,
   events: {
     onExternalBlobs: "external-blobs" as EventName<
       CustomEvent<{

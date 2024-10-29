@@ -1,6 +1,6 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
-import { WyFilesAppbar as WyFilesAppbarWC } from "@weavy/uikit-web";
+import { WeavyComponents } from "@weavy/uikit-web";
 import {
   BlobType,
   ExternalBlobType,
@@ -11,7 +11,7 @@ import {
 export const WyFilesAppbar = createComponent({
   react: React,
   tagName: "wy-files-appbar",
-  elementClass: WyFilesAppbarWC,
+  elementClass: WeavyComponents.WyFilesAppbar,
   events: {
     onReleaseFocus: "release-focus" as EventName<CustomEvent>,
     onUploadFiles: "upload-files" as EventName<

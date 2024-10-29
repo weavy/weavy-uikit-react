@@ -1,26 +1,19 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
-import {
-  WyCommentList as WyCommentListWC,
-  WyComment as WyCommentWC,
-  WyCommentView as WyCommentViewWC,
-  WyCommentEdit as WyCommentEditWC,
-  WyCommentEditor as WyCommentEditorWC,
-  WyCommentTrashed as WyCommentTrashedWC,
-} from "@weavy/uikit-web";
+import { WeavyComponents } from "@weavy/uikit-web";
 import { PollOptionType } from "@weavy/uikit-web/dist/types/types/polls.types.d.ts";
 
 // Creates a React component from a Lit component
 export const WyCommentList = createComponent({
   react: React,
   tagName: "wy-comment-list",
-  elementClass: WyCommentListWC,
+  elementClass: WeavyComponents.WyCommentList,
 });
 
 export const WyComment = createComponent({
   react: React,
   tagName: "wy-comment",
-  elementClass: WyCommentWC,
+  elementClass: WeavyComponents.WyComment,
   events: {
     onVote: "vote" as EventName<
       CustomEvent<{
@@ -51,7 +44,7 @@ export const WyComment = createComponent({
 export const WyCommentView = createComponent({
   react: React,
   tagName: "wy-comment-view",
-  elementClass: WyCommentViewWC,
+  elementClass: WeavyComponents.WyCommentView,
   events: {
     onVote: "vote" as EventName<
       CustomEvent<{
@@ -74,7 +67,7 @@ export const WyCommentView = createComponent({
 export const WyCommentEdit = createComponent({
   react: React,
   tagName: "wy-comment-edit",
-  elementClass: WyCommentEditWC,
+  elementClass: WeavyComponents.WyCommentEdit,
   events: {
     onEdit: "edit" as EventName<
       CustomEvent<{
@@ -88,7 +81,7 @@ export const WyCommentEdit = createComponent({
 export const WyCommentEditor = createComponent({
   react: React,
   tagName: "wy-comment-editor",
-  elementClass: WyCommentEditorWC,
+  elementClass: WeavyComponents.WyCommentEditor,
   events: {
     onSubmit: "submit" as EventName<
       CustomEvent<{
@@ -106,7 +99,7 @@ export const WyCommentEditor = createComponent({
 export const WyCommentTrashed = createComponent({
   react: React,
   tagName: "wy-comment-trashed",
-  elementClass: WyCommentTrashedWC,
+  elementClass: WeavyComponents.WyCommentTrashed,
   events: {
     onRestore: "restore" as EventName<
       CustomEvent<{
