@@ -1,7 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from "react";
 import { Weavy, WeavyOptions, WeavyType } from "../client/weavy";
+import { globalContextProvider } from "@weavy/uikit-web";
 
+/**
+ * Hook for configuring a global weavy instance. 
+ * It will reuse any previously available global weavy instance.
+ * 
+ * @param options { WeavyOptions } - Options for the weavy instance, the same as the weavy instance preperties.
+ * @returns Weavy instance
+ */
 export function useWeavy(options: WeavyOptions) {
   const [weavy, setWeavy] = useState<WeavyType>();
 
@@ -13,19 +21,28 @@ export function useWeavy(options: WeavyOptions) {
     cloudFilePickerUrl: options.cloudFilePickerUrl?.toString(),
     locales: useMemo(() => options.locales, [options.locales?.length]),
     tokenUrl: options.tokenUrl?.toString(),
-    tokenFactory: useMemo(() => options.tokenFactory, [options.tokenFactory?.toString()]),
-    url: options.url?.toString()
+    tokenFactory: useMemo(
+      () => options.tokenFactory,
+      [options.tokenFactory?.toString()]
+    ),
+    url: options.url?.toString(),
   };
 
-  const [prevOptions, setPrevOptions] = useState<WeavyOptions>(cacheSafeOptions);
+  const [prevOptions, setPrevOptions] =
+    useState<WeavyOptions>(cacheSafeOptions);
 
   useEffect(() => {
-    const wy = new Weavy(cacheSafeOptions);
-    setWeavy(wy);
+    if (!weavy) {
+      const globalWeavy = globalContextProvider?.value;
+      const wy = globalWeavy ?? new Weavy(cacheSafeOptions);
+      setWeavy(wy);
 
-    return () => {
-      wy?.destroy();
-    };
+      /*console.log(
+        "useWeavy",
+        globalWeavy ? "using global instance" : "created new instance",
+        wy?.weavySid
+      );*/
+    }
   }, []);
 
   useEffect(() => {
@@ -49,4 +66,3 @@ export function useWeavy(options: WeavyOptions) {
 
   return weavy;
 }
-

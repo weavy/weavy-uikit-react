@@ -3,6 +3,15 @@ import { useController } from "@lit/react/use-controller.js";
 import { ContextController, WeavyContext } from "@weavy/uikit-web";
 import { Context } from "@weavy/uikit-web/dist/types/contexts/index.js";
 
+/**
+ * Hook to consume the Weavy context from the Weavy Web Components using the Context Community Protocol. 
+ * The useWeavyContext(ref) must be used with an element reference from any child from the DOM tree since it relies on standard events in the DOM.
+ * 
+ * @see https://github.com/webcomponents-cg/community-protocols/blob/main/proposals/context.md
+ * @param ref { React.RefObject | HTMLElement } - Reference object that needs to be placed in the DOM.
+ * @param context { Context } - The context to use. Defaults to WeavyContext from ukit-web.
+ * @returns Weavy instance 
+ */
 export function useWeavyContext<TContext extends Context<unknown, unknown> = typeof WeavyContext, TElement extends HTMLElement = HTMLElement>(
   ref: React.RefObject<TElement> | TElement | null,
   context?: TContext
