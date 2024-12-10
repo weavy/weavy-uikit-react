@@ -7,10 +7,10 @@ import { globalContextProvider } from "@weavy/uikit-web";
  * Hook for configuring a global weavy instance. 
  * It will reuse any previously available global weavy instance.
  * 
- * @param options { WeavyOptions } - Options for the weavy instance, the same as the weavy instance preperties.
+ * @param options { WeavyOptions } - Options for the weavy instance, the same as the weavy instance properties.
  * @returns Weavy instance
  */
-export function useWeavy(options: WeavyOptions) {
+export function useWeavy(options: WeavyOptions, deps: React.DependencyList = []) {
   const [weavy, setWeavy] = useState<WeavyType>();
 
   /**
@@ -23,7 +23,7 @@ export function useWeavy(options: WeavyOptions) {
     tokenUrl: options.tokenUrl?.toString(),
     tokenFactory: useMemo(
       () => options.tokenFactory,
-      [options.tokenFactory?.toString()]
+      [options.tokenFactory?.toString(), ...deps]
     ),
     url: options.url?.toString(),
   };

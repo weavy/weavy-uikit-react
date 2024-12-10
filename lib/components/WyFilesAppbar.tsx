@@ -1,7 +1,7 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import { WeavyComponents } from "@weavy/uikit-web";
-import {
+import type {
   BlobType,
   ExternalBlobType,
   FileOrderType,

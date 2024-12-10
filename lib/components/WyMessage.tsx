@@ -1,7 +1,7 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import { WeavyComponents } from "@weavy/uikit-web";
-import { PollOptionType } from "@weavy/uikit-web/dist/types/types/polls.types.d.ts";
+import type { PollOptionType } from "@weavy/uikit-web/dist/types/types/polls.types.d.ts";
 
 // Creates a React component from a Lit component
 export const WyMessage = createComponent({
