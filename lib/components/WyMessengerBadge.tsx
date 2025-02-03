@@ -3,9 +3,9 @@ import { createComponent } from "@lit/react";
 import { WeavyComponents } from "@weavy/uikit-web"
 
 // Creates a React component from a Lit component
-export const WyBadge = createComponent({
+export const WyMessengerBadge = createComponent({
   react: React,
-  tagName: "wy-badge",
-  elementClass: WeavyComponents.WyBadge,
+  tagName: "wy-messenger-badge",
+  elementClass: WeavyComponents.WyMessengerBadge,
 });
 

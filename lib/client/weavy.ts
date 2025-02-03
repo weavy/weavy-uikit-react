@@ -1,6 +1,6 @@
 'use client';
 
-import { Weavy, WeavyClient, AppTypes, ConversationTypes, WeavyType, WyNotificationsEventType, WeavyOptions } from "@weavy/uikit-web";
+import { Weavy, WeavyClient, AppTypeGuids, AppTypeStrings, MessengerTypes, WeavyType, WyNotificationsEventType, WeavyOptions } from "@weavy/uikit-web";
 import { createContext } from "react";
 
 /* @ts-expect-error Override Weavy version */
@@ -12,5 +12,5 @@ WeavyClient.sourceName = WEAVY_SOURCE_NAME;
 // React context provider
 export const WeavyContext = createContext<WeavyType | null>(null);
 
-export { Weavy, AppTypes, ConversationTypes }
+export { Weavy, AppTypeGuids, AppTypeStrings, MessengerTypes }
 export type { WeavyType, WyNotificationsEventType, WeavyOptions }

@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
   return {
-    plugins: [react()],
+    plugins: [react({ jsxRuntime: 'classic' })],
     define: {
       WEAVY_SOURCE_NAME: JSON.stringify(sourceName),
       WEAVY_VERSION: JSON.stringify(version),

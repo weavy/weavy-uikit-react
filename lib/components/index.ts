@@ -1,6 +1,5 @@
 export * from "./WyAttachment";
 export * from "./WyAvatar";
-export * from "./WyBadge";
 export * from "./WyBlobUpload";
 export * from "./WyButton";
 export * from "./WyCloudFiles";
@@ -20,6 +19,7 @@ export * from "./WyIcon";
 export * from "./WyImageGrid";
 export * from "./WyMeetingCard";
 export * from "./WyMessage";
+export * from "./WyMessengerBadge";
 export * from "./WyNotification";
 export * from "./WyOverlay";
 export * from "./WyPdfViewer";

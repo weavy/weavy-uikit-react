@@ -53,4 +53,4 @@ Please refer to UIKIt Web documentation if you want to create a custom Messenger
 | `<MessengerProvider />` | N/A                      |
 | `<ConversationList />`  | `<WyConversationList />` |
 | `<Conversation />`      | `<WyConversation />`     |
-| `<ConversationBadge />` | `<WyBadge />`            |
+| `<ConversationBadge />` | `<WyMessengerBadge />`            |

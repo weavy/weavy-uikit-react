@@ -1,5 +1,6 @@
 export * from "./WyChat";
 export * from "./WyComments";
+export * from "./WyComponent";
 export * from "./WyContext";
 export * from "./WyFiles";
 export * from "./WyMessenger";

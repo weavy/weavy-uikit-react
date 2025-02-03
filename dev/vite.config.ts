@@ -39,7 +39,7 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     plugins: [
-      react(),
+      react({ jsxRuntime: 'classic' }),
       dts({
         tsconfigPath: "./tsconfig.json",
         outDir: "./dist/types",
