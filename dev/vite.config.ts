@@ -21,6 +21,14 @@ console.log(sourceName, version);
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
+  const define = {
+    WEAVY_SOURCE_NAME: JSON.stringify(sourceName),
+    WEAVY_VERSION: JSON.stringify(version),
+    WEAVY_URL: JSON.stringify(env.WEAVY_URL),
+    //WEAVY_TOKEN_URL: JSON.stringify(env.WEAVY_TOKEN_URL),
+    "process.env.NODE_ENV": JSON.stringify(env.NODE_ENV),
+  };
+
   let httpsConfig;
 
   if (env.HTTPS_PEM_CERT_PATH && env.HTTPS_PEM_KEY_PATH) {
@@ -47,13 +55,7 @@ export default defineConfig(({ command, mode }) => {
       }),
       weavyAuthServer(command),
     ],
-    define: {
-      WEAVY_SOURCE_NAME: JSON.stringify(sourceName),
-      WEAVY_VERSION: JSON.stringify(version),
-      WEAVY_URL: JSON.stringify(env.WEAVY_URL),
-      //WEAVY_TOKEN_URL: JSON.stringify(env.WEAVY_TOKEN_URL),
-      "process.env.NODE_ENV": JSON.stringify(env.NODE_ENV),
-    },
+    define,
     server: {
       /*proxy: {
         "/api": "http://localhost:3001/",

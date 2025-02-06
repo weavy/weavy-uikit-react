@@ -45,7 +45,7 @@ export function App() {
       <h1>Vite + React</h1>
       <h3>Powered by uikit-web</h3>
 
-      <WyMessenger></WyMessenger>
+      <WyMessenger className="WyMessenger"></WyMessenger>
     </React.StrictMode>
   );
 }

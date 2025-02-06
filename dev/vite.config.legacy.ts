@@ -20,29 +20,31 @@ console.log(sourceName, version);
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
+  const define = {
+    WEAVY_SOURCE_NAME: JSON.stringify(sourceName),
+    WEAVY_VERSION: JSON.stringify(version),
+    //WEAVY_URL: JSON.stringify(env.WEAVY_URL),
+    //WEAVY_TOKEN_URL: JSON.stringify(env.WEAVY_TOKEN_URL),
+    "process.env.NODE_ENV": JSON.stringify(env.NODE_ENV),
+  };
+
   return {
-    plugins: [react({ jsxRuntime: 'classic' })],
-    define: {
-      WEAVY_SOURCE_NAME: JSON.stringify(sourceName),
-      WEAVY_VERSION: JSON.stringify(version),
-      //WEAVY_URL: JSON.stringify(env.WEAVY_URL),
-      //WEAVY_TOKEN_URL: JSON.stringify(env.WEAVY_TOKEN_URL),
-      "process.env.NODE_ENV": JSON.stringify(env.NODE_ENV),
-    },
+    plugins: [react({ jsxRuntime: "classic" })],
+    define,
     resolve: {
       alias: [
         {
           find: "@weavy/uikit-web",
-          replacement: "@weavy/uikit-web/dist/weavy.esm.bundle.js",
+          replacement: "@weavy/uikit-web/dist/build/weavy.esm.bundle.js",
         },
       ],
     },
     css: {
       preprocessorOptions: {
         scss: {
-          api: 'modern-compiler' // or "modern"
-        }
-      }
+          api: "modern-compiler", // or "modern"
+        },
+      },
     },
     build: {
       emptyOutDir: false,
