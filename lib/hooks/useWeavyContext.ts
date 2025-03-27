@@ -11,6 +11,27 @@ import { Context } from "@weavy/uikit-web/dist/types/contexts/index.js";
  * @param ref { React.RefObject | HTMLElement } - Reference object that needs to be placed in the DOM.
  * @param context { Context } - The context to use. Defaults to WeavyContext from ukit-web.
  * @returns Weavy instance 
+ * @example
+ * import React, { useRef } from "react"
+ * import { useWeavyContext } from "@weavy/uikit-react"
+ * 
+ * export const MyComponent = () => {
+ *   const domRef = useRef(null)
+ *   const weavy = useWeavyContext(domRef)
+ * 
+ *   useEffect(() => {
+ *     if (weavy) {
+ *       console.log("We got weavy", weavy.version)
+ *     }
+ *   }, [weavy])
+ * 
+ *   // ...
+ *   return (
+ *     <>
+ *       <span ref={domRef}></span>
+ *     </>
+ *   )
+ * }
  */
 export function useWeavyContext<TContext extends Context<unknown, unknown> = typeof WeavyContext, TElement extends HTMLElement = HTMLElement>(
   ref: React.RefObject<TElement> | TElement | null,

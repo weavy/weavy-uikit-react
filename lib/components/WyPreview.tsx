@@ -1,7 +1,7 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import { WeavyComponents } from "@weavy/uikit-web";
-import { WyPreviewCloseEventType, WyPreviewOpenEventType } from "@weavy/uikit-web/dist/types/types/files.types.js";
+import { WyPreviewCloseEventType, WyPreviewOpenEventType } from "@weavy/uikit-web/dist/types/types/events.types.js";
 
 // Creates a React component from a Lit component
 export const WyPreview = createComponent({

@@ -1,7 +1,9 @@
+export { Feature } from "@weavy/uikit-web/lib/types/features.types.ts";
 export * from "./WyChat";
 export * from "./WyComments";
 export * from "./WyComponent";
 export * from "./WyContext";
+export * from "./WyCopilot";
 export * from "./WyFiles";
 export * from "./WyMessenger";
 export * from "./WyNotifications";

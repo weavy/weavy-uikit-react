@@ -3,7 +3,7 @@
 import React from "react";
 import { createComponent, EventName, WebComponentProps } from "@lit/react";
 import { WY_POSTS_TAGNAME, WyPosts as WyPostsWC } from "@weavy/uikit-web";
-import { WyPreviewOpenEventType } from "@weavy/uikit-web/dist/types/types/files.types.js";
+import { WyPreviewOpenEventType } from "@weavy/uikit-web/dist/types/types/events.types.js";
 
 // Creates a React component from a Lit component
 export const WyPosts = createComponent({

@@ -1,8 +1,8 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import { WeavyComponents } from "@weavy/uikit-web";
+import type { FileOpenEventType } from "@weavy/uikit-web/dist/types/types/events.types.d.ts";
 import type {
-  FileOpenEventType,
   FileOrderType,
   FileType,
 } from "@weavy/uikit-web/dist/types/types/files.types.d.ts";

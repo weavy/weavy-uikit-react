@@ -6,7 +6,7 @@ import {
   WY_MESSENGER_TAGNAME,
   WyMessenger as WyMessengerWC,
 } from "@weavy/uikit-web";
-import { WyPreviewOpenEventType } from "@weavy/uikit-web/dist/types/types/files.types.js";
+import { WyPreviewOpenEventType } from "@weavy/uikit-web/dist/types/types/events.types.js";
 
 // Creates a React component from a Lit component
 export const WyMessenger = createComponent({

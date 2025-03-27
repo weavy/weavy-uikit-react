@@ -12,15 +12,6 @@ export const WyConversation = createComponent({
   },
 });
 
-export const WyConversationExtended = createComponent({
-  react: React,
-  tagName: "wy-conversation-extended",
-  elementClass: WeavyComponents.WyConversationExtended,
-  events: {
-    onReleaseFocus: "release-focus" as EventName<CustomEvent>,
-  },
-});
-
 export const WyConversationAppbar = createComponent({
   react: React,
   tagName: "wy-conversation-appbar",

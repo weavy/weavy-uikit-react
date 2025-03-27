@@ -4,7 +4,7 @@ import packageJson from "../package.json";
 import { resolve } from "node:path";
 import { getBabelOutputPlugin } from "@rollup/plugin-babel";
 import preserveDirectives from "rollup-preserve-directives";
-import { utf8BomPlugin } from "@weavy/uikit-web/utils/vite-plugins.js";
+import { removeImportMetaUrl, utf8BomPlugin } from "@weavy/uikit-web/utils/vite-plugins.js";
 
 const sourceName =
   process.argv.find((s) => s.startsWith("--source-name="))?.split("=")[1] ||
@@ -29,12 +29,15 @@ export default defineConfig(({ mode }) => {
   };
 
   return {
-    plugins: [react({ jsxRuntime: "classic" })],
+    plugins: [
+      react({ jsxRuntime: "classic" }),
+      removeImportMetaUrl()
+    ],
     define,
     resolve: {
       alias: [
         {
-          find: "@weavy/uikit-web",
+          find: /^@weavy\/uikit-web$/,
           replacement: "@weavy/uikit-web/dist/build/weavy.esm.bundle.js",
         },
       ],
