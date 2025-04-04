@@ -9,7 +9,8 @@ import {
 import type {
   WyLinkEventType,
   WyNotificationEventType,
-} from "@weavy/uikit-web/dist/types/types/notifications.types.d.ts";
+} from "@weavy/uikit-web/dist/types/types/notifications.events.d.ts";
+import { WyAppEventType } from "@weavy/uikit-web/dist/types/types/app.events.js";
 
 // Creates a React component from a Lit component
 export const WyNotificationToasts = createComponent({
@@ -17,6 +18,8 @@ export const WyNotificationToasts = createComponent({
   tagName: WY_NOTIFICATION_TOASTS_TAGNAME,
   elementClass: WyNotificationToastsWC,
   events: {
+    onWyApp:
+      "wy-app" satisfies WyAppEventType["type"] as EventName<WyAppEventType>,
     onWyLink:
       "wy-link" satisfies WyLinkEventType["type"] as EventName<WyLinkEventType>,
     onWyNotification:
@@ -33,4 +36,4 @@ declare module "react" {
   }
 }
 
-export type { WyLinkEventType };
+export type { WyAppEventType, WyLinkEventType };

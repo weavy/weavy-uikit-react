@@ -6,7 +6,8 @@ import {
   WY_COMMENTS_TAGNAME,
   WyComments as WyCommentsWC,
 } from "@weavy/uikit-web";
-import { WyPreviewOpenEventType } from "@weavy/uikit-web/dist/types/types/events.types.js";
+import { WyAppEventType } from "@weavy/uikit-web/dist/types/types/app.events.js";
+import { WyPreviewOpenEventType } from "@weavy/uikit-web/dist/types/types/files.events.js";
 
 // Creates a React component from a Lit component
 export const WyComments = createComponent({
@@ -14,6 +15,8 @@ export const WyComments = createComponent({
   tagName: WY_COMMENTS_TAGNAME,
   elementClass: WyCommentsWC,
   events: {
+    onWyApp:
+      "wy-app" satisfies WyAppEventType["type"] as EventName<WyAppEventType>,
     onWyPreviewOpen:
       "wy-preview-open" satisfies WyPreviewOpenEventType["type"] as EventName<WyPreviewOpenEventType>,
   },
@@ -28,4 +31,4 @@ declare module "react" {
   }
 }
 
-export type { WyPreviewOpenEventType };
+export type { WyAppEventType, WyPreviewOpenEventType };

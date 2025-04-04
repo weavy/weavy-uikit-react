@@ -3,7 +3,8 @@
 import React from "react";
 import { createComponent, EventName, WebComponentProps } from "@lit/react";
 import { WY_POSTS_TAGNAME, WyPosts as WyPostsWC } from "@weavy/uikit-web";
-import { WyPreviewOpenEventType } from "@weavy/uikit-web/dist/types/types/events.types.js";
+import { WyPreviewOpenEventType } from "@weavy/uikit-web/dist/types/types/files.events.js";
+import { WyAppEventType } from "@weavy/uikit-web/dist/types/types/app.events.js";
 
 // Creates a React component from a Lit component
 export const WyPosts = createComponent({
@@ -11,7 +12,10 @@ export const WyPosts = createComponent({
   tagName: WY_POSTS_TAGNAME,
   elementClass: WyPostsWC,
   events: {
-    onWyPreviewOpen: "wy-preview-open" satisfies WyPreviewOpenEventType["type"] as EventName<WyPreviewOpenEventType>,
+    onWyApp:
+      "wy-app" satisfies WyAppEventType["type"] as EventName<WyAppEventType>,
+    onWyPreviewOpen:
+      "wy-preview-open" satisfies WyPreviewOpenEventType["type"] as EventName<WyPreviewOpenEventType>,
   },
 });
 
@@ -24,4 +28,4 @@ declare module "react" {
   }
 }
 
-export type { WyPreviewOpenEventType }
+export type { WyAppEventType, WyPreviewOpenEventType };
