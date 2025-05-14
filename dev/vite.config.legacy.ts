@@ -51,6 +51,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       emptyOutDir: false,
+      outDir: "dist/build",
       lib: {
         // Could also be a dictionary or array of multiple entry points
         entry: resolve(__dirname, "../lib/index.ts"),
@@ -78,6 +79,7 @@ export default defineConfig(({ mode }) => {
           },
           {
             format: "umd",
+            entryFileNames: "weavy.umd.js",
             name: "WeavyLib",
             dynamicImportInCjs: false,
             minifyInternalExports: false,
@@ -110,7 +112,7 @@ export default defineConfig(({ mode }) => {
           {
             format: "esm",
             name: "WeavyLib",
-            entryFileNames: "weavy.es5.umd.cjs",
+            entryFileNames: "weavy.es5.umd.js",
             minifyInternalExports: false,
             inlineDynamicImports: true,
             plugins: [

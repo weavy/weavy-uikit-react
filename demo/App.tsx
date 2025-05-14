@@ -45,7 +45,7 @@ export function App() {
       <h1>Vite + React</h1>
       <h3>Powered by uikit-web</h3>
 
-      <WyCopilot bot="gemini" onWyApp={(e) => { console.log("app", e.detail)}} className="WyMessenger"></WyCopilot>
+      <WyCopilot agent="gemini" onWyApp={(e) => { console.log("app", e.detail)}} className="WyMessenger"></WyCopilot>
     </React.StrictMode>
   );
 }

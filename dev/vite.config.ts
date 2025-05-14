@@ -76,6 +76,7 @@ export default defineConfig(({ command, mode }) => {
       }
     },
     build: {
+      outDir: "dist/build",
       lib: {
         // Could also be a dictionary or array of multiple entry points
         entry: resolve(__dirname, "../lib/index.ts"),
