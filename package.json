@@ -1,6 +1,6 @@
 {
   "name": "@weavy/uikit-react",
-  "version": "29.2.0",
+  "version": "29.2.1",
   "author": "Weavy",
   "description": "React components UI-kit for Weavy",
   "homepage": "https://github.com/weavy/weavy-uikit-react",
@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@lit/react": "^1.0.7",
-    "@weavy/uikit-web": "^29.2.0"
+    "@weavy/uikit-web": "^29.2.1"
   },
   "peerDependencies": {
     "react": ">=16",
