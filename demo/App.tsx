@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import "./App.css";
@@ -16,8 +16,10 @@ export function App() {
     //disableEnvironmentImports: true
   });
 
-  // @ts-expect-error globalThis
-  globalThis.weavy = weavy;
+  useEffect(() => {
+    // @ts-expect-error globalThis
+    globalThis.weavy = weavy;
+  }, [weavy])
 
   return (
     <React.StrictMode>

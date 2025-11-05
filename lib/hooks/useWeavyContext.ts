@@ -8,8 +8,8 @@ import { Context } from "@weavy/uikit-web/dist/types/contexts/index.js";
  * The useWeavyContext(ref) must be used with an element reference from any child from the DOM tree since it relies on standard events in the DOM.
  * 
  * @see https://github.com/webcomponents-cg/community-protocols/blob/main/proposals/context.md
- * @param ref { React.RefObject | HTMLElement } - Reference object that needs to be placed in the DOM.
- * @param context { Context } - The context to use. Defaults to WeavyContext from ukit-web.
+ * @param ref { (() => HTMLElement) | HTMLElement } - Reference object or function returning a reference object. The object needs to be placed in the DOM.
+ * @param context { Context } - The context to use. Defaults to WeavyContext from uikit-web.
  * @returns Weavy instance 
  * @example
  * import React, { useRef } from "react"
@@ -17,7 +17,7 @@ import { Context } from "@weavy/uikit-web/dist/types/contexts/index.js";
  * 
  * export const MyComponent = () => {
  *   const domRef = useRef(null)
- *   const weavy = useWeavyContext(domRef)
+ *   const weavy = useWeavyContext(() => domRef.current)
  * 
  *   useEffect(() => {
  *     if (weavy) {
@@ -34,13 +34,13 @@ import { Context } from "@weavy/uikit-web/dist/types/contexts/index.js";
  * }
  */
 export function useWeavyContext<TContext extends Context<unknown, unknown> = typeof WeavyContext, TElement extends HTMLElement = HTMLElement>(
-  ref: React.RefObject<TElement> | TElement | null,
+  ref: (() => TElement | null) | TElement | null,
   context?: TContext
 ) {
-  const isRef = (r: typeof ref): r is React.RefObject<TElement> => {
-    return Boolean(r) && (r as React.RefObject<TElement>).current !== undefined
-}
-  const domRef = (isRef(ref) ? ref.current : ref) || undefined;
+  // Using ref.current for backward compatibility only
+
+  // eslint-disable-next-line react-hooks/refs
+  const domRef = (typeof ref === "function" ? ref() : (ref && "current" in ref) ? ref.current as HTMLElement : ref) || undefined;
 
   const controller = useController(
     React,
@@ -49,8 +49,9 @@ export function useWeavyContext<TContext extends Context<unknown, unknown> = typ
 
   useEffect(() => {
     if (domRef) {
-      controller.ref = domRef;
+      controller.setRef(domRef);
     }
+  // eslint-disable-next-line react-hooks/refs
   }, [controller, domRef]);
 
   return controller.context?.value;

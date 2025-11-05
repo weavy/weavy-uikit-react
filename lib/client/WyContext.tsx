@@ -27,7 +27,7 @@ export function WyContext({
   ...props
 }: React.ComponentProps<typeof WyContextComponent>) {
   const contextRef = useRef(null);
-  const weavy = useWeavyContext(contextRef.current);
+  const weavy = useWeavyContext(() => contextRef.current);
   return (
     <WyContextComponent ref={contextRef} {...props}>
       <WeavyContext.Provider value={weavy ?? null}>
