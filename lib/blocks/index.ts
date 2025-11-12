@@ -1,4 +1,4 @@
-export { Feature } from "@weavy/uikit-web/lib/types/features.types.ts";
+export type { Feature } from "@weavy/uikit-web";
 export * from "./WyChat";
 export * from "./WyComments";
 export * from "./WyComponent";

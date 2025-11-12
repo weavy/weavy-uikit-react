@@ -1,6 +1,6 @@
 {
   "name": "@weavy/uikit-react",
-  "version": "29.3.0",
+  "version": "29.4.0",
   "author": "Weavy",
   "description": "React components UI-kit for Weavy",
   "homepage": "https://github.com/weavy/weavy-uikit-react",
@@ -31,7 +31,7 @@
     "clean": "rimraf dist/**/* --glob",
     "prepack": "run-s clean build",
     "start": "run-p dev",
-    "dev": "vite  --config=dev/vite.config.ts --open",
+    "dev": "vite  --config=dev/vite.config.ts",
     "prebuild": "tsc --p ./dev/tsconfig.build.json",
     "build": "run-s build:*",
     "build:esm": "vite build --config=dev/vite.config.ts",
@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@lit/react": "^1.0.8",
-    "@weavy/uikit-web": "^29.3.0"
+    "@weavy/uikit-web": "^29.4.0"
   },
   "peerDependencies": {
     "react": ">=16",
@@ -70,7 +70,7 @@
     "sass": "^1.93.3",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.3",
-    "vite": "^7.2.0",
+    "vite": "~7.1.12",
     "vite-plugin-dts": "^4.5.4"
   }
 }
