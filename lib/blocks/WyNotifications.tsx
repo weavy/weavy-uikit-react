@@ -1,24 +1,62 @@
 "use client";
 
 import React from "react";
-import { EventName, WebComponentProps, createComponent } from "@lit/react";
+import { WebComponentProps, createComponent } from "@lit/react";
 import {
-  WY_NOTIFICATIONS_TAGNAME,
   WyNotifications as WyNotificationsWC,
+  WyNotificationBadge as WyNotificationBadgeWC,
+  WyNotificationButton as WyNotificationButtonWC,
+  WyNotificationToasts as WyNotificationToastsWC,
 } from "@weavy/uikit-web";
-import type { WyLinkEventType } from "@weavy/uikit-web/dist/types/types/notifications.events.d.ts";
-import type { WyAppEventType } from "@weavy/uikit-web/dist/types/types/app.events.js";
+import { onWyAction, onWyApp, onWyLink, onWyNotification, onWyUnread } from "./events";
+
 
 // Creates a React component from a Lit component
 export const WyNotifications = createComponent({
   react: React,
-  tagName: WY_NOTIFICATIONS_TAGNAME,
+  tagName: "wy-notifications",
   elementClass: WyNotificationsWC,
   events: {
-    onWyApp:
-      "wy-app" satisfies WyAppEventType["type"] as EventName<WyAppEventType>,
-    onWyLink:
-      "wy-link" satisfies WyLinkEventType["type"] as EventName<WyLinkEventType>,
+    onWyAction,
+    onWyApp,
+    onWyLink,
+    onWyUnread
+  },
+});
+
+// Creates a React component from a Lit component
+export const WyNotificationBadge = createComponent({
+  react: React,
+  tagName: "wy-notification-badge",
+  elementClass: WyNotificationBadgeWC,
+  events: {
+    onWyApp,
+    onWyUnread,
+  },
+});
+
+// Creates a React component from a Lit component
+export const WyNotificationButton = createComponent({
+  react: React,
+  tagName: "wy-notification-button",
+  elementClass: WyNotificationButtonWC,
+  events: {
+    onWyAction,
+    onWyApp,
+    onWyLink,
+    onWyUnread,
+  },
+});
+
+// Creates a React component from a Lit component
+export const WyNotificationToasts = createComponent({
+  react: React,
+  tagName: "wy-notification-toasts",
+  elementClass: WyNotificationToastsWC,
+  events: {
+    onWyApp,
+    onWyLink,
+    onWyNotification,
   },
 });
 
@@ -26,9 +64,10 @@ declare module "react" {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      [WY_NOTIFICATIONS_TAGNAME]: WebComponentProps<WyNotificationsWC>;
+      "wy-notifications": WebComponentProps<WyNotificationsWC>;
+      "wy-notification-badge": WebComponentProps<WyNotificationBadgeWC>;
+      "wy-notification-button": WebComponentProps<WyNotificationButtonWC>;
+      "wy-notification-toasts": WebComponentProps<WyNotificationToastsWC>;
     }
   }
 }
-
-export type { WyAppEventType, WyLinkEventType };

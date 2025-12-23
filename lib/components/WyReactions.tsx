@@ -1,6 +1,9 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import { WeavyComponents } from "@weavy/uikit-web";
+import type { CloseEventType } from "@weavy/uikit-web/dist/types/types/ui.events.d.js";
+
+const onClose = "close" satisfies CloseEventType["type"] as EventName<CloseEventType>;
 
 // Creates a React component from a Lit component
 export const WyReactions = createComponent({
@@ -8,7 +11,7 @@ export const WyReactions = createComponent({
   tagName: "wy-reactions",
   elementClass: WeavyComponents.WyReactions,
   events: {
-    onReleaseFocus: "release-focus" as EventName<CustomEvent>,
+    onClose
   },
 });
 

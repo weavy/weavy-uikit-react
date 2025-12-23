@@ -1,6 +1,7 @@
 import React from "react";
 import { createComponent, EventName } from "@lit/react";
 import { WeavyComponents } from "@weavy/uikit-web";
+import { ClosedEventType, HideEventType } from "@weavy/uikit-web/dist/types/types/ui.events.d.js";
 
 // Creates a React component from a Lit component
 export const WyToasts = createComponent({
@@ -8,8 +9,7 @@ export const WyToasts = createComponent({
   tagName: "wy-toasts",
   elementClass: WeavyComponents.WyToasts,
   events: {
-    onHide: "hide" as EventName<CustomEvent>,
-    onReleaseFocus: "release-focus" as EventName<CustomEvent>,
+    onHide: "hide" satisfies HideEventType["type"] as EventName<HideEventType>,
   },
 });
 
@@ -18,11 +18,6 @@ export const WyToast = createComponent({
   tagName: "wy-toast",
   elementClass: WeavyComponents.WyToast,
   events: {
-    onHide: "closed" as EventName<
-      CustomEvent<{
-        silent: boolean;
-      }>
-    >,
-    onReleaseFocus: "release-focus" as EventName<CustomEvent>,
+    onClosed: "closed" satisfies ClosedEventType["type"] as EventName<ClosedEventType>,
   },
 });

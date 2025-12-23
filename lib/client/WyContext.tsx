@@ -1,11 +1,9 @@
 "use client";
 
 import React, { useRef } from "react";
-import { createComponent, EventName, WebComponentProps } from "@lit/react";
+import { createComponent, WebComponentProps } from "@lit/react";
 import {
-  WY_CONTEXT_TAGNAME,
-  WyContext as WyContextWC,
-  WyNotificationsEventType,
+  WyContext as WyContextWC
 } from "@weavy/uikit-web";
 import { useWeavyContext } from "../hooks";
 import { WeavyContext } from "./weavy";
@@ -13,12 +11,8 @@ import { WeavyContext } from "./weavy";
 // Creates a React component from a Lit component
 const WyContextComponent = createComponent({
   react: React,
-  tagName: WY_CONTEXT_TAGNAME,
+  tagName: "wy-context",
   elementClass: WyContextWC,
-  events: {
-    onWyNotifications:
-      "wy-notifications" satisfies WyNotificationsEventType["type"] as EventName<WyNotificationsEventType>,
-  },
 });
 
 // Injects a React context provider
@@ -41,7 +35,7 @@ declare module "react" {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      [WY_CONTEXT_TAGNAME]: WebComponentProps<WyContextWC>;
+      "wy-context": WebComponentProps<WyContextWC>;
     }
   }
 }

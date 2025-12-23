@@ -1,6 +1,16 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import { WeavyComponents } from "@weavy/uikit-web";
+import type {
+  LeaveEventType,
+  PinEventType,
+  RemoveEventType,
+  SelectedEventType,
+  StarEventType,
+  TrashEventType,
+} from "@weavy/uikit-web/dist/types/types/app.events.d.ts";
+import type { MessagesMarkEventType } from "@weavy/uikit-web/dist/types/types/messages.events.d.ts";
+import { onWyAction } from "../blocks/events";
 
 // Creates a React component from a Lit component
 export const WyConversationList = createComponent({
@@ -8,48 +18,21 @@ export const WyConversationList = createComponent({
   tagName: "wy-conversation-list",
   elementClass: WeavyComponents.WyConversationList,
   events: {
-    onConversationSelected: "conversation-selected" as EventName<
-      CustomEvent<{
-        id: number | undefined;
-      }>
-    >,
+    onWyAction,
   },
 });
 
-export const WyConversationListItem = createComponent({
+export const WyConversationItem = createComponent({
   react: React,
-  tagName: "wy-conversation-list-item",
-  elementClass: WeavyComponents.WyConversationListItem,
+  tagName: "wy-conversation-item",
+  elementClass: WeavyComponents.WyConversationItem,
   events: {
-    onRefetch: "refetch" as EventName<CustomEvent>,
-    onSelected: "selected" as EventName<
-      CustomEvent<{
-        id: number;
-      }>
-    >,
-    onStar: "star" as EventName<
-      CustomEvent<{
-        id: number;
-        star: boolean;
-      }>
-    >,
-    onPin: "pin" as EventName<
-      CustomEvent<{
-        id: number;
-        pin: boolean;
-      }>
-    >,
-    onMark: "mark" as EventName<
-      CustomEvent<{
-        id: number;
-        markAsRead: boolean;
-        messageId: number | undefined;
-      }>
-    >,
-    onLeave: "leave" as EventName<
-      CustomEvent<{
-        id: number;
-      }>
-    >,
+    onSelected: "selected" satisfies SelectedEventType["type"] as EventName<SelectedEventType>,
+    onStar: "star" satisfies StarEventType["type"] as EventName<StarEventType>,
+    onPin: "pin" satisfies PinEventType["type"] as EventName<PinEventType>,
+    onMark: "mark" satisfies MessagesMarkEventType["type"] as EventName<MessagesMarkEventType>,
+    onLeave: "leave" satisfies LeaveEventType["type"] as EventName<LeaveEventType>,
+    onRemove: "remove" satisfies RemoveEventType["type"] as EventName<RemoveEventType>,
+    onTrash: "trash" satisfies TrashEventType["type"] as EventName<TrashEventType>,
   },
 });

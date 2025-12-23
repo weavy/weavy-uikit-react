@@ -1,6 +1,7 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import { WeavyComponents } from "@weavy/uikit-web";
+import type { PollVoteEventType } from "@weavy/uikit-web/dist/types/types/polls.events.d.ts";
 
 // Creates a React component from a Lit component
 export const WyPoll = createComponent({
@@ -8,12 +9,8 @@ export const WyPoll = createComponent({
   tagName: "wy-poll",
   elementClass: WeavyComponents.WyPoll,
   events: {
-    onReleaseFocus: "release-focus" as EventName<CustomEvent>,
-    onVote: "vote" as EventName<
-      CustomEvent<{
-        id: number;
-      }>
-    >,
+    onVote:
+      "vote" satisfies PollVoteEventType["type"] as EventName<PollVoteEventType>,
   },
 });
 
@@ -22,11 +19,7 @@ export const WyPollOption = createComponent({
   tagName: "wy-poll-option",
   elementClass: WeavyComponents.WyPollOption,
   events: {
-    onReleaseFocus: "release-focus" as EventName<CustomEvent>,
-    onVote: "vote" as EventName<
-      CustomEvent<{
-        id: number;
-      }>
-    >,
+    onVote:
+      "vote" satisfies PollVoteEventType["type"] as EventName<PollVoteEventType>,
   },
 });

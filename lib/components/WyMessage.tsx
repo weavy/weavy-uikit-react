@@ -1,39 +1,25 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import { WeavyComponents } from "@weavy/uikit-web";
-import type { PollOptionType } from "@weavy/uikit-web/dist/types/types/polls.types.d.ts";
+import type { PollVoteEventType } from "@weavy/uikit-web/dist/types/types/polls.events.d.ts";
+import type { TypingEventType } from "@weavy/uikit-web/dist/types/types/typing.events.d.ts";
+import { onWyAction, onWyPreviewClose, onWyPreviewOpen } from "../blocks/events";
+
+const onVote =
+  "vote" satisfies PollVoteEventType["type"] as EventName<PollVoteEventType>;
+const onTyping =
+  "typing" satisfies TypingEventType["type"] as EventName<TypingEventType>;
 
 // Creates a React component from a Lit component
 export const WyMessage = createComponent({
   react: React,
   tagName: "wy-message",
   elementClass: WeavyComponents.WyMessage,
-});
-
-export const WyMessages = createComponent({
-  react: React,
-  tagName: "wy-messages",
-  elementClass: WeavyComponents.WyMessages,
   events: {
-    onScrollToBottom: "scroll-to-bottom" as EventName<CustomEvent>,
-  },
-});
-
-export const WyMessageEditor = createComponent({
-  react: React,
-  tagName: "wy-message-editor",
-  elementClass: WeavyComponents.WyMessageEditor,
-  events: {
-    onSubmit: "submit" as EventName<
-      CustomEvent<{
-        text: string | undefined;
-        meetingId: number | undefined;
-        blobs: (number | undefined)[] | undefined;
-        attachments: number[];
-        pollOptions: PollOptionType[];
-        embed: number;
-      }>
-    >,
+    onVote,
+    onWyAction,
+    onWyPreviewOpen,
+    onWyPreviewClose
   },
 });
 
@@ -41,4 +27,7 @@ export const WyMessageTyping = createComponent({
   react: React,
   tagName: "wy-message-typing",
   elementClass: WeavyComponents.WyMessageTyping,
+  events: {
+    onTyping,
+  },
 });

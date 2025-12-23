@@ -9,6 +9,6 @@ export const WyImageGrid = createComponent({
   tagName: "wy-image-grid",
   elementClass: WeavyComponents.WyImageGrid,
   events: {
-    onFileOpen: "file-open" as EventName<FileOpenEventType>,
+    onFileOpen: "file-open" satisfies FileOpenEventType["type"] as EventName<FileOpenEventType>,
   },
 });

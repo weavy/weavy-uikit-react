@@ -1,11 +1,18 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import { WeavyComponents } from "@weavy/uikit-web";
-import type { FileOpenEventType } from "@weavy/uikit-web/dist/types/types/files.events.d.ts";
 import type {
-  FileOrderType,
-  FileType,
-} from "@weavy/uikit-web/dist/types/types/files.types.d.ts";
+  FileDeleteForeverEventType,
+  FileEditNameEventType,
+  FileOpenEventType,
+  FileRenameEventType,
+  FileRestoreEventType,
+  FileSubscribeEventType,
+  FileTrashEventType,
+} from "@weavy/uikit-web/dist/types/types/files.events.d.ts";
+import type { OrderEventType } from "@weavy/uikit-web/dist/types/types/lists.events.d.ts";
+import type { FileOrderType } from "@weavy/uikit-web/dist/types/types/files.types.d.ts";
+import { onWyAction, onWyPreviewClose, onWyPreviewOpen } from "../blocks/events";
 
 // Creates a React component from a Lit component
 export const WyFilesList = createComponent({
@@ -13,43 +20,16 @@ export const WyFilesList = createComponent({
   tagName: "wy-files-list",
   elementClass: WeavyComponents.WyFilesList,
   events: {
-    onFileOpen: "file-open" as EventName<FileOpenEventType>,
-    onOrder: "order" as EventName<
-      CustomEvent<{
-        order: FileOrderType;
-      }>
-    >,
-    onEditName: "edit-name" as EventName<
-      CustomEvent<{
-        file: FileType;
-      }>
-    >,
-    onRename: "rename" as EventName<
-      CustomEvent<{
-        file: FileType;
-        name: string;
-      }>
-    >,
-    onTrash: "trash" as EventName<
-      CustomEvent<{
-        file: FileType;
-      }>
-    >,
-    onRestore: "restore" as EventName<
-      CustomEvent<{
-        file: FileType;
-      }>
-    >,
-    onDeleteForever: "delete-forever" as EventName<
-      CustomEvent<{
-        file: FileType;
-      }>
-    >,
-    onSubscribe: "subscribe" as EventName<
-      CustomEvent<{
-        file: FileType;
-        subscribe: boolean;
-      }>
-    >,
+    onFileOpen: "file-open" satisfies FileOpenEventType["type"] as EventName<FileOpenEventType>,
+    onOrder: "order" satisfies OrderEventType<FileOrderType>["type"] as EventName<OrderEventType<FileOrderType>>,
+    onEditName: "edit-name" satisfies FileEditNameEventType["type"] as EventName<FileEditNameEventType>,
+    onRename: "rename" satisfies FileRenameEventType["type"] as EventName<FileRenameEventType>,
+    onTrash: "trash" satisfies FileTrashEventType["type"] as EventName<FileTrashEventType>,
+    onRestore: "restore" satisfies FileRestoreEventType["type"] as EventName<FileRestoreEventType>,
+    onDeleteForever: "delete-forever" satisfies FileDeleteForeverEventType["type"] as EventName<FileDeleteForeverEventType>,
+    onSubscribe: "subscribe" satisfies FileSubscribeEventType["type"] as EventName<FileSubscribeEventType>,
+    onWyAction,
+    onWyPreviewOpen,
+    onWyPreviewClose
   },
 });

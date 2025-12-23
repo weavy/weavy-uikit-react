@@ -1,6 +1,6 @@
 {
   "name": "@weavy/uikit-react",
-  "version": "29.4.0",
+  "version": "30.0.0",
   "author": "Weavy",
   "description": "React components UI-kit for Weavy",
   "homepage": "https://github.com/weavy/weavy-uikit-react",
@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@lit/react": "^1.0.8",
-    "@weavy/uikit-web": "^29.4.0"
+    "@weavy/uikit-web": "^30.0.0"
   },
   "peerDependencies": {
     "react": ">=16",
@@ -52,8 +52,8 @@
     "@eslint/js": "^9.29.0",
     "@rollup/plugin-babel": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
-    "@types/node": "^22.19.0",
-    "@types/react": "^18.3.26",
+    "@types/node": "^22.18.11",
+    "@types/react": "^18.3.27",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^5.1.0",
     "dotenv": "^17.2.3",
@@ -65,11 +65,11 @@
     "npm-run-all": "^4.1.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "rimraf": "^6.1.0",
+    "rimraf": "^6.1.2",
     "rollup-preserve-directives": "^1.1.3",
-    "sass": "^1.93.3",
+    "sass": "^1.94.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.3",
+    "typescript-eslint": "^8.48.0",
     "vite": "~7.1.12",
     "vite-plugin-dts": "^4.5.4"
   }

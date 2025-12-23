@@ -1,24 +1,21 @@
 "use client";
 
 import React from "react";
-import { createComponent, EventName, WebComponentProps } from "@lit/react";
-import { WY_COPILOT_TAGNAME, WyCopilot as WyCopilotWC } from "@weavy/uikit-web";
-import type { WyAppEventType } from "@weavy/uikit-web/dist/types/types/app.events.js";
-import type { WyMessageEventType } from "@weavy/uikit-web/dist/types/types/messages.events.js";
-import type { WyPreviewOpenEventType } from "@weavy/uikit-web/dist/types/types/files.events.js";
+import { createComponent, WebComponentProps } from "@lit/react";
+import { WyCopilot as WyCopilotWC } from "@weavy/uikit-web";
+import { onWyAction, onWyApp, onWyMessage, onWyPreviewClose, onWyPreviewOpen } from "./events";
 
 // Creates a React component from a Lit component
 export const WyCopilot = createComponent({
   react: React,
-  tagName: WY_COPILOT_TAGNAME,
+  tagName: "wy-copilot",
   elementClass: WyCopilotWC,
   events: {
-    onWyApp:
-      "wy-app" satisfies WyAppEventType["type"] as EventName<WyAppEventType>,
-    onWyMessage:
-      "wy-message" satisfies WyMessageEventType["type"] as EventName<WyMessageEventType>,
-    onWyPreviewOpen:
-      "wy-preview-open" satisfies WyPreviewOpenEventType["type"] as EventName<WyPreviewOpenEventType>,
+    onWyApp,
+    onWyAction,
+    onWyMessage,
+    onWyPreviewOpen,
+    onWyPreviewClose
   },
 });
 
@@ -26,9 +23,7 @@ declare module "react" {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      [WY_COPILOT_TAGNAME]: WebComponentProps<WyCopilotWC>;
+      "wy-copilot": WebComponentProps<WyCopilotWC>;
     }
   }
 }
-
-export type { WyPreviewOpenEventType, WyAppEventType, WyMessageEventType };

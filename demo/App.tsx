@@ -3,7 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import "./App.css";
 
-import { useWeavy } from "../lib";
+import { useWeavy, WyFiles } from "../lib";
 import { WyCopilot } from "../lib";
 import { WeavyComponents } from "../lib";
 
@@ -47,7 +47,11 @@ export function App() {
       <h1>Vite + React</h1>
       <h3>Powered by uikit-web</h3>
 
-      <WyCopilot agent="gemini" onWyApp={(e) => { console.log("app", e.detail)}} className="WyMessenger"></WyCopilot>
+      <div style={{ display: "flex", height: "500px"}}>
+      <WyCopilot agent="openai" onWyApp={(e) => { console.log("app", e.detail)}} className="WyMessenger"></WyCopilot>
+      <WyFiles uid="react-files" />
+      </div>
+
     </React.StrictMode>
   );
 }

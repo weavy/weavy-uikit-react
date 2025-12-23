@@ -1,7 +1,7 @@
 import React from "react";
 import { EventName, createComponent } from "@lit/react";
 import { WeavyComponents } from "@weavy/uikit-web";
-import type { ExternalBlobType } from "@weavy/uikit-web/dist/types/types/files.types.d.ts";
+import type { ExternalBlobsEventType } from "@weavy/uikit-web/dist/types/types/files.events.d.ts";
 
 // Creates a React component from a Lit component
 export const WyCloudFiles = createComponent({
@@ -9,12 +9,7 @@ export const WyCloudFiles = createComponent({
   tagName: "wy-cloud-files",
   elementClass: WeavyComponents.WyCloudFiles,
   events: {
-    onExternalBlobs: "external-blobs" as EventName<
-      CustomEvent<{
-        externalBlobs: ExternalBlobType[] | null;
-      }>
-    >,
-    onReleaseFocus: "release-focus" as EventName<CustomEvent>
+    onExternalBlobs:
+      "external-blobs" satisfies ExternalBlobsEventType["type"] as EventName<ExternalBlobsEventType>,
   },
 });
-

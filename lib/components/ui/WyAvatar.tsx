@@ -9,3 +9,14 @@ export const WyAvatar = createComponent({
   elementClass: WeavyComponents.WyAvatar,
 });
 
+export const WyAvatarGroup = createComponent({
+  react: React,
+  tagName: "wy-avatar-group",
+  elementClass: WeavyComponents.WyAvatarGroup,
+});
+
+export const WyAvatarHeader = createComponent({
+  react: React,
+  tagName: "wy-avatar-header",
+  elementClass: WeavyComponents.WyAvatarHeader,
+});
