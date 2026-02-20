@@ -42,13 +42,6 @@ export default defineConfig(({ mode }) => {
         },
       ],
     },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: "modern-compiler", // or "modern"
-        },
-      },
-    },
     build: {
       emptyOutDir: false,
       outDir: "dist/build",
@@ -69,6 +62,7 @@ export default defineConfig(({ mode }) => {
           {
             format: "cjs",
             entryFileNames: "weavy.bundle.js",
+            intro: `const WEAVY_SOURCE_FORMAT = "cjs/bundle";`,
             dynamicImportInCjs: false,
             minifyInternalExports: false,
             inlineDynamicImports: true,
@@ -80,6 +74,7 @@ export default defineConfig(({ mode }) => {
           {
             format: "umd",
             entryFileNames: "weavy.umd.js",
+            intro: `const WEAVY_SOURCE_FORMAT = "umd/bundle";`,
             name: "WeavyLib",
             dynamicImportInCjs: false,
             minifyInternalExports: false,
@@ -92,6 +87,7 @@ export default defineConfig(({ mode }) => {
           {
             format: "esm",
             entryFileNames: "weavy.es5.esm.js",
+            intro: `const WEAVY_SOURCE_FORMAT = "es5.esm/bundle";`,
             minifyInternalExports: false,
             inlineDynamicImports: true,
             plugins: [
@@ -113,6 +109,7 @@ export default defineConfig(({ mode }) => {
             format: "esm",
             name: "WeavyLib",
             entryFileNames: "weavy.es5.umd.js",
+            intro: `const WEAVY_SOURCE_FORMAT = "es5.umd/bundle";`,
             minifyInternalExports: false,
             inlineDynamicImports: true,
             plugins: [

@@ -9,6 +9,9 @@ WeavyClient.version = WEAVY_VERSION;
 /* @ts-expect-error Override Weavy sourceName */
 WeavyClient.sourceName = WEAVY_SOURCE_NAME;
 
+/* @ts-expect-error Override Weavy sourceFormat */
+WeavyClient.sourceFormat = WEAVY_SOURCE_FORMAT ?? WeavyClient.sourceFormat;
+
 // React context provider
 export const WeavyContext = createContext<WeavyType | null>(null);
 

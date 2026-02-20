@@ -25,6 +25,7 @@ export default [
         ...globals.browser,
         ...globals.es2020,
         WEAVY_SOURCE_NAME: "readonly",
+        WEAVY_SOURCE_FORMAT: "readonly",
         WEAVY_VERSION: "readonly",
       },
       ecmaVersion: "latest",

@@ -21,7 +21,7 @@ console.log(sourceName, version);
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
-  const define = {
+  const define: Record<string, unknown>  = {
     WEAVY_SOURCE_NAME: JSON.stringify(sourceName),
     WEAVY_VERSION: JSON.stringify(version),
     WEAVY_URL: JSON.stringify(env.WEAVY_URL),
@@ -68,13 +68,6 @@ export default defineConfig(({ command, mode }) => {
       //banner: "\ufeff", // UTF-8 BOM
       keepNames: true,
     },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler' // or "modern"
-        }
-      }
-    },
     build: {
       outDir: "dist/build",
       lib: {
@@ -94,11 +87,13 @@ export default defineConfig(({ command, mode }) => {
           {
             format: "esm",
             entryFileNames: "weavy.mjs",
+            intro: `const WEAVY_SOURCE_FORMAT = "esm/dynamic";`,
             minifyInternalExports: false,
           },
           {
             format: "cjs",
             entryFileNames: "weavy.cjs",
+            intro: `const WEAVY_SOURCE_FORMAT = "cjs/dynamic";`,
             minifyInternalExports: false,
             dynamicImportInCjs: true,
           },
