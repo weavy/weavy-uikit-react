@@ -29,6 +29,11 @@ export default defineConfig(({ command, mode }) => {
     "process.env.NODE_ENV": JSON.stringify(env.NODE_ENV),
   };
 
+  if (command === "serve") {
+    define.WEAVY_SOURCE_FORMAT = `undefined`
+    //define.WEAVY_IMPORT_URL = `"/dist/"`
+  }
+
   let httpsConfig;
 
   if (env.HTTPS_PEM_CERT_PATH && env.HTTPS_PEM_KEY_PATH) {

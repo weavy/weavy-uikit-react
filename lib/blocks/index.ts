@@ -8,4 +8,4 @@ export * from "./WyCopilot";
 export * from "./WyFiles";
 export * from "./WyMessenger";
 export * from "./WyNotifications";
-export * from "./WyPosts";
+export * from "./WyFeed";

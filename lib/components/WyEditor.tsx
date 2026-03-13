@@ -6,8 +6,8 @@ import type { EditorSubmitEventType } from "@weavy/uikit-web/dist/types/types/ed
 // Creates a React component from a Lit component
 export const WyEditor = createComponent({
   react: React,
-  tagName: "wy-editor",
-  elementClass: WeavyComponents.WyEditor,
+  tagName: "wy-editor-msg",
+  elementClass: WeavyComponents.WyEditorMsg,
   events: {
     onSubmit: "submit" satisfies EditorSubmitEventType["type"] as EventName<EditorSubmitEventType>,
   },
@@ -16,8 +16,8 @@ export const WyEditor = createComponent({
 // Creates a React component from a Lit component
 export const WyCommentEditor = createComponent({
   react: React,
-  tagName: "wy-comment-editor",
-  elementClass: WeavyComponents.WyCommentEditor,
+  tagName: "wy-editor-comment",
+  elementClass: WeavyComponents.WyEditorComment,
   events: {
     onSubmit: "submit" satisfies EditorSubmitEventType["type"] as EventName<EditorSubmitEventType>,
   },
@@ -25,8 +25,8 @@ export const WyCommentEditor = createComponent({
 
 export const WyMessageEditor = createComponent({
   react: React,
-  tagName: "wy-message-editor",
-  elementClass: WeavyComponents.WyMessageEditor,
+  tagName: "wy-editor-message",
+  elementClass: WeavyComponents.WyEditorMessage,
   events: {
     onSubmit: "submit" satisfies EditorSubmitEventType["type"] as EventName<EditorSubmitEventType>,
   },
