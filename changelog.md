@@ -1,5 +1,12 @@
 # Changelog for Weavy
 
+## v32.1.0
+
+<time>2026-07-07</time>
+
+* Added empty state with corresponding `empty` slot in `<wy-feed>` and `<wy-posts>`.
+* Added number of votes to poll options.
+
 ## v32.0.0
 
 <time>2026-07-01</time>
@@ -12,7 +19,7 @@
 
 ###### Breaking changes
 
-  * The `directory` property in the Users API has been deprecated and is now an array of `directories`.
+* The `directory` property in the Users API has been deprecated and is now an array of `directories`.
 
 ## v31.6.2
 
