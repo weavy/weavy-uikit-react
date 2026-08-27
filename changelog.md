@@ -1,5 +1,13 @@
 # Changelog for Weavy
 
+## v32.2.0
+
+<time>2026-08-26</time>
+
+* Notifications can now be tagged, and the Notifications API supports filtering by one or more tags.
+* Fixed a timeout when indexing messages on SQL Server.
+* The realtime hub now rejects invalid or expired access tokens with `401` instead of accepting the connection without delivering any events, and the UI kits now correctly detect the `401` and refresh the token before reconnecting.
+
 ## v32.1.0
 
 <time>2026-07-07</time>
