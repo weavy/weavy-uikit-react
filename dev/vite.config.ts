@@ -3,16 +3,14 @@ import react from "@vitejs/plugin-react";
 import packageJson from "../package.json";
 import fs from "node:fs";
 import { resolve } from "node:path";
-import dts from "vite-plugin-dts";
+import dts from "unplugin-dts/vite";
 import preserveDirectives from "rollup-preserve-directives";
-import { utf8BomPlugin, weavyAuthServer } from "@weavy/uikit-web/utils/vite-plugins.js"
+import { checkVersionPrefix, utf8BomPlugin, weavyAuthServer } from "@weavy/uikit-web/utils/vite-plugins.js"
 
-const sourceName =
-  process.argv.find((s) => s.startsWith("--source-name="))?.split("=")[1] ||
-  packageJson.name;
-const version =
-  process.argv.find((s) => s.startsWith("--version="))?.split("=")[1] ||
-  packageJson.version;
+const sourceName = packageJson.name;
+const version = packageJson.version;
+
+checkVersionPrefix(packageJson, resolve(__dirname, ".."));
 
 console.log(sourceName, version);
 
@@ -55,7 +53,7 @@ export default defineConfig(({ command, mode }) => {
       react({ jsxRuntime: 'classic' }),
       dts({
         tsconfigPath: "./tsconfig.json",
-        outDir: "./dist/types",
+        outDirs: ["./dist/types"],
         include: ["./lib"],
       }),
       weavyAuthServer(command),

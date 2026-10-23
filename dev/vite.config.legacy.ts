@@ -6,12 +6,8 @@ import { getBabelOutputPlugin } from "@rollup/plugin-babel";
 import preserveDirectives from "rollup-preserve-directives";
 import { removeImportMetaUrl, utf8BomPlugin } from "@weavy/uikit-web/utils/vite-plugins.js";
 
-const sourceName =
-  process.argv.find((s) => s.startsWith("--source-name="))?.split("=")[1] ||
-  packageJson.name;
-const version =
-  process.argv.find((s) => s.startsWith("--version="))?.split("=")[1] ||
-  packageJson.version;
+const sourceName = packageJson.name;
+const version = packageJson.version;
 
 console.log(sourceName, version);
 

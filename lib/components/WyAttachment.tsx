@@ -1,7 +1,7 @@
 import React from "react";
-import { EventName, createComponent } from "@lit/react";
+import { createComponent } from "@lit/react";
 import { WeavyComponents } from "@weavy/uikit-web";
-import type { FileOpenEventType } from "@weavy/uikit-web/dist/types/types/files.events.d.ts";
+import { onWyAction } from "../blocks/events";
 
 // Creates a React component from a Lit component
 export const WyAttachment = createComponent({
@@ -9,7 +9,7 @@ export const WyAttachment = createComponent({
   tagName: "wy-attachment",
   elementClass: WeavyComponents.WyAttachment,
   events: {
-    onFileOpen: "file-open" satisfies FileOpenEventType["type"] as EventName<FileOpenEventType>,
+    onWyAction
   },
 });
 
@@ -18,6 +18,6 @@ export const WyAttachmentList = createComponent({
   tagName: "wy-attachment-list",
   elementClass: WeavyComponents.WyAttachmentList,
   events: {
-    onFileOpen: "file-open" satisfies FileOpenEventType["type"] as EventName<FileOpenEventType>,
+    onWyAction,
   },
 });

@@ -3,6 +3,7 @@ import { createComponent, EventName } from "@lit/react";
 import { WeavyComponents } from "@weavy/uikit-web";
 import type {
   NotificationCloseEventType,
+  NotificationFilterEventType,
   NotificationHideEventType,
   NotificationMarkEventType,
   NotificationSelectEventType,
@@ -24,6 +25,9 @@ export const WyNotificationHeader = createComponent({
   react: React,
   tagName: "wy-notification-header",
   elementClass: WeavyComponents.WyNotificationHeader,
+  events: {
+    onFilter: "filter" satisfies NotificationFilterEventType["type"] as EventName<NotificationFilterEventType>
+  }
 });
 
 export const WyNotificationListitem = createComponent({

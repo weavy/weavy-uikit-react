@@ -6,7 +6,7 @@ import {
   WyMessenger as WyMessengerWC,
   WyMessengerBadge as WyMessengerBadgeWC,
   WyMessengerButton as WyMessengerButtonWC,
-  WyMessengerConversations as WyMessengerConversationsWC,
+  WyConversations as WyConversationsWC,
   WyMessengerNew as WyMessengerNewWC,
 } from "@weavy/uikit-web";
 import { onWyAction, onWyApp, onWyPreviewClose, onWyPreviewOpen, onWyUnread } from "./events";
@@ -50,10 +50,10 @@ export const WyMessengerButton = createComponent({
 });
 
 // Creates a React component from a Lit component
-export const WyMessengerConversations = createComponent({
+export const WyConversations = createComponent({
   react: React,
-  tagName: "wy-messenger-conversations",
-  elementClass: WyMessengerConversationsWC,
+  tagName: "wy-conversations",
+  elementClass: WyConversationsWC,
   events: {
     onWyAction,
     onWyApp,
@@ -78,7 +78,7 @@ declare module "react" {
       "wy-messenger": WebComponentProps<WyMessengerWC>;
       "wy-messenger-badge": WebComponentProps<WyMessengerBadgeWC>;
       "wy-messenger-button": WebComponentProps<WyMessengerButtonWC>;
-      "wy-messenger-conversations": WebComponentProps<WyMessengerConversationsWC>;
+      "wy-conversations": WebComponentProps<WyConversationsWC>;
       "wy-messenger-new": WebComponentProps<WyMessengerNewWC>;
     }
   }

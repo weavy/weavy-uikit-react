@@ -1,5 +1,44 @@
 # Changelog for Weavy
 
+## v33.0.0
+
+<time>2026-10-23</time>
+
+* Added support for scale out with multiple nodes sharing the same database (requires a signalr backplane configuration).
+* Added liveness and readiness endpoints (`/live` and `/ready`). The `/ready` endpoint returns `503 Service Unavailable` when the node is unhealthy, which can be used to stop routing traffic to the node. The `/live` endpoint always returns `200 OK` and can be used to check if the node is running.
+* Added option to disable the Admin area or the Web API on a node, e.g. to run public API nodes and a separate admin node behind a firewall.
+* Added `directory` filter to the Comments, Files, Messages, Notifications, and Posts API, allowing you to list content from apps in a specific directory.
+* Added `directory` filter to  `<wy-notification-toasts>`.
+* Added option to use placeholders in agent tool url:s and headers (functions and MCP servers). The placeholders are automatically resolved when a tool is used. 
+* Added moderation support for messages, posts, comments and users. Weavy emits a `report_created` webhook event when a user reports content; enable it in the UI kit with the `report` feature flag.
+* Added option for users to block and unblock other users. Enable it in the UI kit with the `block` feature flag.
+* Added `POST /api/users/{keep}/merge/{delete}` for merging two user accounts. All content, memberships, read state, reactions, votes and notifications are transferred to the kept user, after which the other user is permanently deleted.
+* Added option to create new files in the `<wy-files>` component.
+* Added support for editing text files (including markdown) in the `<wy-files>` component.
+* Added `<wy-file-new>` component for creating new files in a files app.
+* Added `<wy-messenger-new>` component to display a button with a dialog for creating private chats and group chats.
+* Added CSS variable `--wy-table-border` for setting the height of row border in tables. It defaults to `0`.
+* Added feature flags for `file_create`, `file_edit`,`file_rename` and `file_upload` for customizing the UI behavior in files apps.
+* Added `header` property in `<wy-files>` to set the appearance of the header bar.
+* Poll votes now update in realtime.
+* All file interactions now trigger the `wy-action` event in UI kit.
+* Fixed issue with older content (not available on initial load) being visible when clicking a notification.
+* Fixed an issue with inverted colors for some theme colors.
+* Fixed an issue with text color in mentions selector.
+* Fixed an issue with stacked notifications while having `appearance="none"`.
+* Fixed an issue with mentions not showing when using overlays.
+* Fixed an issue where titlebar content got clipped in smaller viewports.
+* Fixed an issue where clicking an AI annotation in a message, post or comment did not open the file preview.
+* Fixed an issue where Anthropic agents failed on any tool use, and enables functions for Gemini agents.
+
+###### Breaking changes
+
+* Removed `/status` and `/version` endpoints. You can use `/live` and/or `/ready` instead.
+* Replaced the Lucene search index with database full-text search. Self-hosting now requires Postgres 18+ or SQL Server 2022+ with Full-Text Search.
+* Stopped publishing NuGet packages and the [weavy-server](https://github.com/weavy/weavy-server) project for self-hosting. Use the [Docker image](https://hub.docker.com/r/weavy/weavy) instead.
+* Removed support for the `kapa` AI provider. Existing agents with `provider: "kapa"` no longer reply and cannot be used until switched to a supported provider.
+* Removed agent mode from `<wy-messenger>`, `<wy-messenger-button>`, `<wy-messenger-badge>` and `<wy-messenger-new>`. The `agent` and `instructions` properties no longer have any effect on these components. Use `<wy-copilot>` or `<wy-chat>` for agent conversations.
+
 ## v32.2.0
 
 <time>2026-08-26</time>

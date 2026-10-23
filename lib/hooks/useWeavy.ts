@@ -23,6 +23,7 @@ export function useWeavy(options: WeavyOptions, deps: React.DependencyList = [])
     tokenUrl: options.tokenUrl?.toString(),
     tokenFactory: useMemo(
       () => options.tokenFactory,
+      // eslint-disable-next-line react-hooks/use-memo
       [options.tokenFactory?.toString(), ...deps]
     ),
     url: options.url?.toString(),
@@ -35,6 +36,7 @@ export function useWeavy(options: WeavyOptions, deps: React.DependencyList = [])
     if (!weavy) {
       const globalWeavy = globalContextProvider?.value;
       const wy = globalWeavy ?? new Weavy(cacheSafeOptions);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setWeavy(wy);
 
       /*console.log(
@@ -58,6 +60,7 @@ export function useWeavy(options: WeavyOptions, deps: React.DependencyList = [])
 
       if (Object.keys(validProperties).length) {
         //console.log("WeavyOptions", weavy?.weavySid, validProperties);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setPrevOptions(cacheSafeOptions);
         Object.assign(weavy, validProperties);
       }
