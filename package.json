@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@lit/react": "^1.0.8",
-    "@weavy/uikit-web": "^32.2.0"
+    "@weavy/uikit-web": "^33.0.0"
   },
   "peerDependencies": {
     "react": ">=16",
