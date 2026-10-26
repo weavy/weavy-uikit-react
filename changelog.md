@@ -1,5 +1,11 @@
 # Changelog for Weavy
 
+## v33.0.1
+
+<time>2026-10-26</time>
+
+* Fixed database migrations for search and webhook redelivery being skipped when upgrading from v32.2.0 to v33.0.0. Existing v33.0.0 installations apply the missing changes when upgraded.
+
 ## v33.0.0
 
 <time>2026-10-23</time>

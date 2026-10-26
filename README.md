@@ -2,64 +2,38 @@
 
 <img src="https://img.shields.io/badge/Platform-React-orange"/> <img src="https://img.shields.io/badge/Language-TypeScript-orange"/>
 
-React components based UIKit for Weavy powered by `@weavy/uikit-web` web components under the hood. It comes with regular React components for Weavy Blocks and React hooks for simplified configuration and usage.
-
-> See [UIKit React documentation](https://weavy.com/docs/frameworks/react).
+React components for Weavy: chat, feeds, file sharing, comments, notifications and AI agents as `<WyMessenger>`, `<WyChat>`, `<WyFeed>`, `<WyFiles>`, `<WyComments>`, `<WyCopilot>`, `<WyNotifications>` and more. The components are thin [`@lit/react`](https://lit.dev/docs/frameworks/react/) wrappers around the [`@weavy/uikit-web`](https://www.npmjs.com/package/@weavy/uikit-web) web components, so they always have the full feature set of the web components. The `useWeavy` hook and the `<WyContext>` provider configure the connection to your Weavy environment. Supports React 16 and later, including React Server Components.
 
 ## Installation
 
-```shell
+```bash
 npm install @weavy/uikit-react
 ```
 
-## Getting started
+## Documentation
 
-You need a Weavy server in order to test any of the frontend examples. If you don't have one, you can create one for free after signing up for an account on <a href="https://get.weavy.com">get.weavy.com</a>.
+Guides, concepts and the component reference are maintained on [docs.weavy.com](https://docs.weavy.com):
 
-You also need an application with a user system and a token endpoint. See [Weavy Authentication](https://weavy.com/docs) for more info about configuring authentication and single sign-on between your application and Weavy.
+- [Weavy and React](https://docs.weavy.com/guides/react) – step-by-step guide: create an environment, configure authentication and add your first component, including SSR and Next.js.
+- [Adding the Weavy UIKit](https://docs.weavy.com/learn/uikit), [Authentication](https://docs.weavy.com/learn/authentication), [Components](https://docs.weavy.com/learn/components), [Styling](https://docs.weavy.com/learn/styling) and [Localization](https://docs.weavy.com/learn/localization).
+- [UIKit reference](https://docs.weavy.com/reference/uikit/) – properties, events and slots for every component.
+- [Changelog](https://docs.weavy.com/resources/changelog).
 
-> [Weavy docs](https://weavy.com/docs)
+## Development
 
-### Use Weavy React Components
+The dev server runs the demo app in `demo/` in watch mode, together with a local auth server that signs in test users against your Weavy environment. The package depends on the local `@weavy/uikit-web` package, so build that first (or run `npm run build` from the repository root).
 
-To use any block you must first configure Weavy with an `url` and a `tokenUrl` or `tokenFactory`. This can be done using the `useWeavy` hook or alternatively use the `<WyContext />` provider.
-
-```jsx
-import { useWeavy, WyMessenger } from "@weavy/uikit-react";
-
-export function App() {
-  const weavy = useWeavy({
-    url: "https://myenvironment.weavy.io",
-    tokenUrl: "https://myserver.test/api/token",
-  });
-
-  return (
-    <>
-      ...
-      <WyMessenger />
-    </>
-  );
-}
-```
-
-## Run the React components demo in developer mode
-
-The developer mode compiles and starts up a developer server that also provides authentication for a single _developer_ user.
-
-### .env
-
-You must provide an `.env` file with your _WEAVY_URL_ and _WEAVY_APIKEY_ to run the development test server. See the [.env.example](./.env.example) for an example configuration.
-
-```ini
-WEAVY_URL="https://mysite.weavy.io"
-WEAVY_APIKEY=""
-```
-
-### Dev server
-
-Once you have configured you `.env` you can start up the auth server and dev server. The dev server runs in watch mode.
+1. Copy `.env.example` to `.env` and set `WEAVY_URL` and `WEAVY_APIKEY` for your environment.
+2. Install and start:
 
 ```bash
 npm install
 npm start
+```
+
+The optional `HTTPS_PEM_*` and `HTTPS_PFX_*` variables in `.env` enable TLS for the dev server in the same way as in `@weavy/uikit-web`.
+
+```bash
+npm run lint    # ESLint on lib/
+npm run build   # ESM + legacy build with type check
 ```
