@@ -1,5 +1,15 @@
 # Changelog for Weavy
 
+## v33.1.0
+
+<time>2026-11-09</time>
+
+* Added option to edit the name and avatar of the system users root (id `0`) and ghost (id `-1`) with `PATCH /api/users/{id}` and in the admin area.
+* Office links (`application_url`) are now signed by the server.
+* Fixed an issue where the `member_updated` realtime event included flags that only apply to the user making the change.
+* Fixed an issue on PostgreSQL where updating a user could overwrite the reactions on files and messages.
+* Fixed an issue where blocks and follows pointing at a user were not removed when the user was deleted.
+
 ## v33.0.1
 
 <time>2026-10-26</time>
