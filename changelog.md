@@ -1,5 +1,14 @@
 # Changelog for Weavy
 
+## v33.1.1
+
+<time>2026-11-18</time>
+
+* Fixed an issue where uploads and new files in `<wy-files>`, `<wy-file-new>` and `<wy-file>` still went to the first app after changing `uid`.
+* Fixed files dropped or pasted in editors sometimes being handled twice, for example uploaded to the files app as well as attached to a comment, or inserted as text as well as attached.
+* Fixed cursor placement in message, post and comment editors when clicking near the edge or to the right of a wrapped row, or pressing End, and dragging selected text within an editor.
+* Fixed browsers keeping an old UI kit for up to 30 days after an upgrade when loading it from the Weavy server (for example `/uikit-web/weavy.js`). The UI kit entry files are now revalidated on every load.
+
 ## v33.1.0
 
 <time>2026-11-09</time>
